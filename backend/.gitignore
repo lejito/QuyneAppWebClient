@@ -1,5 +1,5 @@
 # Ignorar directorios generados por Node.js
-node_modules/
+**node_modules/
 
 # Ignorar archivos de registro
 logs/
