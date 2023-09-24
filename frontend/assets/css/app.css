@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "Cabin";
+  src: url("../fonts/Cabin/Cabin-VariableFont_wdth\,wght.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Cabin', Verdana, Geneva, Tahoma, sans-serif;
+  width: 100vh;
+  height: 100vh;
+}
