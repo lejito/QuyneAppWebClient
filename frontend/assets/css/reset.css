@@ -60,10 +60,9 @@ label {
   color: inherit;
 }
 
-input:focus {
-  outline: none;
-}
-
+input:focus,
+select:focus,
+textarea:focus,
 button:focus {
   outline: none;
 }

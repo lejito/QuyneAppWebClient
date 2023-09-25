@@ -30,6 +30,5 @@ export default defineNuxtConfig({
     '~/assets/css/reset.css', // Resetear estilos por defecto
     '~/assets/fonts/fontawesome-free-6.4.2-web/css/all.min.css', // Cargar íconos de FontAwesome
     '~/assets/css/app.css', // Estilos generales de la App
-    '~/assets/css/index.css' // Estilos de la página de inicio (landing page), página de registro e inicio de sesión
   ],
 })
