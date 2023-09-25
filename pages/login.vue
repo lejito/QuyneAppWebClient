@@ -2,7 +2,7 @@
   <div class="lr-layout">
     <div class="lr-card">
       <NuxtLink to="/">
-        <i class="lr-card__back fa-solid fa-arrow-left"></i>
+        <v-icon class="lr-card__back" icon="mdi-arrow-left" size="large"></v-icon>
       </NuxtLink>
 
       <img src="QuyneApp_Logo_Normal.png" alt="Logo" class="lr-card__img">
@@ -13,7 +13,7 @@
         <h5 class="lr-form__title">Inicio de sesión</h5>
 
         <div class="lr-form__group">
-          <i class="lr-form__icon fa-solid fa-lg fa-id-badge"></i>
+          <v-icon class="lr-form__icon" icon="mdi-card-account-details"></v-icon>
           <label for="tipoDocumento" class="lr-form__label">Tipo de identificación</label>
           <select name="tipoDocumento" id="tipoDocumento" class="lr-form__select">
             <option value="CC" class="lr-form__select__option">Cédula de ciudadanía</option>
@@ -21,18 +21,18 @@
             <option value="CE" class="lr-form__select__option">Cédula de extranjería</option>
             <option value="PP" class="lr-form__select__option">Pasaporte</option>
           </select>
-          <i class="lr-form__icon-select fa-solid fa-lg fa-caret-down"></i>
+          <v-icon class="lr-form__icon-select" icon="mdi-chevron-down"></v-icon>
         </div>
 
         <div class="lr-form__group">
-          <i class="lr-form__icon fa-solid fa-lg fa-id-card"></i>
+          <v-icon class="lr-form__icon" icon="mdi-pound"></v-icon>
           <label for="numeroDocumento" class="lr-form__label">Número de identificación</label>
           <input type="text" name="numeroDocumento" id="numeroDocumento" placeholder="Número de identificación"
             class="lr-form__input">
         </div>
 
         <div class="lr-form__group">
-          <i class="lr-form__icon fa-solid fa-lg fa-key"></i>
+          <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
           <label for="clave" class="lr-form__label">Contraseña</label>
           <input type="password" name="clave" id="clave" placeholder="Contraseña" class="lr-form__input">
         </div>
@@ -40,7 +40,7 @@
         <button class="lr-form__button">Iniciar sesión</button>
 
         <NuxtLink to="/registro">
-          <span class="lr-form__register">
+          <span class="lr-form__link">
             ¿No tienes una cuenta? ¡Regístrate!
           </span>
         </NuxtLink>
