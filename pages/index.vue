@@ -2,7 +2,7 @@
   <div class="index-layout">
     <nav class="index-navbar">
       <a class="index-navbar__container-logo" href=".">
-        <img src="QuyneApp_Logo_Normal.png" alt="QuyneApp" class="index-navbar__logo">
+        <img src="~/public/QuyneApp_Logo_Normal.png" alt="QuyneApp" class="index-navbar__logo">
       </a>
 
       <div class="index-navbar__options">
@@ -33,7 +33,7 @@
       <div class="index-content__mid-bar"></div>
 
       <div class="index-content__right">
-        <img src="business_bank.png" alt="Imagen" class="index-content__img">
+        <img src="~/public/business_bank.png" alt="Imagen" class="index-content__img">
 
         <div class="index-content__register">
           <h5 class="index-content__register__title">

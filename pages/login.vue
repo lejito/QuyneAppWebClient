@@ -5,7 +5,7 @@
         <v-icon class="lr-card__back" icon="mdi-arrow-left" size="large"></v-icon>
       </NuxtLink>
 
-      <img src="QuyneApp_Logo_Normal.png" alt="Logo" class="lr-card__img">
+      <img src="~/public/QuyneApp_Logo_Normal.png" alt="Logo" class="lr-card__img">
 
       <div class="lr-card__line"></div>
 
