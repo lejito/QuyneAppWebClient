@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       /* vuetify options */
     }
   },
-  app : {
+  app: {
     head: {
       title: 'QuyneApp ~ Gestiona tu dinero, paga tus facturas, crea bolsillos, ¡y más!',
       charset: 'utf-8',

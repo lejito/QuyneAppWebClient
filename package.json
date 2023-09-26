@@ -6,13 +6,17 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "apifake": "json-server --watch db.json --port 3001"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "nuxt": "^3.7.3"
   },
   "dependencies": {
+    "json-server": "^0.17.3",
+    "moment": "^2.29.4",
+    "sweetalert2": "^11.7.31",
     "vuetify-nuxt-module": "^0.5.12"
   }
 }
