@@ -51,6 +51,8 @@
 
 
 <script setup>
+import { AlertService } from '~/services/AlertService';
+
 definePageMeta({
   layout: "blank"
 });

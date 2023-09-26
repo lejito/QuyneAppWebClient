@@ -253,7 +253,7 @@ button {
 .lr-layout {
   width: 100vw;
   height: 100vh;
-  padding: 100px;
+  padding: 5vh;
   display: flex;
   align-items: start;
   justify-content: center;
