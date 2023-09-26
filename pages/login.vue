@@ -15,7 +15,7 @@
         <div class="lr-form__group">
           <v-icon class="lr-form__icon" icon="mdi-card-account-details"></v-icon>
           <label for="tipoDocumento" class="lr-form__label">Tipo de identificación</label>
-          <select name="tipoDocumento" id="tipoDocumento" class="lr-form__select">
+          <select name="tipoDocumento" id="tipoDocumento" v-model="docType" class="lr-form__select">
             <option value="CC" class="lr-form__select__option">Cédula de ciudadanía</option>
             <option value="TI" class="lr-form__select__option">Tarjeta de identidad</option>
             <option value="CE" class="lr-form__select__option">Cédula de extranjería</option>
@@ -27,17 +27,18 @@
         <div class="lr-form__group">
           <v-icon class="lr-form__icon" icon="mdi-pound"></v-icon>
           <label for="numeroDocumento" class="lr-form__label">Número de identificación</label>
-          <input type="text" name="numeroDocumento" id="numeroDocumento" placeholder="Número de identificación"
-            class="lr-form__input">
+          <input type="text" name="numeroDocumento" id="numeroDocumento" v-model="document"
+            placeholder="Número de identificación" class="lr-form__input">
         </div>
 
         <div class="lr-form__group">
           <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
           <label for="clave" class="lr-form__label">Contraseña</label>
-          <input type="password" name="clave" id="clave" placeholder="Contraseña" class="lr-form__input">
+          <input type="password" name="clave" id="clave" placeholder="Contraseña" v-model="password"
+            class="lr-form__input">
         </div>
 
-        <button class="lr-form__button">Iniciar sesión</button>
+        <button class="lr-form__button" @click="UserService.login(document, docType, password)">Iniciar sesión</button>
 
         <NuxtLink to="/registro">
           <span class="lr-form__link">
@@ -52,7 +53,10 @@
 
 <script setup>
 import { AlertService } from '~/services/AlertService';
-
+import { UserService } from '~/services/UserService';
+const document = ref('');
+const docType = ref('CC');
+const password = ref('');
 definePageMeta({
   layout: "blank"
 });
