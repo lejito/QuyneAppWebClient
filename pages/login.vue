@@ -34,11 +34,16 @@
         <div class="lr-form__group">
           <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
           <label for="clave" class="lr-form__label">Contraseña</label>
-          <input type="password" name="clave" id="clave" placeholder="Contraseña" v-model="password"
-            class="lr-form__input">
+          <input name="clave" id="clave" :type="mostrarContraseña ? 'text' : 'password'" 
+            placeholder="Contraseña" v-model="password" class="lr-form__input"/>
+          <button class="lr-form__group lr-form__icon_right"  @click="toggleMostrarContraseña">
+            <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+          </button>
         </div>
 
-        <button class="lr-form__button" @click="UserService.login(document, docType, password)">Iniciar sesión</button>
+        <button class="lr-form__button" 
+        @click="UserService.login(document, docType, password)" 
+        :disabled="!camposCompletos">Iniciar sesión</button>
 
         <NuxtLink to="/registro">
           <span class="lr-form__link">
@@ -52,16 +57,24 @@
 
 
 <script setup>
+import { User } from '~/models/User';
 import { AlertService } from '~/services/AlertService';
 import { UserService } from '~/services/UserService';
+import { ref, computed } from 'vue';
 const document = ref('');
 const docType = ref('CC');
 const password = ref('');
+const mostrarContraseña = ref(false);
 definePageMeta({
   layout: "blank"
 });
-
 useHead({
   title: "QuyneApp ~ Inicio de sesión"
 });
+const camposCompletos = computed(() => {
+    return docType.value && document.value && password.value;
+});
+const toggleMostrarContraseña = () => {
+  mostrarContraseña.value = !mostrarContraseña.value;
+};
 </script>
