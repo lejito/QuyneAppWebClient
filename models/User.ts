@@ -9,7 +9,6 @@ export class User {
         private creationDate: number,
         public firstName: string,
         public firstLastName: string,
-        public phone: string,
         public secondLastName?: string,
         public secondName?: string,
     ) { }
