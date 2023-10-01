@@ -24,6 +24,31 @@
       "firstLastName": "Cordoba",
       "phone": "3011442274",
       "secondLastName": "Rios"
+    },
+    {
+      "id": 1695771679332,
+      "email": "",
+      "docType": "CC",
+      "document": "",
+      "birthDay": "2023-09-26",
+      "password": "",
+      "creationDate": 0,
+      "firstName": "",
+      "firstLastName": "",
+      "phone": ""
     }
-  ]
+  ],
+  "cuentas": [],
+  "movimientos": [],
+  "bolsillos": [],
+  "registros": [],
+  "recargas": [],
+  "retiros": [],
+  "paquetes_telefonia": [],
+  "recargas_civica": [],
+  "facturas": [],
+  "trasferencias_internas": [],
+  "trasferencias_externas": [],
+  "recargas_telefonia": [],
+  "trasferencias_bolsillos": []
 }
