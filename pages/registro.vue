@@ -148,7 +148,7 @@ definePageMeta({
 });
 
 onBeforeMount(() => {
-  console.log(newUser.value.birthDay)
+
 })
 
 useHead({

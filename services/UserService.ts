@@ -1,6 +1,6 @@
 import axios from "axios";
 import { User } from "~/models/User";
-import { url } from "./Global";
+import { CUENTA, url } from "./Global";
 import { AlertService } from "./AlertService";
 import { CuentaService } from "./CuentaService";
 import { Cuenta } from "~/models/Cuenta";
@@ -49,12 +49,16 @@ export const UserService = {
             (user: User) =>
                 user.document === document && user.password === password && user.docType === docType
         );
-
         if (foundUser) {
+            const cuenta = await CuentaService.getCuenta(foundUser.id);
+            CuentaService.SaveCuentaStorage(cuenta);
             AlertService.success(`Inicio de sesion exitoso, bienvenido ${foundUser.firstName}  ${foundUser.firstLastName}`);
             navigateTo('/inicio');
         } else {
             AlertService.error("Error de autenticacion", 'Credenciales incorrectas. Inicio de sesión fallido.')
         }
+    },
+    logout() {
+        sessionStorage.removeItem(CUENTA);
     }
 }
