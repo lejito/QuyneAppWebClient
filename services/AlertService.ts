@@ -18,12 +18,23 @@ export const AlertService = {
     },
     success: (title: string) => {
         Swal.fire({
-            position: 'top-end',
             icon: 'success',
             title: title,
             showConfirmButton: false,
             timer: 1500
         })
+    },
+    withConfirmation: async (title: string, text: string): Promise<boolean> => {
+        const result = await Swal.fire({
+            title: title,
+            text: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Aceptar'
+        })
+        return result.isConfirmed;
     }
 
 }

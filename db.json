@@ -19,9 +19,9 @@
       "id": 1696200793499,
       "id_usuario": 1696200793249,
       "phone_number": "3011442274",
-      "saldo_disponible": 0,
+      "saldo_disponible": 1300,
       "habilitado": true,
-      "saldo_oculto": false,
+      "saldo_oculto": true,
       "fecha_creacion": "2023-10-01"
     }
   ],
