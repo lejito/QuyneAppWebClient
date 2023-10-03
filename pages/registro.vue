@@ -94,27 +94,29 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-phone"></v-icon>
                 <label for="numeroTelefono" class="lr-form__label">Número de teléfono</label>
-                <input type="phone" name="numeroTelefono" id="numeroTelefono" v-model="newUser.phone"
+                <input type="phone" name="numeroTelefono" id="numeroTelefono" v-model="phone"
                   placeholder="Número de teléfono" class="lr-form__input">
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
                 <label for="clave" class="lr-form__label">Contraseña</label>
-                <input :type="mostrarContraseña ? 'text' : 'password'" name="clave" id="clave"
-                  placeholder="Contraseña" v-model="newUser.password" class="lr-form__input"/>
+                <input :type="mostrarContraseña ? 'text' : 'password'" name="clave" id="clave" placeholder="Contraseña"
+                  v-model="newUser.password" class="lr-form__input" />
                 <button class="lr-form__group lr-form__icon_right" @click="toggleMostrarContraseña">
-                  <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+                  <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off'
+                  }}</v-icon>
                 </button>
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
                 <label for="repetirClave" class="lr-form__label">Repetir contraseña</label>
-                <input :type="mostrarContraseña ? 'text' : 'password'" name="repetirClave"
-                  id="repetirClave" v-model="confirmPass" placeholder="Repetir contraseña" class="lr-form__input"/>
+                <input :type="mostrarContraseña ? 'text' : 'password'" name="repetirClave" id="repetirClave"
+                  v-model="confirmPass" placeholder="Repetir contraseña" class="lr-form__input" />
                 <button class="lr-form__group lr-form__icon_right" @click="toggleMostrarContraseña">
-                  <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
+                  <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off'
+                  }}</v-icon>
                 </button>
               </div>
             </div>
@@ -124,8 +126,7 @@
 
         <div class="lr-form__footer">
           <button class="lr-form__button lr-form__button-footer"
-            @click="UserService.register(newUser, confirmPass)"
-            :disabled="!camposCompletos">Crear cuenta</button>
+            @click="UserService.register(newUser, confirmPass, phone)" :disabled="!camposCompletos">Crear cuenta</button>
           <NuxtLink to="/login">
             <span class="lr-form__link">
               ¿Ya tienes una cuenta? ¡Inicia sesión!
