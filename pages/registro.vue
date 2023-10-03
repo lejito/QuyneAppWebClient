@@ -94,22 +94,32 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-phone"></v-icon>
                 <label for="numeroTelefono" class="lr-form__label">Número de teléfono</label>
-                <input type="tel" name="numeroTelefono" id="numeroTelefono" v-model="phone"
+
+                <input type="phone" name="numeroTelefono" id="numeroTelefono" v-model="phone"
+
                   placeholder="Número de teléfono" class="lr-form__input">
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
                 <label for="clave" class="lr-form__label">Contraseña</label>
-                <input type="password" name="clave" id="clave" placeholder="Contraseña" v-model="newUser.password"
-                  class="lr-form__input">
+                <input :type="mostrarContraseña ? 'text' : 'password'" name="clave" id="clave" placeholder="Contraseña"
+                  v-model="newUser.password" class="lr-form__input" />
+                <button class="lr-form__group lr-form__icon_right" @click="toggleMostrarContraseña">
+                  <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off'
+                  }}</v-icon>
+                </button>
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
                 <label for="repetirClave" class="lr-form__label">Repetir contraseña</label>
-                <input type="password" name="repetirClave" id="repetirClave" v-model="confirmPass"
-                  placeholder="Repetir contraseña" class="lr-form__input">
+                <input :type="mostrarContraseña ? 'text' : 'password'" name="repetirClave" id="repetirClave"
+                  v-model="confirmPass" placeholder="Repetir contraseña" class="lr-form__input" />
+                <button class="lr-form__group lr-form__icon_right" @click="toggleMostrarContraseña">
+                  <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off'
+                  }}</v-icon>
+                </button>
               </div>
             </div>
           </template>
@@ -118,6 +128,9 @@
 
         <div class="lr-form__footer">
           <button class="lr-form__button lr-form__button-footer"
+
+            @click="UserService.register(newUser, confirmPass, phone)" :disabled="!camposCompletos">Crear cuenta</button>
+
             @click="UserService.register(newUser, confirmPass, phone)">Crear
             cuenta</button>
 
@@ -135,7 +148,6 @@
 
 <script setup>
 import moment from 'moment';
-
 import { VStepper } from 'vuetify/labs/VStepper'
 import { User } from '~/models/User';
 import { UserService } from '~/services/UserService';
@@ -143,6 +155,7 @@ const confirmPass = ref('')
 const phone = ref('')
 const newUser = ref(new User(0, "", "CC", "", moment().format('yyyy-MM-DD'), "", 0, "", ""));
 const components = ref({ VStepper });
+const mostrarContraseña = ref(false);
 definePageMeta({
   layout: "blank"
 });
@@ -154,6 +167,16 @@ onBeforeMount(() => {
 useHead({
   title: "QuyneApp ~ Registro"
 });
+const camposCompletos = computed(() => {
+  return (
+    newUser.value.docType && newUser.value.document && newUser.value.birthDay &&
+    newUser.value.firstName && newUser.value.email && newUser.value.phone &&
+    newUser.value.password && confirmPass.value && newUser.value.password == confirmPass.value
+  );
+});
+const toggleMostrarContraseña = () => {
+  mostrarContraseña.value = !mostrarContraseña.value;
+};
 </script>
 <style>
 .v-stepper-item__avatar {

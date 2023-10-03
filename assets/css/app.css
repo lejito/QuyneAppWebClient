@@ -366,7 +366,19 @@ button {
   text-align: center;
   transition: all 300ms ease-in-out;
 }
-
+.lr-form__icon_right {
+  position: absolute !important;
+  top: 14px;
+  right: 18px; 
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  transition: all 300ms ease-in-out;
+}
+.lr-form__group:focus-within .lr-form__icon_right,
+.lr-form__group:focus-within .lr-form__icon_right v-icon {
+  color: var(--color-primary); /* Cambia al color deseado */
+}
 .lr-form__icon-select {
   position: absolute !important;
   top: 14px;
@@ -404,6 +416,21 @@ button {
 
 .lr-form__button-footer {
   width: auto;
+}
+
+.lr-form__button-footer:disabled {
+  background-color:  var(--color-light-gray); 
+  cursor: not-allowed; 
+}
+.lr-form__button:disabled {
+  background-color: var(--color-light-gray); 
+  cursor: not-allowed; 
+}
+
+/* Estilo para el icono de alternancia de contraseña */
+.lr-form__password-toggle v-icon {
+  font-size: 24px;
+  color: var(--color-primary);
 }
 
 .lr-form__link:hover {
