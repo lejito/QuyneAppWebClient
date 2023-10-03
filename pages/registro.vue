@@ -94,7 +94,7 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-phone"></v-icon>
                 <label for="numeroTelefono" class="lr-form__label">Número de teléfono</label>
-                <input type="tel" name="numeroTelefono" id="numeroTelefono" v-model="newUser.phone"
+                <input type="tel" name="numeroTelefono" id="numeroTelefono" v-model="phone"
                   placeholder="Número de teléfono" class="lr-form__input">
               </div>
 
@@ -117,7 +117,8 @@
 
 
         <div class="lr-form__footer">
-          <button class="lr-form__button lr-form__button-footer" @click="UserService.register(newUser, confirmPass)">Crear
+          <button class="lr-form__button lr-form__button-footer"
+            @click="UserService.register(newUser, confirmPass, phone)">Crear
             cuenta</button>
 
           <NuxtLink to="/login">
@@ -139,14 +140,15 @@ import { VStepper } from 'vuetify/labs/VStepper'
 import { User } from '~/models/User';
 import { UserService } from '~/services/UserService';
 const confirmPass = ref('')
-const newUser = ref(new User(0, "", "CC", "", moment().format('yyyy-MM-DD'), "", 0, "", "", ""));
+const phone = ref('')
+const newUser = ref(new User(0, "", "CC", "", moment().format('yyyy-MM-DD'), "", 0, "", ""));
 const components = ref({ VStepper });
 definePageMeta({
   layout: "blank"
 });
 
 onBeforeMount(() => {
-  console.log(newUser.value.birthDay)
+
 })
 
 useHead({
