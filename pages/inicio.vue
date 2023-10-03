@@ -1,65 +1,69 @@
 <template>
     <v-container class="contenedor">
-        <v-row justify="center">
-            <v-col cols="1">
-                Disponible
-            </v-col>
-            <v-col cols="1">
-                <v-icon icon="mdi-eye" class="clikeable" v-if="cuenta.saldo_oculto" @click="changeVisibility"></v-icon>
-                <v-icon icon="mdi-eye-off" class="clikeable" v-else @click="changeVisibility"></v-icon>
-            </v-col>
-        </v-row>
+        <v-container class="card">
+            <v-row justify="center">
+                <v-col cols="1" style="margin-right: 10px;">
+                    Disponible
+                </v-col>
+                <v-col cols="1">
+                    <v-icon icon="mdi-eye" class="clikeable" v-if="cuenta.saldo_oculto" @click="changeVisibility"></v-icon>
+                    <v-icon icon="mdi-eye-off" class="clikeable" v-else @click="changeVisibility"></v-icon>
+                </v-col>
+            </v-row>
 
-        <v-row justify="center">
-            <v-col cols="2">
-                <p v-if="cuenta.saldo_oculto">
-                    $ *****
-                </p>
-                <p v-else>
-                    $ {{ cuenta.saldo_disponible }}
-                </p>
-            </v-col>
-        </v-row>
-        <v-row justify="center">
-            <v-col cols="2">
-                Total
-            </v-col>
-        </v-row>
-        <v-row justify="center">
-            <v-col cols="2">
-                <p v-if="cuenta.saldo_oculto">
-                    $ *****
-                </p>
-                <p v-else>
-                    $ {{ saldoTotal() }}
-                </p>
-            </v-col>
-        </v-row>
-        <v-row justify="center">
-            <v-col cols="2">
-                Bolsillos
-            </v-col>
-            <v-col cols="2">
-                Movimientos
-            </v-col>
-            <v-col cols="2">
-                Enviar
-            </v-col>
-        </v-row>
-        <v-row justify="center">
-            <v-col cols="2">
-                <v-icon icon="mdi-safe" size="x-large" class="clikeable" color="var(--color-primary-hover)">
-                </v-icon>
-            </v-col>
-            <v-col cols="2">
-                <v-icon icon="mdi-format-list-bulleted" size="x-large" class="clikeable" color="var(--color-primary-hover)">
-                </v-icon>
-            </v-col>
-            <v-col cols="2">
-                <v-icon icon="mdi-bank-transfer-out" size="x-large" class="clikeable" color="var(--color-primary-hover)">
-                </v-icon>
-            </v-col>
-        </v-row>
+            <v-row justify="center">
+                <v-col cols="2">
+                    <p v-if="cuenta.saldo_oculto">
+                        $ *****
+                    </p>
+                    <p v-else>
+                        $ {{ cuenta.saldo_disponible }}
+                    </p>
+                </v-col>
+            </v-row>
+            <v-row justify="center">
+                <v-col cols="2">
+                    Total
+                </v-col>
+            </v-row>
+            <v-row justify="center">
+                <v-col cols="2">
+                    <p v-if="cuenta.saldo_oculto">
+                        $ *****
+                    </p>
+                    <p v-else>
+                        $ {{ saldoTotal() }}
+                    </p>
+                </v-col>
+            </v-row>
+            <v-row justify="center">
+                <v-col cols="2">
+                    Bolsillos
+                </v-col>
+                <v-col cols="2">
+                    Movimientos
+                </v-col>
+                <v-col cols="2">
+                    Enviar
+                </v-col>
+            </v-row>
+            <v-row justify="center">
+                <v-col cols="2">
+                    <v-icon icon="mdi-safe" size="x-large" class="clikeable" color="var(--color-primary-hover)">
+                    </v-icon>
+                </v-col>
+                <v-col cols="2">
+                    <v-icon icon="mdi-format-list-bulleted" size="x-large" class="clikeable"
+                        color="var(--color-primary-hover)">
+                    </v-icon>
+                </v-col>
+                <v-col cols="2">
+                    <v-icon icon="mdi-bank-transfer-out" size="x-large" class="clikeable"
+                        color="var(--color-primary-hover)">
+                    </v-icon>
+                </v-col>
+            </v-row>
+        </v-container>
     </v-container>
 </template>
 
@@ -107,5 +111,11 @@ function saldoTotal() {
     background-color: var(--color-secondary);
     height: 100dvh;
     padding: 10% !important;
+}
+
+.card {
+    background-color: var(--color-white);
+    border-radius: 30px;
+    box-shadow: 5px 5px 10px var(--color-shadow);
 }
 </style>

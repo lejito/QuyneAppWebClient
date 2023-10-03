@@ -95,8 +95,7 @@
                 <v-icon class="lr-form__icon" icon="mdi-phone"></v-icon>
                 <label for="numeroTelefono" class="lr-form__label">Número de teléfono</label>
 
-                <input type="phone" name="numeroTelefono" id="numeroTelefono" v-model="phone"
-
+                <input type="tel" name="numeroTelefono" id="numeroTelefono" v-model="phone"
                   placeholder="Número de teléfono" class="lr-form__input">
               </div>
 
@@ -128,10 +127,7 @@
 
         <div class="lr-form__footer">
           <button class="lr-form__button lr-form__button-footer"
-
-            @click="UserService.register(newUser, confirmPass, phone)" :disabled="!camposCompletos">Crear cuenta</button>
-
-            @click="UserService.register(newUser, confirmPass, phone)">Crear
+            @click="UserService.register(newUser, confirmPass, phone)" type="submit" :disabled="camposCompletos">Crear
             cuenta</button>
 
           <NuxtLink to="/login">
@@ -168,11 +164,10 @@ useHead({
   title: "QuyneApp ~ Registro"
 });
 const camposCompletos = computed(() => {
-  return (
-    newUser.value.docType && newUser.value.document && newUser.value.birthDay &&
+
+  return newUser.value.docType && newUser.value.document && newUser.value.birthDay &&
     newUser.value.firstName && newUser.value.email && newUser.value.phone &&
     newUser.value.password && confirmPass.value && newUser.value.password == confirmPass.value
-  );
 });
 const toggleMostrarContraseña = () => {
   mostrarContraseña.value = !mostrarContraseña.value;
