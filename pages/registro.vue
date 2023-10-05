@@ -127,7 +127,7 @@
 
         <div class="lr-form__footer">
           <button class="lr-form__button lr-form__button-footer"
-            @click="UserService.register(newUser, confirmPass, phone)" type="submit" :disabled="camposCompletos">Crear
+            @click="verificarDatos(confirmPass,newUser.password,newUser.email,phone)" type="submit" :disabled="camposCompletos">Crear
             cuenta</button>
 
           <NuxtLink to="/login">
@@ -147,6 +147,7 @@ import moment from 'moment';
 import { VStepper } from 'vuetify/labs/VStepper'
 import { User } from '~/models/User';
 import { UserService } from '~/services/UserService';
+const Correo = ref('')
 const confirmPass = ref('')
 const phone = ref('')
 const newUser = ref(new User(0, "", "CC", "", moment().format('yyyy-MM-DD'), "", 0, "", ""));
@@ -171,6 +172,43 @@ const camposCompletos = computed(() => {
 });
 const toggleMostrarContraseña = () => {
   mostrarContraseña.value = !mostrarContraseña.value;
+};
+const verificarDatos = (clave1,clave2,correo,telefono) =>{
+  let claveIgual = false;
+  let correoCorrecto = false;
+  let numeroTelefonicoBien = false;
+  const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const intutcorreo = document.getElementById("correoElectronico")
+  const passa = document.getElementById("repetirClave");
+  const passa2 = document.getElementById("clave");
+  const intutelefono = document.getElementById("numeroTelefono");
+  if(clave1 != clave2){
+    passa.style.borderColor="red";
+    passa2.style.borderColor="red";
+  }
+  else{
+    claveIgual = true;
+    passa.style.borderColor="#BDBDBD";
+    passa2.style.borderColor="#BDBDBD";    
+  }
+  if(regexCorreo.test(correo)){
+    correoCorrecto = true;
+    intutcorreo.style.borderColor= "#BDBDBD";
+  }
+  else{
+    intutcorreo.style.borderColor="red";
+  }
+  if(telefono != "" ){
+    numeroTelefonicoBien = true;
+    intutelefono.style.borderColor="#BDBDBD";
+  }
+  else{
+    intutelefono.style.borderColor="red";
+  }
+  if(claveIgual && correoCorrecto && numeroTelefonicoBien){
+    UserService.register(newUser, confirmPass, phone)
+  }
+
 };
 </script>
 <style>
