@@ -1,70 +1,73 @@
 <template>
-    <v-container class="contenedor">
-        <v-container class="card">
-            <v-row justify="center">
-                <v-col cols="1" style="margin-right: 10px;">
-                    Disponible
-                </v-col>
-                <v-col cols="1">
-                    <v-icon icon="mdi-eye" class="clikeable" v-if="cuenta.saldo_oculto" @click="changeVisibility"></v-icon>
-                    <v-icon icon="mdi-eye-off" class="clikeable" v-else @click="changeVisibility"></v-icon>
-                </v-col>
-            </v-row>
+    <div class="container">
+        <div class="contenedor">
+            <v-container class="card">
+                <v-row justify="center">
+                    <v-col cols="1" style="margin-right: 10px;">
+                        Disponible
+                    </v-col>
+                    <v-col cols="1">
+                        <v-icon icon="mdi-eye" class="clikeable" v-if="cuenta.saldo_oculto"
+                            @click="changeVisibility"></v-icon>
+                        <v-icon icon="mdi-eye-off" class="clikeable" v-else @click="changeVisibility"></v-icon>
+                    </v-col>
+                </v-row>
 
-            <v-row justify="center">
-                <v-col cols="2">
-                    <p v-if="cuenta.saldo_oculto">
-                        $ *****
-                    </p>
-                    <p v-else>
-                        $ {{ cuenta.saldo_disponible }}
-                    </p>
-                </v-col>
-            </v-row>
-            <v-row justify="center">
-                <v-col cols="2">
-                    Total
-                </v-col>
-            </v-row>
-            <v-row justify="center">
-                <v-col cols="2">
-                    <p v-if="cuenta.saldo_oculto">
-                        $ *****
-                    </p>
-                    <p v-else>
-                        $ {{ saldoTotal() }}
-                    </p>
-                </v-col>
-            </v-row>
-            <v-row justify="center">
-                <v-col cols="2">
-                    Bolsillos
-                </v-col>
-                <v-col cols="2">
-                    Movimientos
-                </v-col>
-                <v-col cols="2">
-                    Enviar
-                </v-col>
-            </v-row>
-            <v-row justify="center">
-                <v-col cols="2">
-                    <v-icon icon="mdi-safe" size="x-large" class="clikeable" color="var(--color-primary-hover)">
-                    </v-icon>
-                </v-col>
-                <v-col cols="2">
-                    <v-icon icon="mdi-format-list-bulleted" size="x-large" class="clikeable"
-                        color="var(--color-primary-hover)">
-                    </v-icon>
-                </v-col>
-                <v-col cols="2">
-                    <v-icon icon="mdi-bank-transfer-out" size="x-large" class="clikeable"
-                        color="var(--color-primary-hover)">
-                    </v-icon>
-                </v-col>
-            </v-row>
-        </v-container>
-    </v-container>
+                <v-row justify="center">
+                    <v-col cols="2">
+                        <p v-if="cuenta.saldo_oculto">
+                            $ *****
+                        </p>
+                        <p v-else>
+                            $ {{ cuenta.saldo_disponible }}
+                        </p>
+                    </v-col>
+                </v-row>
+                <v-row justify="center">
+                    <v-col cols="2">
+                        Total
+                    </v-col>
+                </v-row>
+                <v-row justify="center">
+                    <v-col cols="2">
+                        <p v-if="cuenta.saldo_oculto">
+                            $ *****
+                        </p>
+                        <p v-else>
+                            $ {{ saldoTotal() }}
+                        </p>
+                    </v-col>
+                </v-row>
+                <v-row justify="center">
+                    <v-col cols="2">
+                        Bolsillos
+                    </v-col>
+                    <v-col cols="2">
+                        Movimientos
+                    </v-col>
+                    <v-col cols="2">
+                        Enviar
+                    </v-col>
+                </v-row>
+                <v-row justify="center">
+                    <v-col cols="2">
+                        <v-icon icon="mdi-safe" size="x-large" class="clikeable" color="var(--color-primary-hover)">
+                        </v-icon>
+                    </v-col>
+                    <v-col cols="2">
+                        <v-icon icon="mdi-format-list-bulleted" size="x-large" class="clikeable"
+                            color="var(--color-primary-hover)">
+                        </v-icon>
+                    </v-col>
+                    <v-col cols="2">
+                        <v-icon icon="mdi-bank-transfer-out" size="x-large" class="clikeable"
+                            color="var(--color-primary-hover)">
+                        </v-icon>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -108,14 +111,43 @@ function saldoTotal() {
 }
 
 .contenedor {
-    background-color: var(--color-secondary);
-    height: 100dvh;
     padding: 10% !important;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 
 .card {
-    background-color: var(--color-white);
+    background-color: rgba(250, 250, 250, 0.97);
     border-radius: 30px;
+    width: 70% !important;
     box-shadow: 5px 5px 10px var(--color-shadow);
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    min-height: 100vh;
+    overflow: hidden;
+
+}
+
+.container:before {
+    content: "";
+    position: absolute;
+    height: 2000px;
+    width: 1000px;
+    right: 50%;
+    transform: translateY(-48%);
+
+
+    background-image: linear-gradient(-45deg, var(--color-primary) 20%, var(--color-secondary) 100%);
+    transition: 1.8s ease-in-out;
+    border-radius: 50%;
+    z-index: 0;
 }
 </style>
