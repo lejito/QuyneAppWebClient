@@ -127,7 +127,8 @@
 
         <div class="lr-form__footer">
           <button class="lr-form__button lr-form__button-footer"
-            @click="verificarDatos(confirmPass,newUser.password,newUser.email,phone)" type="submit" :disabled="camposCompletos">Crear
+            @click="verificarDatos(confirmPass, newUser.password, newUser.email, phone)" type="submit"
+            :disabled="camposCompletos">Crear
             cuenta</button>
 
           <NuxtLink to="/login">
@@ -173,7 +174,7 @@ const camposCompletos = computed(() => {
 const toggleMostrarContraseña = () => {
   mostrarContraseña.value = !mostrarContraseña.value;
 };
-const verificarDatos = (clave1,clave2,correo,telefono) =>{
+const verificarDatos = (clave1, clave2, correo, telefono) => {
   let claveIgual = false;
   let correoCorrecto = false;
   let numeroTelefonicoBien = false;
@@ -182,31 +183,32 @@ const verificarDatos = (clave1,clave2,correo,telefono) =>{
   const passa = document.getElementById("repetirClave");
   const passa2 = document.getElementById("clave");
   const intutelefono = document.getElementById("numeroTelefono");
-  if(clave1 != clave2){
-    passa.style.borderColor="red";
-    passa2.style.borderColor="red";
+  if (clave1 != clave2) {
+    passa.style.borderColor = "red";
+    passa2.style.borderColor = "red";
   }
-  else{
+  else {
     claveIgual = true;
-    passa.style.borderColor="#BDBDBD";
-    passa2.style.borderColor="#BDBDBD";    
+    passa.style.borderColor = "#BDBDBD";
+    passa2.style.borderColor = "#BDBDBD";
   }
-  if(regexCorreo.test(correo)){
+  if (regexCorreo.test(correo)) {
     correoCorrecto = true;
-    intutcorreo.style.borderColor= "#BDBDBD";
+    intutcorreo.style.borderColor = "#BDBDBD";
   }
-  else{
-    intutcorreo.style.borderColor="red";
+  else {
+    intutcorreo.style.borderColor = "red";
   }
-  if(telefono != "" ){
+  if (telefono != "") {
     numeroTelefonicoBien = true;
-    intutelefono.style.borderColor="#BDBDBD";
+    intutelefono.style.borderColor = "#BDBDBD";
   }
-  else{
-    intutelefono.style.borderColor="red";
+  else {
+    intutelefono.style.borderColor = "red";
   }
-  if(claveIgual && correoCorrecto && numeroTelefonicoBien){
-    UserService.register(newUser, confirmPass, phone)
+  if (claveIgual && correoCorrecto && numeroTelefonicoBien) {
+
+    UserService.register(newUser.value, confirmPass.value, phone.value)
   }
 
 };

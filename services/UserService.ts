@@ -18,11 +18,11 @@ export const UserService = {
         const users = await this.getUsers();
 
         const emailExists = users.some((user: User) => user.email === newUser.email);
-
+        console.log(newUser.password, confirmPassword)
         if (emailExists) {
             AlertService.error("Error de autenticacion", "El correo ingresado ya se encuentra registrado en la aplicacion")
-        } else if (newUser.password !== confirmPassword) {
-            AlertService.error("Error de autenticacion", "Las contraseñas no coindicen")
+        } else if (newUser.password != confirmPassword) {
+            AlertService.error("Error de autenticacion", "Las contraseñas no coindicen");
         } else {
             // Generate a unique sequential ID for the new user (the actual db do it, just while using fake api)
             const userId = Date.now();
