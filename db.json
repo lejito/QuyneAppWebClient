@@ -25,6 +25,17 @@
       "firstLastName": "q",
       "secondLastName": "q",
       "secondName": "q"
+    },
+    {
+      "id": 1696701249095,
+      "email": "lorenacadvid@gmail.com",
+      "docType": "CC",
+      "document": "1234",
+      "birthDay": "2023-10-07",
+      "password": "1",
+      "creationDate": 0,
+      "firstName": "lorena",
+      "firstLastName": "cadavid "
     }
   ],
   "cuentas": [
@@ -45,6 +56,15 @@
       "habilitado": true,
       "saldo_oculto": true,
       "fecha_creacion": "2023-10-05"
+    },
+    {
+      "id": 1696701249509,
+      "id_usuario": 1696701249095,
+      "phone_number": "3043888972",
+      "saldo_disponible": 0,
+      "habilitado": true,
+      "saldo_oculto": true,
+      "fecha_creacion": "2023-10-07"
     }
   ],
   "movimientos": [],

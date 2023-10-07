@@ -90,7 +90,7 @@ onBeforeMount(() => {
     bolsillos.value = BolsilloService.getBolsillos(cuenta.value.id);
 })
 definePageMeta({
-    layout: "blank"
+    layout: "navbar"
 });
 const changeVisibility = () => {
     cuenta.value.saldo_oculto = !cuenta.value.saldo_oculto;

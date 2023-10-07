@@ -470,3 +470,31 @@ button {
 }
 
 /*Estilos para el inicio*/
+.navbar-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 50px; 
+  border-radius: 25px;
+  transition: background-color 0.3s;
+}
+.navbar-button:hover {
+  background-color: var(--color-light-gray); 
+}
+
+.user-icon {
+  display: flex;
+  align-items: center; 
+}
+
+
+
+
+
+
+
