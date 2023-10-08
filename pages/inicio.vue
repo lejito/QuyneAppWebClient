@@ -7,9 +7,9 @@
                         Disponible
                     </v-col>
                     <v-col cols="1">
-                        <v-icon icon="mdi-eye" class="clikeable" v-if="cuenta.saldo_oculto"
+                        <v-icon icon="mdi-eye-off" class="clikeable" v-if="cuenta.saldo_oculto"
                             @click="changeVisibility"></v-icon>
-                        <v-icon icon="mdi-eye-off" class="clikeable" v-else @click="changeVisibility"></v-icon>
+                        <v-icon icon="mdi-eye" class="clikeable" v-else @click="changeVisibility"></v-icon>
                     </v-col>
                 </v-row>
 
