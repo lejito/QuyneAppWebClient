@@ -524,6 +524,7 @@ button {
   margin: 0 5px; 
   flex-grow: 1; 
   transition: color 0.3s, border-bottom 0.3s;
+  z-index: 1;
 }
 .center {
   flex-grow: 0; 
