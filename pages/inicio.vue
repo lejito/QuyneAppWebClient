@@ -2,70 +2,51 @@
     <div class="container">
         <div class="contenedor">
             <v-container class="card">
-                <v-row justify="center">
-                    <v-col cols="1" style="margin-right: 10px;">
+                <v-row >
+                    <v-col cols="1" style="margin-right: 10px;" class="textoBold">
                         Disponible
                     </v-col>
                     <v-col cols="1">
-                        <v-icon icon="mdi-eye-off" class="clikeable" v-if="cuenta.saldo_oculto"
+                        <v-icon icon="mdi-eye-off" class="clikeable-eye" v-if="cuenta.saldo_oculto"
                             @click="changeVisibility"></v-icon>
-                        <v-icon icon="mdi-eye" class="clikeable" v-else @click="changeVisibility"></v-icon>
+                        <v-icon icon="mdi-eye" class="clikeable-eye" v-else @click="changeVisibility"></v-icon>
                     </v-col>
                 </v-row>
-
-                <v-row justify="center">
-                    <v-col cols="2">
-                        <p v-if="cuenta.saldo_oculto">
-                            $ *****
+                <v-row>
+                    <v-col cols="2" class="textoDinero">
+                        <p class="textoDinero" v-if="cuenta.saldo_oculto">
+                            $ ***
                         </p>
-                        <p v-else>
+                        <p class="textoDinero" v-else>
                             $ {{ cuenta.saldo_disponible }}
                         </p>
                     </v-col>
                 </v-row>
-                <v-row justify="center">
-                    <v-col cols="2">
+                <v-row >
+                    <v-col cols="2" class="textoBold2">
                         Total
                     </v-col>
                 </v-row>
-                <v-row justify="center">
-                    <v-col cols="2">
-                        <p v-if="cuenta.saldo_oculto">
-                            $ *****
+                <v-row>
+                    <v-col cols="2" class="textoDinero">
+                        <p class="textoDinero" v-if="cuenta.saldo_oculto">
+                            $ ***
                         </p>
-                        <p v-else>
+                        <p class="textoDinero" v-else>
                             $ {{ saldoTotal() }}
                         </p>
                     </v-col>
                 </v-row>
-                <v-row justify="center">
-                    <v-col cols="2">
-                        Bolsillos
-                    </v-col>
-                    <v-col cols="2">
-                        Movimientos
-                    </v-col>
-                    <v-col cols="2">
-                        Enviar
-                    </v-col>
+                <v-row >
+                    <button class="botonI">
+                        TU PLATA
+                    </button>
                 </v-row>
-                <v-row justify="center">
-                    <v-col cols="2">
-                        <v-icon icon="mdi-safe" size="x-large" class="clikeable" color="var(--color-primary-hover)">
-                        </v-icon>
-                    </v-col>
-                    <v-col cols="2">
-                        <v-icon icon="mdi-format-list-bulleted" size="x-large" class="clikeable"
-                            color="var(--color-primary-hover)">
-                        </v-icon>
-                    </v-col>
-                    <v-col cols="2">
-                        <v-icon icon="mdi-bank-transfer-out" size="x-large" class="clikeable"
-                            color="var(--color-primary-hover)">
-                        </v-icon>
-                    </v-col>
-                </v-row>
+                <div class="cuadrado">
+                    <div class="circulo"></div>
+                </div>
             </v-container>
+            <v-container class="card-2"></v-container>
         </div>
     </div>
 </template>
@@ -109,9 +90,16 @@ function saldoTotal() {
 .clikeable {
     cursor: pointer;
 }
+.clikeable-eye {
+    cursor: pointer;
+    padding-left: 80px;
+}
 
 .contenedor {
-    padding: 10% !important;
+    display: flex;
+    padding-top: 3%;
+    padding-bottom: 10%;
+    padding-left: 5%;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -119,21 +107,72 @@ function saldoTotal() {
     left: 0;
     z-index: 1;
 }
+.textoBold{
+    font-size: 150%;
+    font-style: Bold;
+    margin-left: 30%;
+}
+.textoBold2{
+    font-size: 150%;
+    font-style: Bold;
+    margin-left: 35%;
+}
+.textoDinero{
+    font-size: 120%;
+    margin-left: 33%;
+}
+.botonI{
+    width: 100px;
+    height: 100px;
+    margin-left: 33%;
+    border-color: var(--color-secondary);
+    border-radius: 20px;
+    color: var(--color-secondary);
+}
 
 .card {
     background-color: rgba(250, 250, 250, 0.97);
     border-radius: 30px;
-    width: 70% !important;
+    width: 40% !important;
     box-shadow: 5px 5px 10px var(--color-shadow);
 }
+.card-2 {
+    background-color: rgba(250, 250, 250, 0.97);
+    border-radius: 30px;
+    width: 50% !important;
+    box-shadow: 5px 5px 10px var(--color-shadow);
+}
+.cuadrado{
+    background-color: var(--color-primary);
+    margin-top: 6%;
+    width: 210px;
+    height: 80px;
+    z-index: 1;
+    overflow: visible;
+    position: absolute;
+    left: 0%;
+    top: 3%;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 5px 5px 10px var(--color-shadow);
+}
+.circulo{
+    background-color: var(--color-white);
+    width: 30px;
+    height: 30px;
+    z-index: 0;
+    position: absolute;
+    left: 75%;
+    top: 30%;
+    border-radius: 50%;
+}
+
 
 .container {
     position: relative;
     width: 100%;
     background-color: #fff;
     min-height: 100vh;
-    overflow: hidden;
-
 }
 
 .container:before {
@@ -141,11 +180,8 @@ function saldoTotal() {
     position: absolute;
     height: 2000px;
     width: 1000px;
-    right: 50%;
+    right: 0%;
     transform: translateY(-48%);
-
-
-    background-image: linear-gradient(-45deg, var(--color-primary) 20%, var(--color-secondary) 100%);
     transition: 1.8s ease-in-out;
     border-radius: 50%;
     z-index: 0;

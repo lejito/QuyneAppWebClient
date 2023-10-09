@@ -523,6 +523,7 @@ button {
   cursor: pointer; 
   margin: 0 5px; 
   flex-grow: 1; 
+  transition: color 0.3s, border-bottom 0.3s;
 }
 .center {
   flex-grow: 0; 
@@ -534,6 +535,7 @@ button {
   text-decoration-thickness: 3px;
   text-decoration-skip: none;
   font-weight: bold;
+  transition: color 0.3s, border-bottom 0.3s;
 }
 
 

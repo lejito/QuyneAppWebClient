@@ -13,8 +13,7 @@
 		</nav>
         <nav class="secondary-navbar">
             <a @click="handleClick('inicio')" :class="{ active: activeTab === 'inicio' }" class="nav-button" href="inicio">INICIO</a>
-            <a @click="handleClick('movimientos')" :class="{ active: activeTab === 'movimientos' }" class="nav-button center"
-            >MOVIMIENTOS</a>
+            <a @click="handleClick('movimientos')" :class="{ active: activeTab === 'movimientos' }" class="nav-button center">MOVIMIENTOS</a>
     		<a @click="handleClick('servicios')" :class="{ active: activeTab === 'servicios' }" class="nav-button">SERVICIOS</a>
         </nav>
 
@@ -32,4 +31,5 @@ const activeTab = ref('inicio');
 function handleClick(tab) {
 activeTab.value = tab;
 };
+
 </script>
