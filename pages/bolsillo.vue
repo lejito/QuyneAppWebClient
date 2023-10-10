@@ -83,7 +83,7 @@
 
 <script setup>
 
-let showModal = false;
+const showModal = ref(false);
 const cuenta = ref({ 'saldo_disponible': 0, 'saldo_oculto': true });
 const bolsillos = ref({ 'nombre': "", 'saldo_disponible': 0, 'saldo_objetivo?': 0 });
 import { AlertService } from '~/services/AlertService';
