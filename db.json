@@ -25,6 +25,17 @@
       "firstLastName": "q",
       "secondLastName": "q",
       "secondName": "q"
+    },
+    {
+      "id": 1696830521937,
+      "email": "olarteviviana.a@gmail.com",
+      "docType": "CC",
+      "document": "1000305187",
+      "birthDay": "2001-09-01",
+      "password": "123456789",
+      "creationDate": 0,
+      "firstName": "Viviana",
+      "firstLastName": "Muñoz"
     }
   ],
   "cuentas": [
@@ -45,6 +56,15 @@
       "habilitado": true,
       "saldo_oculto": true,
       "fecha_creacion": "2023-10-05"
+    },
+    {
+      "id": 1696830521980,
+      "id_usuario": 1696830521937,
+      "phone_number": "+57 3242383887",
+      "saldo_disponible": 0,
+      "habilitado": true,
+      "saldo_oculto": true,
+      "fecha_creacion": "2023-10-09"
     }
   ],
   "movimientos": [],

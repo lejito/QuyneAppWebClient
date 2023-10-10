@@ -51,8 +51,10 @@
                 </v-row>
                 <v-row justify="center">
                     <v-col cols="2">
-                        <v-icon icon="mdi-safe" size="x-large" class="clikeable" color="var(--color-primary-hover)">
-                        </v-icon>
+                        <router-link to="/bolsillo">
+                            <v-icon icon="mdi-safe" size="x-large" class="clikeable" color="var(--color-primary-hover)">
+                            </v-icon>
+                        </router-link>
                     </v-col>
                     <v-col cols="2">
                         <v-icon icon="mdi-format-list-bulleted" size="x-large" class="clikeable"
