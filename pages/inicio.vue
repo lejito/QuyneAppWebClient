@@ -1,6 +1,8 @@
 <template>
     <div class="container">
         <div class="contenedor">
+            <div class="left-rectangle2">
+                <div class="left-rectangle">
             <v-container class="card">
                 <v-row >
                     <v-col cols="1" style="margin-right: 10px;" class="textoBold">
@@ -24,7 +26,7 @@
                 </v-row>
                 <v-row >
                     <v-col cols="2" class="textoBold2">
-                        Total
+                        Total:
                     </v-col>
                 </v-row>
                 <v-row>
@@ -47,6 +49,8 @@
                 </div>
             </v-container>
             <v-container class="card-2"></v-container>
+        </div>
+        </div>
         </div>
     </div>
 </template>
@@ -86,104 +90,34 @@ function saldoTotal() {
 
 </script>
 
-<style>
-.clikeable {
-    cursor: pointer;
-}
-.clikeable-eye {
-    cursor: pointer;
-    padding-left: 80px;
-}
 
-.contenedor {
-    display: flex;
-    padding-top: 3%;
-    padding-bottom: 10%;
-    padding-left: 5%;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1;
+<style scoped>
+
+.left-rectangle2 {
+  background-color: red ;
+  width: 700px ; 
+  height: 500px ;
+  clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+  z-index: 2;
 }
-.textoBold{
-    font-size: 150%;
-    font-style: Bold;
-    margin-left: 30%;
+.left-rectangle {
+  background-color: var(--color-secundario) !important;
+  width: 800px ; 
+  height: 600px ; /* Cambia la altura según tus necesidades */
+  clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.9) !important;
+}
+.card{
+    position: absolute;
+    top: 130px;
+    left: 140px;
+    background: rgba(255, 255, 255, 0.45);;
+    border-radius: 35px;
+    width: 500px; 
+    height: 450px;
+    border: 2px solid white;
 }
 .textoBold2{
-    font-size: 150%;
-    font-style: Bold;
-    margin-left: 35%;
-}
-.textoDinero{
-    font-size: 120%;
-    margin-left: 33%;
-}
-.botonI{
-    width: 100px;
-    height: 100px;
-    margin-left: 33%;
-    border-color: var(--color-secondary);
-    border-radius: 20px;
-    color: var(--color-secondary);
-}
-
-.card {
-    background-color: rgba(250, 250, 250, 0.97);
-    border-radius: 30px;
-    width: 40% !important;
-    box-shadow: 5px 5px 10px var(--color-shadow);
-}
-.card-2 {
-    background-color: rgba(250, 250, 250, 0.97);
-    border-radius: 30px;
-    width: 50% !important;
-    box-shadow: 5px 5px 10px var(--color-shadow);
-}
-.cuadrado{
-    background-color: var(--color-primary);
-    margin-top: 6%;
-    width: 210px;
-    height: 80px;
-    z-index: 1;
-    overflow: visible;
-    position: absolute;
-    left: 0%;
-    top: 3%;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    box-shadow: 5px 5px 10px var(--color-shadow);
-}
-.circulo{
-    background-color: var(--color-white);
-    width: 30px;
-    height: 30px;
-    z-index: 0;
-    position: absolute;
-    left: 75%;
-    top: 30%;
-    border-radius: 50%;
-}
-
-
-.container {
-    position: relative;
-    width: 100%;
-    background-color: #fff;
-    min-height: 100vh;
-}
-
-.container:before {
-    content: "";
-    position: absolute;
-    height: 2000px;
-    width: 1000px;
-    right: 0%;
-    transform: translateY(-48%);
-    transition: 1.8s ease-in-out;
-    border-radius: 50%;
-    z-index: 0;
+    color: white;
 }
 </style>
