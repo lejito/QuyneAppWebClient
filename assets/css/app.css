@@ -20,6 +20,12 @@
   --color-warning: #F39C12;
   --color-danger: #B03A2E;
 
+  --color-secundario: #4E52EF;
+  --color-primario:#0E0480;
+  --color-terciario: #81E7EF;
+  --color-cuarto:#DFBBFC;
+
+
   --color-primary-hover: #5d2476;
   --color-secondary-hover: #117360;
   --color-tertiary-hover: #c54234;
@@ -470,3 +476,54 @@ button {
 }
 
 /*Estilos para el inicio*/
+.navbar-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 50px; 
+  border-radius: 25px;
+  transition: background-color 0.3s, color 0.3s;
+}
+.navbar-button:hover {
+  background-color: var(--color-light-gray); 
+}
+.navbar-button:hover h6,
+.navbar-button:hover .v-icon {
+  color: var(--color-secondary); 
+}
+
+.user-icon {
+  display: flex;
+  align-items: center; 
+}
+
+.nav-button {
+  color: #fff;
+  text-decoration: none; 
+  border: none;
+  cursor: pointer; 
+  margin: 0 5px; 
+  flex-grow: 1; 
+  transition: color 0.3s, border-bottom 0.3s;
+  z-index: 1;
+}
+.center {
+  flex-grow: 0; 
+}
+.active {
+  color: var(--color-secundario); 
+  text-decoration: underline;
+  text-underline-offset: 13px;
+  text-decoration-thickness: 3px;
+  text-decoration-skip: none;
+  font-weight: bold;
+  transition: color 0.3s, border-bottom 0.3s;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+
