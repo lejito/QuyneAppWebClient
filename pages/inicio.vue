@@ -1,76 +1,66 @@
 <template>
     <div class="container">
-        <div class="contenedor">
+      <div class="contenedor">
+        <div class="shadow">
+        <div class="left-rectangle2">
+          <div class="left-rectangle">
+            <v-col class="separacion">
             <v-container class="card">
-                <v-row justify="center">
-                    <v-col cols="1" style="margin-right: 10px;">
-                        Disponible
-                    </v-col>
-                    <v-col cols="1">
-                        <v-icon icon="mdi-eye" class="clikeable" v-if="cuenta.saldo_oculto"
-                            @click="changeVisibility"></v-icon>
-                        <v-icon icon="mdi-eye-off" class="clikeable" v-else @click="changeVisibility"></v-icon>
-                    </v-col>
-                </v-row>
-
-                <v-row justify="center">
-                    <v-col cols="2">
-                        <p v-if="cuenta.saldo_oculto">
-                            $ *****
-                        </p>
-                        <p v-else>
-                            $ {{ cuenta.saldo_disponible }}
-                        </p>
-                    </v-col>
-                </v-row>
-                <v-row justify="center">
-                    <v-col cols="2">
-                        Total
-                    </v-col>
-                </v-row>
-                <v-row justify="center">
-                    <v-col cols="2">
-                        <p v-if="cuenta.saldo_oculto">
-                            $ *****
-                        </p>
-                        <p v-else>
-                            $ {{ saldoTotal() }}
-                        </p>
-                    </v-col>
-                </v-row>
-                <v-row justify="center">
-                    <v-col cols="2">
-                        Bolsillos
-                    </v-col>
-                    <v-col cols="2">
-                        Movimientos
-                    </v-col>
-                    <v-col cols="2">
-                        Enviar
-                    </v-col>
-                </v-row>
-                <v-row justify="center">
-                    <v-col cols="2">
-                        <router-link to="/bolsillo">
-                            <v-icon icon="mdi-safe" size="x-large" class="clikeable" color="var(--color-primary-hover)">
-                            </v-icon>
-                        </router-link>
-                    </v-col>
-                    <v-col cols="2">
-                        <v-icon icon="mdi-format-list-bulleted" size="x-large" class="clikeable"
-                            color="var(--color-primary-hover)">
-                        </v-icon>
-                    </v-col>
-                    <v-col cols="2">
-                        <v-icon icon="mdi-bank-transfer-out" size="x-large" class="clikeable"
-                            color="var(--color-primary-hover)">
-                        </v-icon>
-                    </v-col>
-                </v-row>
+              <v-row>
+                <v-col>
+                  <h4 class="textoBold2">DISPONIBLE</h4>
+                </v-col>
+                <v-col>
+                  <v-icon icon="mdi-eye-off" class="icono-ojo" v-if="cuenta.saldo_oculto" @click="changeVisibility"></v-icon>
+                  <v-icon icon="mdi-eye" class="icono-ojo" v-else @click="changeVisibility"></v-icon>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <p class="textoBold1" v-if="cuenta.saldo_oculto">
+                    $ ***
+                  </p>
+                  <p class="textoBold1" v-else>
+                    $ {{ cuenta.saldo_disponible }}
+                  </p>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                    <h4 class="textoBold3" v-if="cuenta.saldo_oculto">
+                    Total: $ ***
+                    </h4>
+                    <h4 class="textoBold3" v-else>
+                    Total: $ {{ saldoTotal() }}
+                    </h4>
+                </v-col>
+              </v-row>
+              <div class="linea"></div>
+              <v-row>
+                
+                <button   <router-link to="/bolsillo"> class="botonI">Bolsillos</button>
+              </v-row>
             </v-container>
+            </v-col>
+          </div>
         </div>
-    </div>
-</template>
+        </div>    
+      </div>
+            <div class="contenido-derecha">
+                <h4 >BIENVENIDO DE NUEVO</h4>
+                <p class="derecha">¿Qué deseas hacer hoy?</p>
+                <v-col  >
+                    <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-multiple" 
+                        class="icono-izquierda" size="35"></v-icon>Sacar</v-btn>
+                    <v-btn block class="boton- boton-con-rectangulo2" >Enviar<v-icon icon="mdi-account-cash-outline" 
+                        class="icono-dercha" size="35"></v-icon></v-btn>
+                    <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" 
+                        class="icono-izquierda2" size="35"></v-icon>Recargar</v-btn>
+              </v-col>
+            </div>
+    </div>  
+  </template>
+  
 
 <script setup>
 
@@ -92,7 +82,7 @@ onBeforeMount(() => {
     bolsillos.value = BolsilloService.getBolsillos(cuenta.value.id);
 })
 definePageMeta({
-    layout: "blank"
+    layout: "navbar"
 });
 const changeVisibility = () => {
     cuenta.value.saldo_oculto = !cuenta.value.saldo_oculto;
@@ -107,49 +97,153 @@ function saldoTotal() {
 
 </script>
 
-<style>
-.clikeable {
-    cursor: pointer;
+
+<style scoped>
+.icono-izquierda {
+    transform: translateX(-92px);
+    position: relative;
+}
+.icono-izquierda2 {
+    transform: translateX(-77px);
+    position: relative;
+}
+.icono-dercha {
+    position: relative;
+    transform: translateX(88px);
+}
+.boton-con-rectangulo {
+  position: relative; 
 }
 
-.contenedor {
-    padding: 10% !important;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
+.boton-con-rectangulo::before {
+  content: ""; 
+  position: absolute; 
+  left: 25px; 
+  top: 50%; 
+  transform: translateY(-50%) rotate(-45deg); 
+  width: 35px;
+  height: 30px; 
+  background-color: var(--color-terciario); 
+  border-radius: 8px; 
+}
+.boton-con-rectangulo2 {
+  position: relative; 
+}
+
+.boton-con-rectangulo2::before {
+  content: ""; 
+  position: absolute; 
+  right: 25px;
+  top: 50%; 
+  transform: translateY(-50%) rotate(45deg); 
+  width: 35px;
+  height: 30px; 
+  background-color: var(--color-cuarto); 
+  border-radius: 8px; 
+}
+.boton- {
+  font-size: 18px; 
+  padding: 30px 30px; 
+  font-weight: 700 !important; 
+  margin: 40px 0;
+  border-radius: 40px;
+  font-weight: bold;
+}
+.left-rectangle2 {
+    background-color: var(--color-secundario);
+    width: 830px ; 
+    height: 630px ;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
     z-index: 1;
 }
-
-.card {
-    background-color: rgba(250, 250, 250, 0.97);
-    border-radius: 30px;
-    width: 70% !important;
-    box-shadow: 5px 5px 10px var(--color-shadow);
-}
-
-.container {
-    position: relative;
-    width: 100%;
-    background-color: #fff;
-    min-height: 100vh;
-    overflow: hidden;
-
-}
-
-.container:before {
-    content: "";
+.left-rectangle {
+    background: linear-gradient(138deg, transparent, var(--color-primario) 75%);
+    width: 800px !important; 
+    height: 600px !important; 
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%) ;
+    z-index: 1 !important;
+ }
+.card{
     position: absolute;
-    height: 2000px;
-    width: 1000px;
-    right: 50%;
-    transform: translateY(-48%);
+    top: 10%;
+    left: 140px;
+    background: rgba(255, 255, 255, 0.45);;
+    border-radius: 35px;
+    width: 450px; 
+    height: 480px;
+    border: 2px solid white;
+}
+.textoBold2{
+    color: white;
+    margin-left: 50%;
+    margin-top: 25% !important;
+    text-shadow: 4px 4px 5px var(--color-shadow);
+}
+.textoBold1{
+    color: white;
+    margin-left: 40%;
+    font-size: 40px;
+    font-weight: bold;
+    text-shadow: 4px 4px 5px var(--color-shadow);
+}
+.textoBold3{
+    color: white;
+    margin-left: 30%;
+    top: 50% !important;
+    text-shadow: 4px 4px 5px var(--color-shadow);
+}
+.contenido-derecha {
+    text-align: right;
+    margin-right: 10%;
+    position: absolute;
+    top: 180px; 
+    right: 20px;    
+  }
+.derecha{
+    margin-right: 21%;
+    font-size: 20px;
+}
+.icono-ojo{
+    color:white;
+    top: 58px;
+    margin-left: 40%;
+    text-shadow: 2px 2px 4px var(--color-shadow);
+}
+.contenido-derecha p.derecha {
+    border-bottom: 1px solid #000; 
+    display: inline; 
+    padding-bottom: 20px;
+    width: 0px; 
+    
+}
 
+.shadow{
+    filter: drop-shadow(0 0 1rem #000);
+}
+.botonI {
+    background-color: transparent;
+    border: 4px solid var(--color-terciario);
+    color: var(--color-terciario);
+    padding: 10px 20px; 
+    border-radius: 30px; 
+    margin-left: 35%;
+    margin-top: 10%;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
 
-    background-image: linear-gradient(-45deg, var(--color-primary) 20%, var(--color-secondary) 100%);
-    transition: 1.8s ease-in-out;
-    border-radius: 50%;
-    z-index: 0;
+}
+.botonI:hover {
+  background-color: var(--color-terciario); 
+  color: white; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  cursor: pointer; 
+  font-weight: bold;
+}
+.linea {
+    width: 250px;
+    height: 1px; 
+    background-color: white;
+    margin: 20px auto 10px; 
 }
 </style>
