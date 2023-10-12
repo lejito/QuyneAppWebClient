@@ -21,6 +21,9 @@
   --color-danger: #B03A2E;
 
   --color-secundario: #4E52EF;
+  --color-primario:#0E0480;
+  --color-terciario: #81E7EF;
+  --color-cuarto:#DFBBFC;
 
 
   --color-primary-hover: #5d2476;
@@ -513,14 +516,14 @@ button {
   flex-grow: 0; 
 }
 .active {
-  color: var(--color-primario); 
+  color: var(--color-secundario); 
   text-decoration: underline;
   text-underline-offset: 13px;
   text-decoration-thickness: 3px;
   text-decoration-skip: none;
   font-weight: bold;
   transition: color 0.3s, border-bottom 0.3s;
-  text-shadow: var(--color-shadow);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 
