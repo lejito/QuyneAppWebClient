@@ -38,7 +38,7 @@
               <div class="linea"></div>
               <v-row>
                 
-                <button class="botonI">TU PLATA</button>
+                <button   <router-link to="/bolsillo"> class="botonI">Bolsillos</button>
               </v-row>
             </v-container>
             </v-col>
