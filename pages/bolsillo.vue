@@ -15,24 +15,19 @@
                     <v-col cols="9">
                         Cuenta {{ Bolsillo.id_cuenta }}
                         <p v-if="BolsilloService.getBolsillos(Bolsillo.id_cuenta)">
-                            <v-banner
-                                lines="one"
-                            >
+                            <v-banner lines="one">
                                 <template v-slot:text>
                                     {{ Bolsillo.nombre }}
                                 </template>
 
                                 <template v-slot:actions>
-                                    <v-btn
-                                    @click="BolsilloService.updateBolsillo(bolsillos)">
+                                    <v-btn @click="BolsilloService.updateBolsillo(bolsillos)">
                                         Editar
                                     </v-btn>
-                                    <v-btn
-                                    @click="BolsilloService.updateBolsilloSaldo(bolsillos.saldo_disponible)">
+                                    <v-btn @click="BolsilloService.updateBolsilloSaldo(bolsillos.saldo_disponible)">
                                         Transferir
                                     </v-btn>
-                                    <v-btn
-                                    @click="BolsilloService.deleteBolsillo(bolsillos)">
+                                    <v-btn @click="BolsilloService.deleteBolsillo(bolsillos)">
                                         Eliminar
                                     </v-btn>
                                 </template>
@@ -44,23 +39,23 @@
                     </v-col>
                 </v-row>
                 <Transition name="fade">
-                        <div class="modal-overlay" v-if="showModal"></div>
+                    <div class="modal-overlay" v-if="showModal"></div>
                 </Transition>
                 <Transition name="fade">
                     <div class="modal" v-if="showModal">
                         <v-card>
                             <v-card-title>Personaliza tu bolsillo</v-card-title>
-                                <v-card-text>
-                                    <div class="lr-form__group">
-                                        <input type="text" name="nombreBolsillo" id="nombreBolsillo" v-model="document"
+                            <v-card-text>
+                                <div class="lr-form__group">
+                                    <input type="text" name="nombreBolsillo" id="nombreBolsillo" v-model="document"
                                         placeholder="Nombre del bolsillo (Obligatorio)" class="lr-form__input">
-                                    </div>
-                                    <br>
-                                    <div class="lr-form__group">
-                                        <input type="text" name="meta" id="meta" v-model="document"
+                                </div>
+                                <br>
+                                <div class="lr-form__group">
+                                    <input type="text" name="meta" id="meta" v-model="document"
                                         placeholder="¿Cuánto necesitas para alcanzar tu meta?" class="lr-form__input">
-                                    </div>
-                                </v-card-text>
+                                </div>
+                            </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" @click="saveBolsillo">Crear Bolsillo</v-btn>
@@ -104,7 +99,7 @@ onBeforeMount(() => {
     bolsillos.value = BolsilloService.getBolsillos(cuenta.value.id);
 })
 definePageMeta({
-    layout: "blank"
+    layout: "navbar"
 });
 
 </script>
@@ -114,46 +109,6 @@ definePageMeta({
     cursor: pointer;
 }
 
-.contenedor {
-    padding: 10% !important;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
-.card {
-    background-color: rgba(250, 250, 250, 0.97);
-    border-radius: 30px;
-    width: 70% !important;
-    box-shadow: 5px 5px 10px var(--color-shadow);
-}
-
-.container {
-    position: relative;
-    width: 100%;
-    background-color: #fff;
-    min-height: 100vh;
-    overflow: hidden;
-
-}
-
-.container:before {
-    content: "";
-    position: absolute;
-    height: 2000px;
-    width: 1000px;
-    right: 50%;
-    transform: translateY(-48%);
-
-
-    background-image: linear-gradient(-45deg, var(--color-primary) 20%, var(--color-secondary) 100%);
-    transition: 1.8s ease-in-out;
-    border-radius: 50%;
-    z-index: 0;
-}
 
 .modal-overlay {
     position: absolute;

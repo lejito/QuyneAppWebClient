@@ -1,20 +1,24 @@
 <template>
 	<div class="index-layout">
 		<nav class="index-navbar">
-            
 			<a class="navbar__link" href=".">
-                <img src="~/public/QuyneApp_Logo_Normal.png" alt="QuyneApp" class="index-navbar__logo">
+				<img src="~/public/QuyneApp_Logo_Normal.png" alt="QuyneApp" class="index-navbar__logo">
 			</a>
-            <a @click="handleClick('inicio')" :class="{ active: activeTab === 'inicio' }" href="inicio">INICIO</a>
-            <a @click="handleClick('movimientos')" :class="{ active: activeTab === 'movimientos' }" >MOVIMIENTOS</a>
-    		<a @click="handleClick('servicios')" :class="{ active: activeTab === 'servicios' }">SERVICIOS</a>
-            <bottom class="navbar-button">
-                <div class="user-icon">
-                    <h6>Nombre</h6>
-                    <v-icon >mdi-account</v-icon>
-                </div>
-            </bottom>
-            
+			<nuxt-link @click="handleClick('inicio')" :class="{ active: activeTab === 'inicio' }" to="/inicio">
+				INICIO
+			</nuxt-link>
+
+			<nuxt-link @click="handleClick('movimientos')" :class="{ active: activeTab === 'movimientos' }"
+				to="/movimientos">MOVIMIENTOS</nuxt-link>
+			<nuxt-link @click="handleClick('servicios')" :class="{ active: activeTab === 'servicios' }"
+				to="/servicios">SERVICIOS</nuxt-link>
+			<bottom class="navbar-button">
+				<nuxt-link class="user-icon" to="/perfil">
+					<h6>Nombre</h6>
+					<v-icon>mdi-account</v-icon>
+				</nuxt-link>
+			</bottom>
+
 		</nav>
 		<main class="content">
 			<slot />
@@ -28,7 +32,7 @@ const appTitle = 'QuyneApp';
 const activeTab = ref('inicio');
 
 function handleClick(tab) {
-activeTab.value = tab;
+	activeTab.value = tab;
 };
 
 </script>
