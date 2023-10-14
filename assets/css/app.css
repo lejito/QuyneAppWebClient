@@ -526,4 +526,14 @@ button {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.textoBold2 {
+  color: white;
+  margin-left: 50%;
+  margin-top: 25% !important;
+  text-shadow: 4px 4px 5px var(--color-shadow);
+}
+
+.shadow {
+  filter: drop-shadow(0 0 1rem #000);
+}
 
