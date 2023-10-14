@@ -1,2 +1,2 @@
-export const url = "http://localhost:3001/";
+export const url = "https://quyneappwebserver-140x-dev.fl0.io/api/";
 export const CUENTA = 'CUENTA';

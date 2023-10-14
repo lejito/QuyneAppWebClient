@@ -9,56 +9,58 @@ export const UserService = {
     getUsers: async () => {
         try {
             const response = await axios.get(`${url}users`);
-            return response.data;
+            return response.data.info;
         } catch (error) {
             AlertService.error("Error de conexion", `No fue posible conectarse a la base de datos detalles: ${error}`);
         }
     },
     async register(newUser: User, confirmPassword: String, phone: string) {
         const users = await this.getUsers();
-
-        const emailExists = users.some((user: User) => user.email === newUser.email);
-        console.log(newUser.password, confirmPassword)
+        const emailExists = users.some((user: User) => user.correo_electronico === newUser.correo_electronico);
         if (emailExists) {
             AlertService.error("Error de autenticacion", "El correo ingresado ya se encuentra registrado en la aplicacion")
-        } else if (newUser.password != confirmPassword) {
+        } else if (newUser.clave != confirmPassword) {
             AlertService.error("Error de autenticacion", "Las contraseñas no coindicen");
         } else {
-            // Generate a unique sequential ID for the new user (the actual db do it, just while using fake api)
-            const userId = Date.now();
-            newUser.id = userId;
-
             // Add the user to the server
-            await this.addUser(newUser, phone);
-            AlertService.success("Registro exitoso");
+            const info = await this.addUser(newUser, phone);
+            if (info.ok) AlertService.success("Registro exitoso");
+            else AlertService.error('Error durante la creacion', info.message);
         }
     },
     async addUser(user: User, phone: string) {
         try {
-            const response = await axios.post(`${url}users`, user);
-            const Id = Date.now();
-            const newCuenta = new Cuenta(Id, user.id, phone, 0, true, true, moment().format('yyyy-MM-DD'))
-            const response_2 = await CuentaService.addCuenta(newCuenta);
+
+            const response = await axios.post(`${url}users`, { ...user, numero_telefono: phone });
+            return response.data
         } catch (error) {
             AlertService.error("Error de conexion", `No fue posible conectarse a la base de datos detalles: ${error}`);
         }
     },
     async login(document: string, docType: string, password: string) {
-        const users = await this.getUsers();
-        const foundUser: User = users.find(
-            (user: User) =>
-                user.document === document && user.password === password && user.docType === docType
-        );
-        if (foundUser) {
+        try {
+            const valido = await axios.post(`${url}accounts/validate`, { "tipo_documento": docType, "numero_documento": document, "clave": password });
+            if (!valido.data.ok) {
+                AlertService.error("Error de autenticacion", 'Credenciales incorrectas. Inicio de sesión fallido.')
+                return;
+            }
+            const response = await axios.get(`${url}users/${document}`)
+            const foundUser: User = response.data.info
+
             const cuenta = await CuentaService.getCuenta(foundUser.id);
-            CuentaService.SaveCuentaStorage(cuenta);
-            AlertService.success(`Inicio de sesion exitoso, bienvenido ${foundUser.firstName}  ${foundUser.firstLastName}`);
+            const fullName = foundUser.primer_nombre + ` ${foundUser.primer_apellido}`
+
+            CuentaService.SaveCuentaStorage(cuenta, fullName);
+            AlertService.success(`Inicio de sesion exitoso, bienvenido ${foundUser.primer_nombre}  ${foundUser.primer_apellido}`);
             navigateTo('/inicio');
-        } else {
-            AlertService.error("Error de autenticacion", 'Credenciales incorrectas. Inicio de sesión fallido.')
         }
+        catch (error) {
+            AlertService.error("Error de conexion", `No fue posible conectarse a la base de datos detalles: ${error}`);
+        }
+
     },
     logout() {
         sessionStorage.removeItem(CUENTA);
+        navigateTo('/');
     }
 }

@@ -4,6 +4,9 @@ export const AlertService = {
     message: (text: string) => {
         Swal.fire(text);
     },
+    informative: (title: string, text: string) => {
+        Swal.fire(title, text, "info");
+    },
     question: (title: string, text: string) => {
         Swal.fire(title, text, 'question');
     },

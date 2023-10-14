@@ -14,8 +14,8 @@
 				to="/servicios">SERVICIOS</nuxt-link>
 			<bottom class="navbar-button">
 				<nuxt-link class="user-icon" to="/perfil">
-					<h6>Nombre</h6>
-					<v-icon>mdi-account</v-icon>
+					<h6>{{ CurrentAcount.nombre_completo }} <v-icon>mdi-account</v-icon></h6>
+
 				</nuxt-link>
 			</bottom>
 
@@ -27,9 +27,15 @@
 </template>
 
 <script setup>
-
+import { CuentaService } from "../services/CuentaService";
 const appTitle = 'QuyneApp';
-const activeTab = ref('inicio');
+const activeTab = ref({ nombre_completo: "Nombre" });
+const CurrentAcount = ref(undefined)
+const account = CuentaService.getCuentaActual();
+if (account) {
+	CurrentAcount.value = account
+	console.log(CurrentAcount)
+}
 
 function handleClick(tab) {
 	activeTab.value = tab;
