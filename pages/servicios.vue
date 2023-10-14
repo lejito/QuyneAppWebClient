@@ -9,13 +9,16 @@
     </div>
     <div class="card-container">
       <div class="card">
-        <h6>Recargar cívica</h6>
+        <h6 class="centered-text">Recargar cívica</h6>
+        <img src="~/public/fondo_civica.png"/>
       </div>
       <div class="card">
-        <h6>Recargar teléfono</h6>
+        <h6 class="centered-text">Recargar teléfono</h6>
+        <img src="~/public/fondo_icono_recargar.png"/>
       </div>
       <div class="card">
-        <h6>paquetes moviles</h6>
+        <h6 class="centered-text">paquetes moviles</h6>
+        <img src="~/public/fondo_icono_moviles.png"/>
       </div>
     </div>
 </template>
@@ -66,5 +69,17 @@ definePageMeta({
   height: 400px; 
   border-radius: 40px;
   box-shadow: 0 2px 5px var(--color-hover-background);
+  transition: transform 0.3s;
+}
+.card:hover {
+  transform: translateY(-10px); 
+}
+.card:not(:hover) {
+  transform: translateY(0);
+}
+
+.centered-text {
+  text-align: center; 
+  margin-top: 20px; 
 }
 </style>
