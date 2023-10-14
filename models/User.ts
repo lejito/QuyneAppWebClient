@@ -1,15 +1,15 @@
 export class User {
     constructor(
         public id: number,
-        public email: string,
-        public docType: string,
-        public document: string,
-        public birthDay: Date,
-        public password: string,
-        private creationDate: number,
-        public firstName: string,
-        public firstLastName: string,
-        public secondLastName?: string,
-        public secondName?: string,
+        public correo_electronico: string,
+        public tipo_documento: string,
+        public numero_documento: string,
+        public fecha_nacimiento: Date,
+        public clave: string,
+        private fecha_creacion: number,
+        public primer_nombre: string,
+        public primer_apellido: string,
+        public segundo_apellido?: string,
+        public segundo_nombre?: string,
     ) { }
 }

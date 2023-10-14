@@ -32,7 +32,7 @@
                       Total: $ ***
                     </h4>
                     <h4 class="textoBold3" v-else>
-                      Total: $ {{ saldoTotal() }}
+                      Total: $ {{ saldoTotal }}
                     </h4>
                   </v-col>
                 </v-row>
@@ -70,7 +70,8 @@
 <script setup>
 
 const cuenta = ref({ 'saldo_disponible': 0, 'saldo_oculto': true });
-const bolsillos = ref(undefined);
+const bolsillos = ref([]);
+const saldoTotal = ref(0);
 import { AlertService } from '~/services/AlertService';
 import { BolsilloService } from '~/services/BolsilloService';
 import { CuentaService } from '~/services/CuentaService';
@@ -83,23 +84,26 @@ onBeforeMount(() => {
     cuenta.value = { 'saldo_disponible': 0, 'saldo_oculto': true }
     AlertService.message("El tiempo de la session ha expirado, ingrese nuevamente sus credenciales");
     navigateTo('/');
+    return;
   }
-  bolsillos.value = BolsilloService.getBolsillos(cuenta.value.id);
+  const getBollsillos = async () => { bolsillos.value = await BolsilloService.getBolsillos(cuenta.value.id); saldoTotal.value = calcularTotal() }
+  getBollsillos()
+
 })
 definePageMeta({
   layout: "navbar"
 });
 const changeVisibility = () => {
   cuenta.value.saldo_oculto = !cuenta.value.saldo_oculto;
-  CuentaService.updateCuenta(cuenta.value);
+  CuentaService.updateCuenta(cuenta.value, { saldo_oculto: cuenta.value.saldo_oculto });
   CuentaService.SaveCuentaStorage(cuenta.value);
 }
 
-function saldoTotal() {
-  const total = cuenta.value.saldo_disponible + bolsillos.value.lenght > 0 ? bolsillos.value.map(value => { return value.saldo_disponible }).reduce((prev, crr) => { return prev + crr }) : 0;
+const calcularTotal = () => {
+
+  const total = cuenta.value.saldo_disponible + (bolsillos.value.lenght > 0 ? bolsillos.value.map(value => { return value.saldo_disponible }).reduce((prev, crr) => { return prev + crr }) : 0);
   return total
 }
-
 </script>
 
 

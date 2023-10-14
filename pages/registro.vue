@@ -20,7 +20,7 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-card-account-details"></v-icon>
                 <label for="tipoDocumento" class="lr-form__label">Tipo de identificación</label>
-                <select name="tipoDocumento" id="tipoDocumento" class="lr-form__select" v-model="newUser.docType">
+                <select name="tipoDocumento" id="tipoDocumento" class="lr-form__select" v-model="newUser.tipo_documento">
                   <option value="CC" class="lr-form__select__option">Cédula de ciudadanía</option>
                   <option value="TI" class="lr-form__select__option">Tarjeta de identidad</option>
                   <option value="CE" class="lr-form__select__option">Cédula de extranjería</option>
@@ -32,7 +32,7 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-pound"></v-icon>
                 <label for="numeroDocumento" class="lr-form__label">Número de identificación</label>
-                <input type="text" name="numeroDocumento" id="numeroDocumento" v-model="newUser.document"
+                <input type="text" name="numeroDocumento" id="numeroDocumento" v-model="newUser.numero_documento"
                   placeholder="Número de identificación" class="lr-form__input">
               </div>
 
@@ -40,7 +40,7 @@
                 <v-icon class="lr-form__icon" icon="mdi-cake-variant"></v-icon>
                 <label for="fechaNacimiento" class="lr-form__label">Fecha de nacimiento</label>
                 <input type="date" name="fechaNacimiento" id="fechaNacimiento" class="lr-form__input"
-                  v-model="newUser.birthDay">
+                  v-model="newUser.fecha_nacimiento">
               </div>
             </div>
 
@@ -53,28 +53,28 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-text-box"></v-icon>
                 <label for="primerNombre" class="lr-form__label">Primer nombre</label>
-                <input type="text" name="primerNombre" id="primerNombre" v-model="newUser.firstName"
+                <input type="text" name="primerNombre" id="primerNombre" v-model="newUser.primer_nombre"
                   placeholder="Primer nombre" class="lr-form__input">
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-text-box"></v-icon>
                 <label for="segundoNombre" class="lr-form__label">Segundo nombre (opcional)</label>
-                <input type="text" name="segundoNombre" id="segundoNombre" v-model="newUser.secondName"
+                <input type="text" name="segundoNombre" id="segundoNombre" v-model="newUser.segundo_nombre"
                   placeholder="Segundo nombre" class="lr-form__input">
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-text-box"></v-icon>
                 <label for="primerApellido" class="lr-form__label">Primer apellido</label>
-                <input type="text" name="primerApellido" id="primerApellido" v-model="newUser.firstLastName"
+                <input type="text" name="primerApellido" id="primerApellido" v-model="newUser.primer_apellido"
                   placeholder="Primer apellido" class="lr-form__input">
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-text-box"></v-icon>
                 <label for="segundoApellido" class="lr-form__label">Segundo apellido (opcional)</label>
-                <input type="text" name="segundoApellido" id="segundoApellido" v-model="newUser.secondLastName"
+                <input type="text" name="segundoApellido" id="segundoApellido" v-model="newUser.segundo_apellido"
                   placeholder="Segundo apellido" class="lr-form__input">
               </div>
             </div>
@@ -87,7 +87,7 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-at"></v-icon>
                 <label for="correoElectronico" class="lr-form__label">Correo electrónico</label>
-                <input type="email" name="correoElectronico" id="correoElectronico" v-model="newUser.email"
+                <input type="email" name="correoElectronico" id="correoElectronico" v-model="newUser.correo_electronico"
                   placeholder="Correo electrónico" class="lr-form__input">
               </div>
 
@@ -103,7 +103,7 @@
                 <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
                 <label for="clave" class="lr-form__label">Contraseña</label>
                 <input :type="mostrarContraseña ? 'text' : 'password'" name="clave" id="clave" placeholder="Contraseña"
-                  v-model="newUser.password" class="lr-form__input" />
+                  v-model="newUser.clave" class="lr-form__input" />
                 <button class="lr-form__group lr-form__icon_right" @click="toggleMostrarContraseña">
                   <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off'
                   }}</v-icon>
@@ -127,8 +127,8 @@
 
         <div class="lr-form__footer">
           <button class="lr-form__button lr-form__button-footer"
-            @click="verificarDatos(confirmPass, newUser.password, newUser.email, phone)" type="submit"
-            :disabled="camposCompletos">Crear
+            @click="verificarDatos(confirmPass, newUser.clave, newUser.correo_electronico, phone)" type="submit"
+            :disabled="!camposCompletos">Crear
             cuenta</button>
 
           <NuxtLink to="/login">
@@ -148,7 +148,6 @@ import moment from 'moment';
 import { VStepper } from 'vuetify/labs/VStepper'
 import { User } from '~/models/User';
 import { UserService } from '~/services/UserService';
-const Correo = ref('')
 const confirmPass = ref('')
 const phone = ref('')
 const newUser = ref(new User(0, "", "CC", "", moment().format('yyyy-MM-DD'), "", 0, "", ""));
@@ -167,9 +166,12 @@ useHead({
 });
 const camposCompletos = computed(() => {
 
-  return newUser.value.docType && newUser.value.document && newUser.value.birthDay &&
-    newUser.value.firstName && newUser.value.email && newUser.value.phone &&
-    newUser.value.password && confirmPass.value && newUser.value.password == confirmPass.value
+  let completo = (newUser.value.tipo_documento && newUser.value.numero_documento && newUser.value.fecha_nacimiento &&
+    newUser.value.primer_nombre && newUser.value.correo_electronico && phone.value &&
+    newUser.value.clave && confirmPass.value && (newUser.value.clave === confirmPass.value))
+
+  if (completo === '') return false
+  return completo
 });
 const toggleMostrarContraseña = () => {
   mostrarContraseña.value = !mostrarContraseña.value;
