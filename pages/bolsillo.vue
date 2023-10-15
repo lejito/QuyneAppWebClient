@@ -82,28 +82,24 @@ const newPocketName = ref('');
 const newPocketObjetivo = ref(null);
 const showModal = ref(false);
 const changes = ref({ amount: null, newName: null })
-const cuenta = ref({ 'saldo_disponible': 0, 'saldo_oculto': true });
 const bolsillos = ref([{ 'nombre': "", 'saldo_disponible': 0, 'saldo_objetivo?': 0 }]);
 import { AlertService } from '~/services/AlertService';
 import { Bolsillo } from '~/models/Bolsillo';
 import { BolsilloService } from '~/services/BolsilloService';
 import { CuentaService } from '~/services/CuentaService';
+import { CuentaLocal } from '~/models/CuentaLocal';
+const cuenta = ref(new CuentaLocal(0, 0, '', 0, true, true, '', 'Nombre'));
+const observer = ref(CuentaService.getCuentaActual(cuenta));
+const getBollsillos = async () => {
+    bolsillos.value = await BolsilloService.getBolsillos(cuenta.value.id);
 
+}
+getBollsillos()
 useHead({
     title: "QuyneApp ~ Bolsillo"
 });
-onBeforeMount(() => {
-    cuenta.value = CuentaService.getCuentaActual();
-    if (typeof cuenta.value == typeof undefined) {
-        cuenta.value = { 'saldo_disponible': 0, 'saldo_oculto': true }
-        AlertService.message("El tiempo de la session ha expirado, ingrese nuevamente sus credenciales");
-        navigateTo('/');
-    }
-    const getBollsillos = async () => {
-        bolsillos.value = await BolsilloService.getBolsillos(cuenta.value.id);
-
-    }
-    getBollsillos()
+onUnmounted(() => {
+    CuentaService.unsuscribe(observer.value);
 })
 async function CreatePocket() {
     let saldo_objetivo = newPocketObjetivo.value > 0 ? newPocketObjetivo.value : null;

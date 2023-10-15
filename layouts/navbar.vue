@@ -1,9 +1,9 @@
 <template>
 	<div class="index-layout">
 		<nav class="index-navbar">
-			<a class="navbar__link" href=".">
+			<div class="navbar__link">
 				<img src="~/public/QuyneApp_Logo_Normal.png" alt="QuyneApp" class="index-navbar__logo">
-			</a>
+			</div>
 			<nuxt-link @click="handleClick('inicio')" :class="{ active: activeTab === 'inicio' }" to="/inicio">
 				INICIO
 			</nuxt-link>
@@ -12,13 +12,17 @@
 				to="/movimientos">MOVIMIENTOS</nuxt-link>
 			<nuxt-link @click="handleClick('servicios')" :class="{ active: activeTab === 'servicios' }"
 				to="/servicios">SERVICIOS</nuxt-link>
-			<bottom class="navbar-button">
+			<botton class="navbar-button">
 				<nuxt-link class="user-icon" to="/perfil">
-					<h6>{{ CurrentAcount.nombre_completo }} <v-icon>mdi-account</v-icon></h6>
-
+					<h6>{{ cuenta.nombre_completo }} <v-icon>mdi-account</v-icon></h6>
 				</nuxt-link>
-			</bottom>
+			</botton>
 
+			<botton class="navbar-button" @click="logOut">
+
+				<h6>Salir <v-icon>mdi-exit-to-app</v-icon></h6>
+
+			</botton>
 		</nav>
 		<main class="content">
 			<slot />
@@ -27,18 +31,34 @@
 </template>
 
 <script setup>
+
+import { AlertService } from '~/services/AlertService';
+import { CuentaLocal } from "~/models/CuentaLocal";
 import { CuentaService } from "../services/CuentaService";
+import { UserService } from '~/services/UserService';
+
+onBeforeMount(() => {
+	let state = CuentaService.getStateCuenta();
+	if (typeof state == typeof undefined) {
+		navigateTo('/');
+		AlertService.message("El tiempo de la session ha expirado, ingrese nuevamente sus credenciales");
+		return;
+	}
+	observer.value = CuentaService.getCuentaActual(cuenta);
+})
 const appTitle = 'QuyneApp';
-const activeTab = ref({ nombre_completo: "Nombre" });
-const CurrentAcount = ref(undefined)
-const account = CuentaService.getCuentaActual();
-if (account) {
-	CurrentAcount.value = account
-	console.log(CurrentAcount)
+const activeTab = ref("inicio");
+const cuenta = ref(new CuentaLocal(0, 0, '', 0, true, true, '', 'Nombre'));
+const observer = ref();
+
+function logOut() {
+	UserService.logout();
 }
 
 function handleClick(tab) {
 	activeTab.value = tab;
 };
-
+onUnmounted(() => {
+	CuentaService.unsuscribe(observer.value);
+})
 </script>

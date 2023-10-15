@@ -1,6 +1,6 @@
 import axios from "axios";
 import { User } from "~/models/User";
-import { CUENTA, url } from "./Global";
+import { url } from "./Global";
 import { AlertService } from "./AlertService";
 import { CuentaService } from "./CuentaService";
 import { Cuenta } from "~/models/Cuenta";
@@ -50,7 +50,7 @@ export const UserService = {
             const cuenta = await CuentaService.getCuenta(foundUser.id);
             const fullName = foundUser.primer_nombre + ` ${foundUser.primer_apellido}`
 
-            CuentaService.SaveCuentaStorage(cuenta, fullName);
+            CuentaService.setCuenta(cuenta, fullName);
             AlertService.success(`Inicio de sesion exitoso, bienvenido ${foundUser.primer_nombre}  ${foundUser.primer_apellido}`);
             navigateTo('/inicio');
         }
@@ -60,7 +60,7 @@ export const UserService = {
 
     },
     logout() {
-        sessionStorage.removeItem(CUENTA);
+        CuentaService.logOut();
         navigateTo('/');
     }
 }

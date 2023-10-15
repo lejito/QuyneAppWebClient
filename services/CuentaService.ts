@@ -1,9 +1,50 @@
 import axios from "axios";
 import { AlertService } from "./AlertService";
-import { CUENTA, url } from "./Global";
+import { url } from "./Global";
 import { Cuenta } from "~/models/Cuenta";
 import { CuentaLocal } from "~/models/CuentaLocal";
+import { Subject, Observer } from "~/models/Observer";
+
+
+class CuentaSubject implements Subject {
+    value: CuentaLocal | undefined;
+    observers: Observer[];
+    constructor() {
+        this.value = undefined;
+        this.observers = new Array();
+    }
+    addObserver(observer: Observer): void {
+        this.observers.push(observer);
+    }
+    removeObserver(observer: Observer): void {
+        this.observers = this.observers.filter(obs => obs.id != observer.id);
+    }
+    cleanObservers(): void {
+        this.observers = new Array()
+    }
+    notifyObservers(): void {
+        this.observers.forEach(observer => observer.update(this));
+    }
+
+}
+
+class CuentaObserver implements Observer {
+    id: number;
+    value: any;
+    constructor(id: number, value: any) {
+        this.id = id;
+        this.value = value;
+    }
+    update(subject: Subject): void {
+        this.value.value = subject.value;
+    }
+
+}
+
+const CUENTA = new CuentaSubject();
+
 export const CuentaService = {
+
     async getCuentas() {
         try {
             const response = await axios.get(`${url}accounts`);
@@ -33,14 +74,26 @@ export const CuentaService = {
 
         }
     },
-    getCuentaActual() {
-        const cuentaString = sessionStorage.getItem(CUENTA);
-        if (!cuentaString) return;
-        const cuenta: CuentaLocal = JSON.parse(cuentaString);
-        return cuenta;
+    getCuentaActual(reference: any) {
+
+        if (typeof CUENTA.value === typeof undefined) return
+        reference.value = CUENTA.value;
+        let newObserver = new CuentaObserver(Date.now(), reference);
+        CUENTA.addObserver(newObserver);
+        return newObserver
     },
-    SaveCuentaStorage(cuenta: Cuenta, nombre_completo: string) {
-        const cuentaString = JSON.stringify({ ...cuenta, nombre_completo });
-        sessionStorage.setItem(CUENTA, cuentaString);
+    setCuenta(cuenta: Cuenta, nombre_completo: string) {
+        CUENTA.value = { ...cuenta, nombre_completo }
+        CUENTA.notifyObservers();
+    },
+    unsuscribe(observer: Observer) {
+        CUENTA.removeObserver(observer)
+    },
+    logOut() {
+        CUENTA.cleanObservers();
+        CUENTA.value = undefined;
+    },
+    getStateCuenta() {
+        return CUENTA.value;
     }
 }

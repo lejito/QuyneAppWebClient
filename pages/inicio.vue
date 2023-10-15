@@ -68,28 +68,24 @@
   
 
 <script setup>
-
-const cuenta = ref({ 'saldo_disponible': 0, 'saldo_oculto': true });
-const bolsillos = ref([]);
-const saldoTotal = ref(0);
 import { AlertService } from '~/services/AlertService';
 import { BolsilloService } from '~/services/BolsilloService';
 import { CuentaService } from '~/services/CuentaService';
+import { CuentaLocal } from '~/models/CuentaLocal';
+
+const bolsillos = ref([]);
+const saldoTotal = ref(0);
+
+const cuenta = ref(new CuentaLocal(0, 0, '', 0, true, true, '', 'Nombre'));
+
+const observer = ref(null);
+
+const getBollsillos = async () => { bolsillos.value = await BolsilloService.getBolsillos(cuenta.value.id); saldoTotal.value = calcularTotal() }
+getBollsillos()
 useHead({
   title: "QuyneApp ~ Inicio"
 });
-onBeforeMount(() => {
-  cuenta.value = CuentaService.getCuentaActual();
-  if (typeof cuenta.value == typeof undefined) {
-    cuenta.value = { 'saldo_disponible': 0, 'saldo_oculto': true }
-    AlertService.message("El tiempo de la session ha expirado, ingrese nuevamente sus credenciales");
-    navigateTo('/');
-    return;
-  }
-  const getBollsillos = async () => { bolsillos.value = await BolsilloService.getBolsillos(cuenta.value.id); saldoTotal.value = calcularTotal() }
-  getBollsillos()
 
-})
 definePageMeta({
   layout: "navbar"
 });
@@ -98,7 +94,12 @@ const changeVisibility = () => {
   CuentaService.updateCuenta(cuenta.value, { saldo_oculto: cuenta.value.saldo_oculto });
   CuentaService.SaveCuentaStorage(cuenta.value);
 }
-
+onBeforeMount(() => {
+  observer.value = CuentaService.getCuentaActual(cuenta);
+})
+onUnmounted(() => {
+  CuentaService.unsuscribe(observer.value);
+})
 const calcularTotal = () => {
 
   const total = cuenta.value.saldo_disponible + (bolsillos.value.lenght > 0 ? bolsillos.value.map(value => { return value.saldo_disponible }).reduce((prev, crr) => { return prev + crr }) : 0);
