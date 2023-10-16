@@ -37,8 +37,8 @@ export const BolsilloService = {
         try {
             const confirmacion = await AlertService.withConfirmation("Eliminar bolsillo", "El bolsillo no podra volver a ser accedido y el dinero volvera a la cuenta, ¿desea continuar?");
             if (confirmacion) {
-
-                const cuenta = CuentaService.getCuentaActual();
+                const cuentaObserver = CuentaService.getCuentaActual({ value: null });
+                const cuenta = cuentaObserver?.value;
                 if (cuenta) {
                     if (bolsillo.saldo_disponible > 0) {
                         AlertService.informative("Eliminación de bolsillo", "Para poder eliminar el bolsillo porfavor, devuelva todo el dinero a la cuenta");
@@ -61,12 +61,13 @@ export const BolsilloService = {
                 return;
             }
             AlertService.success(response.data.message);
-            const current = CuentaService.getCuentaActual();
+            const cuentaObserver = CuentaService.getCuentaActual({ value: null });
+            const current = cuentaObserver?.value;
             if (current) {
                 if (!changes.amount) return
                 let { id_usuario, nombre_completo } = current;
                 const accountUpdate = await CuentaService.getCuenta(id_usuario);
-                CuentaService.SaveCuentaStorage(accountUpdate, nombre_completo);
+                CuentaService.setCuenta(accountUpdate, nombre_completo);
             }
 
         } catch (error) {
