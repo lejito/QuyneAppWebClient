@@ -67,7 +67,7 @@ export const BolsilloService = {
                 if (!changes.amount) return
                 let { id_usuario, nombre_completo } = current;
                 const accountUpdate = await CuentaService.getCuenta(id_usuario);
-                CuentaService.SaveCuentaStorage(accountUpdate, nombre_completo);
+                CuentaService.setCuenta(accountUpdate, nombre_completo);
             }
 
         } catch (error) {

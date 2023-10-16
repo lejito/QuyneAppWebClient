@@ -26,6 +26,10 @@
                                         <v-btn color="var(--color-danger)" @click="DeleteP(item)">
                                             Eliminar
                                         </v-btn>
+                                        <v-btn @click="toggleMovimientosDrawer(item)">
+                                            <v-icon color="var(--color-accent)">mdi-history</v-icon>
+                                                Movimientos
+                                            </v-btn>
                                     </template>
                                 </v-banner>
                             </div>
@@ -34,6 +38,14 @@
                             </p>
                         </v-col>
                     </v-row>
+                    <v-navigation-drawer
+                        expand-on-hover
+                        v-model="movimientosDrawer"
+                        app
+                        right
+                    >
+                    <!-- Contenido del drawer para los movimientos -->
+                    </v-navigation-drawer>
                     <Transition name="fade">
                         <div class="modal-overlay" v-if="showModal"></div>
                     </Transition>
@@ -111,6 +123,17 @@ async function CreatePocket() {
 
 async function DeleteP(bolsilloToDelete) {
     await BolsilloService.deleteBolsillo(bolsilloToDelete, bolsillos);
+}
+
+async function updateP() {
+
+}
+
+const movimientosDrawer = ref(false);
+
+function toggleMovimientosDrawer(bolsillo) {
+  // Aquí puedes cargar los movimientos específicos del bolsillo antes de abrir el drawer si es necesario.
+  movimientosDrawer.value = !movimientosDrawer.value;
 }
 
 definePageMeta({
