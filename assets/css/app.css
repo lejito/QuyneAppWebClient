@@ -498,7 +498,7 @@ button {
 }
 .navbar-button:hover h6,
 .navbar-button:hover .v-icon {
-  color: var(--color-secondary); 
+  color: var(--color-secundario); 
 }
 
 .user-icon {

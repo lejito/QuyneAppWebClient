@@ -12,13 +12,13 @@
 				to="/movimientos">MOVIMIENTOS</nuxt-link>
 			<nuxt-link @click="handleClick('servicios')" :class="{ active: activeTab === 'servicios' }"
 				to="/servicios">SERVICIOS</nuxt-link>
-			<v-menu>
+			<v-menu class="menu">
       			<template v-slot:activator="{ props }">
 					<button class="navbar-button" v-bind="props">
 						<h6>{{ usuario.primerNombre }} <v-icon>mdi-account</v-icon></h6>
 					</button>
 				</template>
-				<v-list>
+				<v-list class="menu">
 					<v-list-item><nuxt-link class="user-icon" to="/perfil"><button class="navbar-button" v-bind="props">
 						<h6>Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
 					</button></nuxt-link></v-list-item>
@@ -66,3 +66,8 @@ const logOut = async () => {
 	await UsuariosService.cerrarSesion();
 }
 </script>
+<style>
+.menu{
+	margin-top: 15px;
+}
+</style>
