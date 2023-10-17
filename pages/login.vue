@@ -15,11 +15,9 @@
         <div class="lr-form__group">
           <v-icon class="lr-form__icon" icon="mdi-card-account-details"></v-icon>
           <label for="tipoDocumento" class="lr-form__label">Tipo de identificación</label>
-          <select name="tipoDocumento" id="tipoDocumento" v-model="docType" class="lr-form__select">
-            <option value="CC" class="lr-form__select__option">Cédula de ciudadanía</option>
-            <option value="TI" class="lr-form__select__option">Tarjeta de identidad</option>
-            <option value="CE" class="lr-form__select__option">Cédula de extranjería</option>
-            <option value="PP" class="lr-form__select__option">Pasaporte</option>
+          <select name="tipoDocumento" id="tipoDocumento" v-model="tipoDocumento" class="lr-form__select">
+            <option v-for="(tipoDocumento, index) in tiposDocumentos" :key="index" :value="tipoDocumento.value"
+              class="lr-form__select__option">{{ tipoDocumento.name }}</option>
           </select>
           <v-icon class="lr-form__icon-select" icon="mdi-chevron-down"></v-icon>
         </div>
@@ -27,23 +25,22 @@
         <div class="lr-form__group">
           <v-icon class="lr-form__icon" icon="mdi-pound"></v-icon>
           <label for="numeroDocumento" class="lr-form__label">Número de identificación</label>
-          <input type="text" name="numeroDocumento" id="numeroDocumento" v-model="document"
+          <input type="text" name="numeroDocumento" id="numeroDocumento" v-model="numeroDocumento"
             placeholder="Número de identificación" class="lr-form__input">
         </div>
 
         <div class="lr-form__group">
           <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
           <label for="clave" class="lr-form__label">Contraseña</label>
-          <input name="clave" id="clave" :type="mostrarContraseña ? 'text' : 'password'" 
-            placeholder="Contraseña" v-model="password" class="lr-form__input"/>
-          <button class="lr-form__group lr-form__icon_right"  @click="toggleMostrarContraseña">
+          <input name="clave" id="clave" :type="mostrarContraseña ? 'text' : 'password'" placeholder="Contraseña"
+            v-model="clave" class="lr-form__input" />
+          <button class="lr-form__group lr-form__icon_right" @click="toggleMostrarContraseña">
             <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
           </button>
         </div>
 
-        <button class="lr-form__button" 
-        @click="UserService.login(document, docType, password)" 
-        :disabled="!camposCompletos">Iniciar sesión</button>
+        <button class="lr-form__button" @click="login(tipoDocumento, numeroDocumento, clave)"
+          :disabled="!camposCompletos">Iniciar sesión</button>
 
         <NuxtLink to="/registro">
           <span class="lr-form__link">
@@ -57,24 +54,42 @@
 
 
 <script setup>
-import { User } from '~/models/User';
-import { AlertService } from '~/services/AlertService';
-import { UserService } from '~/services/UserService';
-import { ref, computed } from 'vue';
-const document = ref('');
-const docType = ref('CC');
-const password = ref('');
-const mostrarContraseña = ref(false);
+import { UsuariosService } from '~/services/UsuariosService';
+import { UtilsService } from '~/services/UtilsService';
+
 definePageMeta({
   layout: "blank"
 });
+
 useHead({
   title: "QuyneApp ~ Inicio de sesión"
 });
-const camposCompletos = computed(() => {
-    return docType.value && document.value && password.value;
+
+onBeforeMount(() => {
+  const sessionToken = UtilsService.getSessionToken();
+  if (sessionToken) {
+    navigateTo("/inicio");
+  }
+
+  tiposDocumentos.value = UtilsService.getTiposDocumentos();
+  tipoDocumento.value = tiposDocumentos.value[0].value;
 });
+
+const tiposDocumentos = ref([]);
+const tipoDocumento = ref("");
+const numeroDocumento = ref("");
+const clave = ref("");
+const mostrarContraseña = ref(false);
+
+const camposCompletos = computed(() => {
+  return tipoDocumento.value && numeroDocumento.value && clave.value;
+});
+
 const toggleMostrarContraseña = () => {
   mostrarContraseña.value = !mostrarContraseña.value;
 };
+
+const login = (tipoDocumento, numeroDocumento, clave) => {
+  UsuariosService.iniciarSesion(tipoDocumento, numeroDocumento, clave);
+}
 </script>
