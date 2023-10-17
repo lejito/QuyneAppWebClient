@@ -23,21 +23,21 @@
                 <thead style="position: -webkit-sticky;">
                     <tr>
                         <th class="text-left">
-                            Tipo de Movimiento
+                            Tipo de movimiento
                         </th>
                         <th class="text-left">
                             Monto
                         </th>
                         <th class="text-left">
-                            Fecha
+                            Fecha/hora
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in movimientos" :key="item.id_movimiento" v-if="movimientos.length > 0">
-                        <td>{{ item.tipo_movimiento }}</td>
+                    <tr v-for="item in movimientos" :key="item.idMovimiento" v-if="movimientos.length > 0">
+                        <td>{{ item.tipoMovimiento }}</td>
                         <td>{{ item.monto }} $</td>
-                        <td>{{ moment(item.fecha_hora).format('yyyy-MM-DD hh:mm:ss A') }}</td>
+                        <td>{{ moment(item.fechaHora).format('yyyy-MM-DD hh:mm:ss A') }}</td>
                     </tr>
                     <tr v-else>
                         <td colspan="3" class="text-center">No hay movimientos realizados hasta la fecha</td>
@@ -49,28 +49,26 @@
 </template>
 
 <script setup>
-import { Movimiento } from '~/models/Movimiento';
-import { CuentaService } from '~/services/CuentaService';
-import { MovimientosService } from '~/services/MovimientosService';
-import { CuentaLocal } from '~/models/CuentaLocal';
 import moment from 'moment';
-const cuenta = ref(new CuentaLocal(0, 0, '', 0, true, true, '', 'Nombre'));
-const observer = ref(undefined);
-const movimientos = ref([]);
-const all = ref([])
-const filter = ref('')
+import { CuentasService } from '~/services/CuentasService';
+import { MovimientosService } from '~/services/MovimientosService';
+
+definePageMeta({
+    layout: "navbar"
+});
 
 onBeforeMount(() => {
-    observer.value = CuentaService.getCuentaActual(cuenta);
     const getMovimientos = async () => {
-        movimientos.value = await MovimientosService.getMovimientosByAccount(cuenta.value.id);
+        const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();
+        movimientos.value = await MovimientosService.consultarUltimos(idCuenta);
         all.value = movimientos.value;
     }
     getMovimientos()
-})
-onUnmounted(() => {
-    CuentaService.unsuscribe(observer.value);
-})
+});
+
+const movimientos = ref([]);
+const all = ref([]);
+const filter = ref('');
 
 function lookUp() {
 
@@ -80,15 +78,11 @@ function lookUp() {
     }
 
     let reg = RegExp(filter.value, 'i');
-    movimientos.value = movimientos.value.filter(({ tipo_movimiento }) => {
+    movimientos.value = movimientos.value.filter(({ tipoMovimiento }) => {
 
-        return reg.test(tipo_movimiento.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
+        return reg.test(tipoMovimiento.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
     });
 }
-definePageMeta({
-    layout: "navbar"
-});
-
 </script>
 
 <style scoped>
