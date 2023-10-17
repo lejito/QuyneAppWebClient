@@ -12,17 +12,22 @@
 				to="/movimientos">MOVIMIENTOS</nuxt-link>
 			<nuxt-link @click="handleClick('servicios')" :class="{ active: activeTab === 'servicios' }"
 				to="/servicios">SERVICIOS</nuxt-link>
-			<botton class="navbar-button">
-				<nuxt-link class="user-icon" to="/perfil">
-					<h6>{{ cuenta.nombre_completo }} <v-icon>mdi-account</v-icon></h6>
-				</nuxt-link>
-			</botton>
-
-			<botton class="navbar-button" @click="logOut">
-
-				<h6>Salir <v-icon>mdi-exit-to-app</v-icon></h6>
-
-			</botton>
+			<v-menu>
+      			<template v-slot:activator="{ props }">
+					<button class="navbar-button" v-bind="props">
+						<h6>{{ cuenta.nombre_completo }} <v-icon>mdi-account</v-icon></h6>
+					</button>
+				</template>
+				<v-list>
+					<v-list-item><nuxt-link class="user-icon" to="/perfil"><button class="navbar-button" v-bind="props">
+						<h6>Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
+					</button></nuxt-link></v-list-item>
+					<v-list-item><botton class="navbar-button" @click="logOut">
+						<h6>Salir <v-icon>mdi-exit-to-app</v-icon></h6>
+						</botton></v-list-item>
+				</v-list>
+			</v-menu>
+			
 		</nav>
 		<main class="content">
 			<slot />
