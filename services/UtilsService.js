@@ -89,6 +89,9 @@ export const UtilsService = {
 
   getPaquetes() {
     return paquetes;
-  }
+  },
 
+  getSessionToken() {
+    return sessionStorage.getItem("STK");
+  }
 }

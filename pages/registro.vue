@@ -20,11 +20,9 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-card-account-details"></v-icon>
                 <label for="tipoDocumento" class="lr-form__label">Tipo de identificación</label>
-                <select name="tipoDocumento" id="tipoDocumento" class="lr-form__select" v-model="newUser.tipo_documento">
-                  <option value="CC" class="lr-form__select__option">Cédula de ciudadanía</option>
-                  <option value="TI" class="lr-form__select__option">Tarjeta de identidad</option>
-                  <option value="CE" class="lr-form__select__option">Cédula de extranjería</option>
-                  <option value="PP" class="lr-form__select__option">Pasaporte</option>
+                <select name="tipoDocumento" id="tipoDocumento" class="lr-form__select" v-model="usuario.tipoDocumento">
+                  <option v-for="(tipoDocumento, index) in tiposDocumentos" :key="index" :value="tipoDocumento.value"
+                    class="lr-form__select__option">{{ tipoDocumento.name }}</option>
                 </select>
                 <v-icon class="lr-form__icon-select" icon="mdi-chevron-down"></v-icon>
               </div>
@@ -32,7 +30,7 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-pound"></v-icon>
                 <label for="numeroDocumento" class="lr-form__label">Número de identificación</label>
-                <input type="text" name="numeroDocumento" id="numeroDocumento" v-model="newUser.numero_documento"
+                <input type="text" name="numeroDocumento" id="numeroDocumento" v-model="usuario.numeroDocumento"
                   placeholder="Número de identificación" class="lr-form__input">
               </div>
 
@@ -40,7 +38,7 @@
                 <v-icon class="lr-form__icon" icon="mdi-cake-variant"></v-icon>
                 <label for="fechaNacimiento" class="lr-form__label">Fecha de nacimiento</label>
                 <input type="date" name="fechaNacimiento" id="fechaNacimiento" class="lr-form__input"
-                  v-model="newUser.fecha_nacimiento">
+                  v-model="usuario.fechaNacimiento">
               </div>
             </div>
 
@@ -53,28 +51,28 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-text-box"></v-icon>
                 <label for="primerNombre" class="lr-form__label">Primer nombre</label>
-                <input type="text" name="primerNombre" id="primerNombre" v-model="newUser.primer_nombre"
+                <input type="text" name="primerNombre" id="primerNombre" v-model="usuario.primerNombre"
                   placeholder="Primer nombre" class="lr-form__input">
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-text-box"></v-icon>
                 <label for="segundoNombre" class="lr-form__label">Segundo nombre (opcional)</label>
-                <input type="text" name="segundoNombre" id="segundoNombre" v-model="newUser.segundo_nombre"
+                <input type="text" name="segundoNombre" id="segundoNombre" v-model="usuario.segundoNombre"
                   placeholder="Segundo nombre" class="lr-form__input">
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-text-box"></v-icon>
                 <label for="primerApellido" class="lr-form__label">Primer apellido</label>
-                <input type="text" name="primerApellido" id="primerApellido" v-model="newUser.primer_apellido"
+                <input type="text" name="primerApellido" id="primerApellido" v-model="usuario.primerApellido"
                   placeholder="Primer apellido" class="lr-form__input">
               </div>
 
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-text-box"></v-icon>
                 <label for="segundoApellido" class="lr-form__label">Segundo apellido (opcional)</label>
-                <input type="text" name="segundoApellido" id="segundoApellido" v-model="newUser.segundo_apellido"
+                <input type="text" name="segundoApellido" id="segundoApellido" v-model="usuario.segundoApellido"
                   placeholder="Segundo apellido" class="lr-form__input">
               </div>
             </div>
@@ -87,7 +85,7 @@
               <div class="lr-form__group">
                 <v-icon class="lr-form__icon" icon="mdi-at"></v-icon>
                 <label for="correoElectronico" class="lr-form__label">Correo electrónico</label>
-                <input type="email" name="correoElectronico" id="correoElectronico" v-model="newUser.correo_electronico"
+                <input type="email" name="correoElectronico" id="correoElectronico" v-model="usuario.correoElectronico"
                   placeholder="Correo electrónico" class="lr-form__input">
               </div>
 
@@ -95,7 +93,7 @@
                 <v-icon class="lr-form__icon" icon="mdi-phone"></v-icon>
                 <label for="numeroTelefono" class="lr-form__label">Número de teléfono</label>
 
-                <input type="tel" name="numeroTelefono" id="numeroTelefono" v-model="phone"
+                <input type="tel" name="numeroTelefono" id="numeroTelefono" v-model="usuario.numeroTelefono"
                   placeholder="Número de teléfono" class="lr-form__input">
               </div>
 
@@ -103,7 +101,7 @@
                 <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
                 <label for="clave" class="lr-form__label">Contraseña</label>
                 <input :type="mostrarContraseña ? 'text' : 'password'" name="clave" id="clave" placeholder="Contraseña"
-                  v-model="newUser.clave" class="lr-form__input" />
+                  v-model="usuario.clave" class="lr-form__input" />
                 <button class="lr-form__group lr-form__icon_right" @click="toggleMostrarContraseña">
                   <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off'
                   }}</v-icon>
@@ -114,7 +112,7 @@
                 <v-icon class="lr-form__icon" icon="mdi-key"></v-icon>
                 <label for="repetirClave" class="lr-form__label">Repetir contraseña</label>
                 <input :type="mostrarContraseña ? 'text' : 'password'" name="repetirClave" id="repetirClave"
-                  v-model="confirmPass" placeholder="Repetir contraseña" class="lr-form__input" />
+                  v-model="confirmarClave" placeholder="Repetir contraseña" class="lr-form__input" />
                 <button class="lr-form__group lr-form__icon_right" @click="toggleMostrarContraseña">
                   <v-icon :dark="mostrarContraseña ? false : true">{{ mostrarContraseña ? 'mdi-eye' : 'mdi-eye-off'
                   }}</v-icon>
@@ -127,8 +125,8 @@
 
         <div class="lr-form__footer">
           <button class="lr-form__button lr-form__button-footer"
-            @click="verificarDatos(confirmPass, newUser.clave, newUser.correo_electronico, phone)" type="submit"
-            :disabled="!camposCompletos">Crear
+            @click="verificarDatos(usuario.clave, confirmarClave, usuario.correoElectronico, usuario.numeroTelefono)"
+            type="submit" :disabled="!camposCompletos">Crear
             cuenta</button>
 
           <NuxtLink to="/login">
@@ -143,39 +141,57 @@
 </template>
 
 
+<style>
+.v-stepper-item__avatar {
+  background-color: var(--color-primary) !important;
+}
+</style>
+
+
 <script setup>
 import moment from 'moment';
 import { VStepper } from 'vuetify/labs/VStepper'
-import { User } from '~/models/User';
-import { UserService } from '~/services/UserService';
-const confirmPass = ref('')
-const phone = ref('')
-const newUser = ref(new User(0, "", "CC", "", moment().format('yyyy-MM-DD'), "", 0, "", ""));
-const components = ref({ VStepper });
-const mostrarContraseña = ref(false);
+import { UsuariosService } from '~/services/UsuariosService';
+import { UtilsService } from '~/services/UtilsService';
+
 definePageMeta({
   layout: "blank"
 });
 
-onBeforeMount(() => {
-
-})
-
 useHead({
   title: "QuyneApp ~ Registro"
 });
-const camposCompletos = computed(() => {
 
-  let completo = (newUser.value.tipo_documento && newUser.value.numero_documento && newUser.value.fecha_nacimiento &&
-    newUser.value.primer_nombre && newUser.value.correo_electronico && phone.value &&
-    newUser.value.clave && confirmPass.value && (newUser.value.clave === confirmPass.value))
+onBeforeMount(() => {
+  const sessionToken = UtilsService.getSessionToken();
+  if (sessionToken) {
+    navigateTo("/inicio");
+  }
+  
+  tiposDocumentos.value = UtilsService.getTiposDocumentos();
+  usuario.value.tipoDocumento = tiposDocumentos.value[0].value;
+  usuario.value.fechaNacimiento = moment().format("yyyy-MM-DD");
+});
+
+//const components = ref({ VStepper });
+const confirmarClave = ref('');
+const tiposDocumentos = ref([]);
+const usuario = ref({ tipoDocumento: "", numeroDocumento: "", primerNombre: "", segundoNombre: "", primerApellido: "", segundoApellido: "", fechaNacimiento: "", correoElectronico: "", clave: "", numeroTelefono: "" });
+const mostrarContraseña = ref(false);
+
+const camposCompletos = computed(() => {
+  let completo = (usuario.value.tipoDocumento && usuario.value.numeroDocumento && usuario.value.fechaNacimiento &&
+    usuario.value.primerNombre && usuario.value.primerApellido && usuario.value.correoElectronico && usuario.value.numeroTelefono &&
+    usuario.value.clave && confirmarClave.value && (usuario.value.clave === confirmarClave.value))
 
   if (completo === '') return false
   return completo
 });
+
 const toggleMostrarContraseña = () => {
   mostrarContraseña.value = !mostrarContraseña.value;
 };
+
 const verificarDatos = (clave1, clave2, correo, telefono) => {
   let claveIgual = false;
   let correoCorrecto = false;
@@ -209,14 +225,18 @@ const verificarDatos = (clave1, clave2, correo, telefono) => {
     intutelefono.style.borderColor = "red";
   }
   if (claveIgual && correoCorrecto && numeroTelefonicoBien) {
-
-    UserService.register(newUser.value, confirmPass.value, phone.value)
+    UsuariosService.crearUsuarioYCuenta(
+      usuario.value.tipoDocumento,
+      usuario.value.numeroDocumento,
+      usuario.value.primerNombre,
+      usuario.value.segundoNombre,
+      usuario.value.primerApellido,
+      usuario.value.segundoApellido,
+      usuario.value.fechaNacimiento,
+      usuario.value.correoElectronico,
+      usuario.value.clave,
+      usuario.value.numeroTelefono
+    );
   }
-
 };
 </script>
-<style>
-.v-stepper-item__avatar {
-  background-color: var(--color-primary) !important;
-}
-</style>

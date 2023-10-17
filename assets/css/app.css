@@ -94,6 +94,10 @@ span {
   color: var(--color-dark);
 }
 
+.swal2-modal span {
+  font-size: initial;
+}
+
 label,
 input,
 select,

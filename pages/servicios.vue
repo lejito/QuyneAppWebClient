@@ -17,7 +17,7 @@
         <img src="~/public/fondo_icono_recargar.png"/>
       </div>
       <div class="card">
-        <h6 class="centered-text">paquetes moviles</h6>
+        <h6 class="centered-text">Paquetes móviles</h6>
         <img src="~/public/fondo_icono_moviles.png"/>
       </div>
     </div>
