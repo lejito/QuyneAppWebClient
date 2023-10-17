@@ -11,28 +11,28 @@
                     <h4 class="textoBold2">DISPONIBLE</h4>
                   </v-col>
                   <v-col>
-                    <v-icon icon="mdi-eye-off" class="icono-ojo" v-if="cuenta.saldo_oculto"
+                    <v-icon icon="mdi-eye-off" class="icono-ojo" v-if="cuenta.saldoOculto"
                       @click="changeVisibility"></v-icon>
                     <v-icon icon="mdi-eye" class="icono-ojo" v-else @click="changeVisibility"></v-icon>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
-                    <p class="textoBold1" v-if="cuenta.saldo_oculto">
-                      $ ***
+                    <p class="textoBold1" v-if="cuenta.saldoOculto">
+                      $ *****
                     </p>
                     <p class="textoBold1" v-else>
-                      $ {{ cuenta.saldo_disponible }}
+                      $ {{ cuenta.saldo }}
                     </p>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
-                    <h4 class="textoBold3" v-if="cuenta.saldo_oculto">
-                      Total: $ ***
+                    <h4 class="textoBold3" v-if="cuenta.saldoOculto">
+                      Total: $ *****
                     </h4>
                     <h4 class="textoBold3" v-else>
-                      Total: $ {{ saldoTotal }}
+                      Total: $ {{ cuenta.saldo + cuenta.saldoBolsillos }}
                     </h4>
                   </v-col>
                 </v-row>
@@ -56,7 +56,7 @@
       <p class="derecha">¿Qué deseas hacer hoy?</p>
       <v-col>
         <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-multiple" class="icono-izquierda"
-            size="35"></v-icon>Sacar</v-btn>
+            size="35"></v-icon>Retirar</v-btn>
         <v-btn block class="boton- boton-con-rectangulo2">Enviar<v-icon icon="mdi-account-cash-outline"
             class="icono-dercha" size="35"></v-icon></v-btn>
         <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" class="icono-izquierda2"
@@ -68,42 +68,39 @@
   
 
 <script setup>
-import { AlertService } from '~/services/AlertService';
-import { BolsilloService } from '~/services/BolsilloService';
-import { CuentaService } from '~/services/CuentaService';
-import { CuentaLocal } from '~/models/CuentaLocal';
-
-const bolsillos = ref([]);
-const saldoTotal = ref(0);
-
-const cuenta = ref(new CuentaLocal(0, 0, '', 0, true, true, '', 'Nombre'));
-
-const observer = ref(null);
-
-const getBollsillos = async () => { bolsillos.value = await BolsilloService.getBolsillos(cuenta.value.id); saldoTotal.value = calcularTotal() }
-getBollsillos()
-useHead({
-  title: "QuyneApp ~ Inicio"
-});
+import { CuentasService } from '~/services/CuentasService';
 
 definePageMeta({
   layout: "navbar"
 });
-const changeVisibility = () => {
-  cuenta.value.saldo_oculto = !cuenta.value.saldo_oculto;
-  CuentaService.updateCuenta(cuenta.value, { saldo_oculto: cuenta.value.saldo_oculto });
-  CuentaService.SaveCuentaStorage(cuenta.value);
-}
-onBeforeMount(() => {
-  observer.value = CuentaService.getCuentaActual(cuenta);
-})
-onUnmounted(() => {
-  CuentaService.unsuscribe(observer.value);
-})
-const calcularTotal = () => {
 
-  const total = cuenta.value.saldo_disponible + (bolsillos.value.lenght > 0 ? bolsillos.value.map(value => { return value.saldo_disponible }).reduce((prev, crr) => { return prev + crr }) : 0);
-  return total
+useHead({
+  title: "QuyneApp ~ Inicio"
+});
+
+onBeforeMount(async () => {
+  const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();
+  const { id, numeroTelefono, idUsuario, habilitada, saldoOculto } = await CuentasService.consultarDatos(idCuenta);
+  cuenta.value.id = id;
+  cuenta.value.numeroTelefono = numeroTelefono;
+  cuenta.value.idUsuario = idUsuario;
+  cuenta.value.habilitada = habilitada;
+  cuenta.value.saldoOculto = saldoOculto;
+  const { saldo, saldoBolsillos } = await CuentasService.consultarSaldo(idCuenta);
+  cuenta.value.saldo = saldo;
+  cuenta.value.saldoBolsillos = saldoBolsillos;
+});
+
+const cuenta = ref({ id: -1, numeroTelefono: "", idUsuario: -1, habilitada: true, saldoOculto: false, saldo: 0, saldoBolsillos: 0 });
+
+const changeVisibility = async () => {
+  if (cuenta.value.saldoOculto) {
+    await CuentasService.desactivarSaldoOculto(cuenta.value.id);
+    cuenta.value.saldoOculto = false;
+  } else {
+    await CuentasService.activarSaldoOculto(cuenta.value.id);
+    cuenta.value.saldoOculto = true;
+  }
 }
 </script>
 

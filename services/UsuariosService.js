@@ -1,6 +1,7 @@
 import axios from "axios";
-import { AlertService } from "./AlertService";
 import { Global } from './Global';
+import { UtilsService } from "./UtilsService";
+import { AlertService } from "./AlertService";
 
 export const UsuariosService = {
   crearUsuarioYCuenta: async (tipoDocumento, numeroDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, correoElectronico, clave, numeroTelefono) => {
@@ -26,7 +27,7 @@ export const UsuariosService = {
   iniciarSesion: async (tipoDocumento, numeroDocumento, clave) => {
     try {
       const usuario = { tipoDocumento, numeroDocumento, clave };
-  
+
       const { data } = await axios.post(`${Global.APIURL}/usuarios/iniciar-sesion`, usuario);
 
       if (data.error) {
@@ -43,5 +44,52 @@ export const UsuariosService = {
       AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
       return false;
     }
-  }
+  },
+
+  cerrarSesion: async () => {
+    try {
+      const token = UtilsService.getSessionToken();
+
+      const { data } = await axios.post(
+        `${Global.APIURL}/usuarios/cerrar-sesion`,
+        {},
+        { headers: { "Authorization": token } }
+      );
+
+      if (data.error) {
+        AlertService.error("Error", data.message);
+        return false;
+      } else {
+        AlertService.success("¡Hasta pronto!", data.message);
+        sessionStorage.removeItem("STK");
+        navigateTo("/");
+        return true;
+      }
+    } catch (error) {
+      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      return false;
+    }
+  },
+
+  consultarDatos: async () => {
+    try {
+      const token = UtilsService.getSessionToken();
+
+      const { data } = await axios.post(
+        `${Global.APIURL}/usuarios/consultar-datos`,
+        {},
+        { headers: { "Authorization": token } }
+      );
+
+      if (data.error) {
+        AlertService.error("Error", data.message);
+        return false;
+      } else {
+        return data.data.usuario;
+      }
+    } catch (error) {
+      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      return false;
+    }
+  },
 }

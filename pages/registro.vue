@@ -163,6 +163,11 @@ useHead({
 });
 
 onBeforeMount(() => {
+  const sessionToken = UtilsService.getSessionToken();
+  if (sessionToken) {
+    navigateTo("/inicio");
+  }
+  
   tiposDocumentos.value = UtilsService.getTiposDocumentos();
   usuario.value.tipoDocumento = tiposDocumentos.value[0].value;
   usuario.value.fechaNacimiento = moment().format("yyyy-MM-DD");

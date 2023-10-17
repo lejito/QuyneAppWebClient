@@ -66,6 +66,11 @@ useHead({
 });
 
 onBeforeMount(() => {
+  const sessionToken = UtilsService.getSessionToken();
+  if (sessionToken) {
+    navigateTo("/inicio");
+  }
+
   tiposDocumentos.value = UtilsService.getTiposDocumentos();
   tipoDocumento.value = tiposDocumentos.value[0].value;
 });

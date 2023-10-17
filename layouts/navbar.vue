@@ -14,7 +14,7 @@
 				to="/servicios">SERVICIOS</nuxt-link>
 			<botton class="navbar-button">
 				<nuxt-link class="user-icon" to="/perfil">
-					<h6>{{ cuenta.nombre_completo }} <v-icon>mdi-account</v-icon></h6>
+					<h6>{{ usuario.primerNombre }} <v-icon>mdi-account</v-icon></h6>
 				</nuxt-link>
 			</botton>
 
@@ -31,34 +31,34 @@
 </template>
 
 <script setup>
+import { UtilsService } from '~/services/UtilsService';
+import { UsuariosService } from '~/services/UsuariosService';
 
-import { AlertService } from '~/services/AlertService';
-import { CuentaLocal } from "~/models/CuentaLocal";
-import { CuentaService } from "../services/CuentaService";
-import { UserService } from '~/services/UserService';
-
-onBeforeMount(() => {
-	let state = CuentaService.getStateCuenta();
-	if (typeof state == typeof undefined) {
-		navigateTo('/');
-		AlertService.message("El tiempo de la session ha expirado, ingrese nuevamente sus credenciales");
-		return;
+onBeforeMount(async () => {
+	const sessionToken = UtilsService.getSessionToken();
+	if (!sessionToken) {
+		navigateTo("/");
 	}
-	observer.value = CuentaService.getCuentaActual(cuenta);
-})
-const appTitle = 'QuyneApp';
-const activeTab = ref("inicio");
-const cuenta = ref(new CuentaLocal(0, 0, '', 0, true, true, '', 'Nombre'));
-const observer = ref();
 
-function logOut() {
-	UserService.logout();
-}
+	const { tipoDocumento, numeroDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, correoElectronico } = await UsuariosService.consultarDatos();
+	usuario.value.tipoDocumento = tipoDocumento;
+	usuario.value.numeroDocumento = numeroDocumento;
+	usuario.value.primerNombre = primerNombre;
+	usuario.value.segundoNombre = segundoNombre;
+	usuario.value.primerApellido = primerApellido;
+	usuario.value.segundoApellido = segundoApellido;
+	usuario.value.fechaNacimiento = fechaNacimiento;
+	usuario.value.correoElectronico = correoElectronico;
+})
+
+const activeTab = ref("inicio");
+const usuario = ref({ tipoDocumento: "", numeroDocumento: "", primerNombre: "", segundoNombre: "", primerApellido: "", segundoApellido: "", fechaNacimiento: "", correoElectronico: "" });
 
 function handleClick(tab) {
 	activeTab.value = tab;
 };
-onUnmounted(() => {
-	CuentaService.unsuscribe(observer.value);
-})
+
+const logOut = async () => {
+	await UsuariosService.cerrarSesion();
+}
 </script>
