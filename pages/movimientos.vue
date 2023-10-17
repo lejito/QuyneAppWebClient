@@ -57,6 +57,10 @@ definePageMeta({
     layout: "navbar"
 });
 
+useHead({
+  title: "QuyneApp ~ Movimientos"
+});
+
 onBeforeMount(() => {
     const getMovimientos = async () => {
         const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();

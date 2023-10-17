@@ -40,7 +40,7 @@
                 <v-row>
 
                   <button class="botonI">
-                    <NuxtLink to="/bolsillo">
+                    <NuxtLink to="/bolsillos">
                       Bolsillos
                     </NuxtLink>
                   </button>
