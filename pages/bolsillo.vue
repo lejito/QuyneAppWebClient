@@ -17,7 +17,7 @@
                                         $ {{ item.saldo_disponible }}
                                     </template>
                                     <template v-slot:actions>
-                                        <v-btn color="var(--color-secondary)">
+                                        <v-btn @click="editModal = true" color="var(--color-secondary)">
                                             Editar
                                         </v-btn>
                                         <v-btn color="var(--color-primary)">
@@ -73,6 +73,39 @@
                             </v-card>
                         </div>
                     </Transition>
+                    <Transition name="fade">
+                        <div class="modal-overlay" v-if="editModal"></div>
+                    </Transition>
+                    <Transition name="fade">
+                        <div class="modal" v-if="editModal">
+                            <v-card>
+                                <v-card-title>Editar Bolsillo</v-card-title>
+                                <v-card-text>
+                                    <div class="lr-form__group">
+                                        <input type="text" name="nombreBolsillo" id="nombreBolsillo" v-model="editedPocket.name"
+                                            placeholder="Nuevo nombre del bolsillo (Obligatorio)" 
+                                            class="lr-form__input">
+                                    </div>
+                                    <br>
+                                    <div class="lr-form__group">
+                                        <input type="number" name="saldoDisponible" v-model="editedPocket.saldo_disponible"
+                                            placeholder="Saldo disponible"
+                                            class="lr-form__input">
+                                    </div>
+                                    <div class="lr-form__group">
+                                        <input type="number" name="saldoObjetivo" v-model="editedPocket.saldo_objetivo" 
+                                        placeholder="Saldo objetivo" 
+                                        class="lr-form__input">
+                                    </div>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn class="botonG" @click="updatePocket">Guardar Bolsillo</v-btn>
+                                    <v-btn class="botonC" @click="editModal = false">Cancelar</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </div>
+                    </Transition>
                     <v-row justify="end" class="mb-3">
                         <v-col cols="3">
                             <v-btn
@@ -93,6 +126,7 @@
 const newPocketName = ref('');
 const newPocketObjetivo = ref(null);
 const showModal = ref(false);
+const editModal = ref(false);
 const changes = ref({ amount: null, newName: null })
 const bolsillos = ref([{ 'nombre': "", 'saldo_disponible': 0, 'saldo_objetivo?': 0 }]);
 import { AlertService } from '~/services/AlertService';
@@ -106,6 +140,11 @@ const getBollsillos = async () => {
     bolsillos.value = await BolsilloService.getBolsillos(cuenta.value.id);
 
 }
+const editedPocket = ref({
+    name: '',
+    saldo_disponible: 0,
+    saldo_objetivo: 0,
+});
 getBollsillos()
 useHead({
     title: "QuyneApp ~ Bolsillo"
@@ -125,8 +164,8 @@ async function DeleteP(bolsilloToDelete) {
     await BolsilloService.deleteBolsillo(bolsilloToDelete, bolsillos);
 }
 
-async function updateP() {
-
+async function updatePocket() {
+    await BolsilloService.updateBolsillo(bolsillo.id, editedPocket);
 }
 
 const movimientosDrawer = ref(false);
