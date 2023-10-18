@@ -9,7 +9,7 @@
 
 /* Variables */
 :root {
-  --color-primary: #7D3C98;
+  --color-primary: #0E0480;
   --color-secondary: #148F77;
   --color-tertiary: #E74C3C;
   --color-white: #FAFAFA;
@@ -26,7 +26,7 @@
   --color-cuarto:#DFBBFC;
 
 
-  --color-primary-hover: #5d2476;
+  --color-primary-hover: #4E52EF;
   --color-secondary-hover: #117360;
   --color-tertiary-hover: #c54234;
   --color-shadow: rgba(0, 0, 0, 0.2);
@@ -267,7 +267,7 @@ button {
   display: flex;
   align-items: start;
   justify-content: center;
-  background-color: var(--color-secondary);
+  background-image: linear-gradient(to bottom,var(--color-secundario),var(--color-primario));
   overflow: auto;
 }
 
