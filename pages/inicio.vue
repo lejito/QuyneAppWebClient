@@ -60,7 +60,7 @@
         <v-btn block class="boton- boton-con-rectangulo2">Enviar<v-icon icon="mdi-account-cash-outline"
             class="icono-dercha" size="35"></v-icon></v-btn>
         <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" class="icono-izquierda2"
-            size="35"></v-icon>Recargar</v-btn>
+            size="35"></v-icon>Pagar Facturas</v-btn>
       </v-col>
     </div>
   </div>
@@ -112,7 +112,7 @@ const changeVisibility = async () => {
 }
 
 .icono-izquierda2 {
-  transform: translateX(-77px);
+  transform: translateX(-50px);
   position: relative;
 }
 
