@@ -90,10 +90,7 @@ function lookUp() {
 </script>
 
 <style scoped>
-.shadow2 {
-  filter: drop-shadow(0 0 1rem #000);
-  margin-top: -25px;
-}
+
 .rectangle-m {
     clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
     background-color: var(--color-secundario);
@@ -109,11 +106,12 @@ function lookUp() {
     height: 110px;
 }
 
-.text-m {
-    color: white;
-    margin-top: 25px;
-    margin-left: 20%;
-}
+.text-m{
+        color: white;
+        padding-top: 20px;
+        margin-top: 25px;
+        margin-left: 25%;
+    }
 
 .line-m {
     width: 450px;
@@ -130,7 +128,7 @@ function lookUp() {
 .icono-dentro {
     position: relative;
     left: 1.5%;
-    top: -23%;
+    top: -28%;
     font-size: 20px;
     color: black;
     outline: none;
