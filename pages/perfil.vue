@@ -1,8 +1,8 @@
 <template>
-  <div class="shadow">
+  <div class="shadow2">
         <div class="rectangle-p">
             <div class="rectangle-p2">
-                    <h4 class="text-p">Perfil</h4>
+                    <h4 class="text-p">PERFIL</h4>
                     <div class="line-p"></div>
             </div> 
         </div>
@@ -20,24 +20,25 @@ definePageMeta({
         background-color: var(--color-secundario);
         width: 50% !important; 
         height: 140px !important;
-        float: center;
+        margin: 0 auto;
     }
     .rectangle-p2 {
         clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
         background: linear-gradient(10deg, var(--color-primario) 25%,transparent);
         width: 92%; 
         height: 110px; 
-        float: right;
+        margin: 0 auto;
     }
     .text-p{
         color: white;
+        padding-top: 20px;
         margin-top: 25px;
-        margin-left: 55%;
+        margin-left: 45%;
     }
     .line-p {
         width: 450px; 
         border-bottom: 1px solid white;
-        margin-left: 23%;
+        margin-left: 18%;
         margin-top: 8px;
     }
     .card-container {

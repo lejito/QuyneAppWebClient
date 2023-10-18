@@ -538,6 +538,9 @@ button {
 }
 
 .shadow {
-  filter: drop-shadow(0 0 1rem #000);
+  filter: drop-shadow(0 0 0.5rem #000);
 }
-
+.shadow2 {
+  filter: drop-shadow(0 0 0.5rem #000);
+  margin-top: -25px;
+}
