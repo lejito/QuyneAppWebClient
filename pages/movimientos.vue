@@ -36,7 +36,7 @@
                 <tbody v-if="!loading">
                     <tr v-for="item in movimientos" :key="item.idMovimiento" v-if="movimientos.length > 0">
                         <td>{{ item.tipoMovimiento }}</td>
-                        <td>{{ item.monto }} $</td>
+                        <td>{{ UtilsService.formatToCOP(parseFloat(item.monto)) }}</td>
                         <td>{{ moment(item.fechaHora).format('yyyy-MM-DD hh:mm:ss A') }}</td>
                     </tr>
                     <tr v-else>
@@ -59,6 +59,7 @@
 import moment from 'moment';
 import { CuentasService } from '~/services/CuentasService';
 import { MovimientosService } from '~/services/MovimientosService';
+import { UtilsService } from '~/services/UtilsService';
 
 const loading = ref(true);
 definePageMeta({
