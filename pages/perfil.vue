@@ -7,6 +7,9 @@
             </div> 
         </div>
     </div>
+    <div class="card-perfil">
+        
+    </div>
 
 </template>
 <script>
@@ -48,13 +51,14 @@ definePageMeta({
     padding: 35px;
 }
 
-.card {
+.card-perfil {
   background-color: #fafafa; 
-  width: 350px; 
-  height: 400px; 
+  width: 800px; 
+  height: 450px; 
   border-radius: 40px;
   box-shadow: 0 2px 5px var(--color-hover-background);
-  transition: transform 0.3s;
+
 }
+
 
 </style>
