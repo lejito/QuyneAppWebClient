@@ -68,7 +68,7 @@ onBeforeMount(() => {
 })
 
 useHead({
-  title: "QuyneApp ~ Recargas de telefonia"
+  title: "QuyneApp ~ Paquetes moviles"
 })
 function setLoading(value) {
   loading.value = value;
