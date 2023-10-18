@@ -23,7 +23,7 @@
                       $ *****
                     </p>
                     <p class="textoBold1" v-else>
-                      $ {{ cuenta.saldo }}
+                      {{ UtilsService.formatToCOP(cuenta.saldo) }}
                     </p>
                   </v-col>
                   <v-col v-else>
@@ -43,7 +43,7 @@
                       $ *****
                     </h4>
                     <h4 class="textoBold3" v-else>
-                      $ {{ cuenta.saldo + cuenta.saldoBolsillos }}
+                      {{ UtilsService.formatToCOP(cuenta.saldo + cuenta.saldoBolsillos) }}
                     </h4>
                   </v-col>
                   <v-col v-else>
@@ -84,8 +84,9 @@
   
 
 <script setup>
-import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
+import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
 import { CuentasService } from '~/services/CuentasService';
+import { UtilsService } from '~/services/UtilsService';
 
 definePageMeta({
   layout: "navbar"
@@ -108,6 +109,7 @@ onBeforeMount(async () => {
   cuenta.value.saldoBolsillos = saldoBolsillos;
   loading.value = false;
 });
+
 const loading = ref(true);
 const cuenta = ref({ id: -1, numeroTelefono: "", idUsuario: -1, habilitada: true, saldoOculto: false, saldo: 0, saldoBolsillos: 0 });
 
