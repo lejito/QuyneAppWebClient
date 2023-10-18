@@ -17,7 +17,8 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col>
+
+                  <v-col v-if="!loading">
                     <p class="textoBold1" v-if="cuenta.saldoOculto">
                       $ *****
                     </p>
@@ -25,20 +26,34 @@
                       $ {{ cuenta.saldo }}
                     </p>
                   </v-col>
+                  <v-col v-else>
+                    <div class="center">
+                      <span class="skeleton-loader-light-blue"></span>
+                    </div>
+                  </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
+                    <h4 class="textoBold3">TOTAL</h4>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col v-if="!loading">
                     <h4 class="textoBold3" v-if="cuenta.saldoOculto">
-                      Total: $ *****
+                      $ *****
                     </h4>
                     <h4 class="textoBold3" v-else>
-                      Total: $ {{ cuenta.saldo + cuenta.saldoBolsillos }}
+                      $ {{ cuenta.saldo + cuenta.saldoBolsillos }}
                     </h4>
+                  </v-col>
+                  <v-col v-else>
+                    <div class="center">
+                      <span class="skeleton-loader-light-blue"></span>
+                    </div>
                   </v-col>
                 </v-row>
                 <div class="linea"></div>
                 <v-row>
-
                   <button class="botonI">
                     <NuxtLink to="/bolsillos">
                       Bolsillos
@@ -62,12 +77,14 @@
         <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" class="icono-izquierda2"
             size="35"></v-icon>Recargar</v-btn>
       </v-col>
+
     </div>
   </div>
 </template>
   
 
 <script setup>
+import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 import { CuentasService } from '~/services/CuentasService';
 
 definePageMeta({
@@ -89,8 +106,9 @@ onBeforeMount(async () => {
   const { saldo, saldoBolsillos } = await CuentasService.consultarSaldo(idCuenta);
   cuenta.value.saldo = saldo;
   cuenta.value.saldoBolsillos = saldoBolsillos;
+  loading.value = false;
 });
-
+const loading = ref(true);
 const cuenta = ref({ id: -1, numeroTelefono: "", idUsuario: -1, habilitada: true, saldoOculto: false, saldo: 0, saldoBolsillos: 0 });
 
 const changeVisibility = async () => {
@@ -199,7 +217,7 @@ const changeVisibility = async () => {
 
 .textoBold1 {
   color: white;
-  margin-left: 40%;
+  text-align: center;
   font-size: 40px;
   font-weight: bold;
   text-shadow: 4px 4px 5px var(--color-shadow);
@@ -207,7 +225,7 @@ const changeVisibility = async () => {
 
 .textoBold3 {
   color: white;
-  margin-left: 30%;
+  text-align: center;
   top: 50% !important;
   text-shadow: 4px 4px 5px var(--color-shadow);
 }
@@ -271,5 +289,6 @@ const changeVisibility = async () => {
   height: 1px;
   background-color: white;
   margin: 20px auto 10px;
+
 }
 </style>
