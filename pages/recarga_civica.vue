@@ -18,7 +18,7 @@
 
 
       <div class="d-flex flex-column">
-        <v-btn color="var(--color-primario)" block @click="validate" id="btn">
+        <v-btn color="var(--color-primario)" block @click="validate(tipoDocumento, documento, monto)" id="btn">
           <p style="color: white;">Pagar</p>
         </v-btn>
       </div>
