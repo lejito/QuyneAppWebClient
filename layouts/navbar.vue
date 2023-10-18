@@ -13,18 +13,24 @@
 			<nuxt-link @click="handleClick('servicios')" :class="{ active: activeTab === 'servicios' }"
 				to="/servicios">SERVICIOS</nuxt-link>
 			<v-menu>
-      			<template v-slot:activator="{ props }">
-					<button class="navbar-button" v-bind="props">
+				<template v-slot:activator="{ props }">
+					<button class="navbar-button" v-bind="props" v-if="!loading">
 						<h6>{{ usuario.primerNombre }} <v-icon>mdi-account</v-icon></h6>
 					</button>
+					<div class="center" style="width:12rem;" v-else>
+						<span class="skeleton-loader-white"></span>
+						<h6> <v-icon>mdi-account</v-icon></h6>
+					</div>
 				</template>
 				<v-list>
 					<v-list-item><nuxt-link class="user-icon" to="/perfil"><button class="navbar-button" v-bind="props">
-						<h6>Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
-					</button></nuxt-link></v-list-item>
-					<v-list-item><botton class="navbar-button" @click="logOut">
-						<h6>Salir <v-icon>mdi-exit-to-app</v-icon></h6>
-						</botton></v-list-item>
+								<h6>Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
+							</button></nuxt-link></v-list-item>
+					<v-list-item>
+						<botton class="navbar-button" @click="logOut">
+							<h6>Salir <v-icon>mdi-exit-to-app</v-icon></h6>
+						</botton>
+					</v-list-item>
 				</v-list>
 			</v-menu>
 		</nav>
@@ -53,8 +59,9 @@ onBeforeMount(async () => {
 	usuario.value.segundoApellido = segundoApellido;
 	usuario.value.fechaNacimiento = fechaNacimiento;
 	usuario.value.correoElectronico = correoElectronico;
+	loading.value = false;
 })
-
+const loading = ref(true);
 const activeTab = ref("inicio");
 const usuario = ref({ tipoDocumento: "", numeroDocumento: "", primerNombre: "", segundoNombre: "", primerApellido: "", segundoApellido: "", fechaNacimiento: "", correoElectronico: "" });
 
