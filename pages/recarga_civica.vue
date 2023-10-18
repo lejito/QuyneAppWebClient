@@ -6,16 +6,16 @@
       </NuxtLink>
     </v-col>
     <v-col cols=" 11" style="margin-right: 5px ;">
-      <TitleLeft name="RECARGAS TELEFONIA"></TitleLeft>
+      <TitleLeft name="RECARGAS CIVICA"></TitleLeft>
     </v-col>
   </v-row>
   <v-responsive style="margin-top: 50px;" width="50%" class="mx-auto">
     <v-form id="form" ref="form">
-      <v-text-field v-model="numero" :rules="numRules" label="Numero de telefono" required></v-text-field>
+      <v-select v-model="tipoDocumento" :items="tipoDocumentos" :rules="[v => !!v || 'El tipo de documento es requerido']"
+        label="tipo de documento" required></v-select>
+      <v-text-field v-model="documento" :rules="docRules" label=" numero de documento" required></v-text-field>
       <v-text-field v-model="monto" :rules="amountRules" label="Monto a recargar" required></v-text-field>
 
-      <v-select v-model="operador" :items="operadores" :rules="[v => !!v || 'El operador es requerido']" label="Operador"
-        required></v-select>
 
       <div class="d-flex flex-column">
         <v-btn color="var(--color-primario)" block @click="validate" id="btn">
@@ -35,23 +35,23 @@ definePageMeta({
   layout: "navbar",
 });
 
-const operadores = ref([])
-const operador = ref(undefined)
-const numero = ref("")
+const tipoDocumentos = ref([])
+const tipoDocumento = ref(undefined)
+const documento = ref("")
 const monto = ref();
 const loading = ref(false)
-const numRules = ref([
-  v => !!v || 'El numero es requerido',
-  v => (v && v.length == 10) || 'Los numeros de celular son de 10 digitos',
-  v => (RegExp("^[0-9]").test(v)) || 'Solo se admiten numeros'
+const docRules = ref([
+  v => !!v || 'El documento es requerido',
+  v => (v && v.length > 4) || 'Los documentos de documento son de más de 4 digitos',
+
 ])
 const amountRules = ref([
   v => !!v || 'El monto es requerido',
-  v => (RegExp("^[0-9,$]*$").test(v)) || 'Solo se admiten numeros',
+  v => (RegExp("^[0-9,$]*$").test(v)) || 'Solo se admiten documentos',
   v => (Number(v) != 0) || "Ingrese un valor"
 ])
 onBeforeMount(() => {
-  operadores.value = UtilsService.getOperadores().map(o => o.value);
+  tipoDocumentos.value = UtilsService.getTiposDocumentos().map(o => o.value);
 })
 
 useHead({
@@ -65,12 +65,14 @@ function setLoading(value) {
 <script>
 export default {
   methods: {
-    async validate(operador, numero, monto) {
+    async validate(tipoDocumento, documento, monto) {
       const { valid } = await this.$refs.form.validate()
       if (!valid) {
         AlertService.warning("Atención", "No se han cumplido las validaciones para realizar el proceso");
         return;
       }
+
+
       await setTimeout(() => { console.log('Implementar logica aca') }, 1000)
     }
   }

@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="card-container">
-    <NuxtLink class="card" to="recarga_civica">
+    <NuxtLink class="card" to="/recarga_civica">
       <h6 class="centered-text">Recargar cívica</h6>
       <img src="~/public/fondo_civica.png" />
     </NuxtLink>
@@ -16,7 +16,7 @@
       <h6 class="centered-text">Recargar teléfono</h6>
       <img src="~/public/fondo_icono_recargar.png" />
     </NuxtLink>
-    <NuxtLink class="card" to="paquetes_moviles">
+    <NuxtLink class="card" to="/paquetes_moviles">
       <h6 class="centered-text">Paquetes móviles</h6>
       <img src="~/public/fondo_icono_moviles.png" />
     </NuxtLink>
