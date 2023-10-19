@@ -1,5 +1,5 @@
 <template>
-  <v-responsive class="modal">
+  <v-responsive class="modal_detalles">
 
     <main class="detalles" id="details">
       <v-icon icon="mdi-download" class="descargar" @click="descargar"></v-icon>
@@ -45,7 +45,7 @@ function descargar() {
 }
 </script>
 <style scoped>
-.modal {
+.modal_detalles {
   width: 100%;
   height: 100%;
   top: 0;
