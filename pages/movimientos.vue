@@ -19,7 +19,11 @@
 
     <section style="display:block; margin-top: 20px;">
         <main justify="center">
-            <v-table fixed-header height="400px">
+            <v-btn color="var(--color-primario)" block @click="descargar"
+                style="width: 15%; margin-bottom: 10px; margin-left: 5px; border-radius: 10px;">
+                <p style="color: white;">Descargar extracto</p>
+            </v-btn>
+            <v-table fixed-header height="400px" id="table">
                 <thead style="position: -webkit-sticky;">
                     <tr>
                         <th class="text-left">
@@ -36,7 +40,12 @@
                 <tbody v-if="!loading">
                     <tr v-for="item in movimientos" :key="item.idMovimiento" v-if="movimientos.length > 0">
                         <td>{{ item.tipoMovimiento }}</td>
-                        <td>{{ UtilsService.formatToCOP(parseFloat(item.monto)) }}</td>
+                        <td style="color: red;" v-if="item.monto < 0">
+                            {{ UtilsService.formatToCOP(parseFloat(item.monto)) }}
+                        </td>
+                        <td style="color:green;" v-else>
+                            {{ UtilsService.formatToCOP(parseFloat(item.monto)) }}
+                        </td>
                         <td>{{ moment(item.fechaHora).format('yyyy-MM-DD hh:mm:ss A') }}</td>
                     </tr>
                     <tr v-else>
@@ -57,14 +66,14 @@
 
 <script setup>
 import moment from 'moment';
-import { CuentasService } from '~/services/CuentasService';
 import { MovimientosService } from '~/services/MovimientosService';
 import { UtilsService } from '~/services/UtilsService';
-
+import { toPDF } from '~/services/PDFService';
 const loading = ref(true);
 definePageMeta({
     layout: "navbar"
 });
+
 
 useHead({
     title: "QuyneApp ~ Movimientos"
@@ -72,8 +81,12 @@ useHead({
 
 onBeforeMount(() => {
     const getMovimientos = async () => {
-        movimientos.value = await MovimientosService.consultarUltimos();
+        await MovimientosService.consultarUltimos();
+        let mv = [{ 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Ingreso', "monto": 500000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() },]
+        movimientos.value = mv
         all.value = movimientos.value;
+
+
         loading.value = false;
     }
     getMovimientos()
@@ -83,6 +96,13 @@ onBeforeMount(() => {
 const movimientos = ref([]);
 const all = ref([]);
 const filter = ref('');
+
+function descargar() {
+    const tabla = document.getElementById('table');
+    toPDF(tabla, 'Extracto');
+
+
+}
 
 function lookUp() {
 
@@ -100,6 +120,9 @@ function lookUp() {
 </script>
 
 <style scoped>
+.v-btn--block {
+    min-width: 10% !important;
+}
 
 .rectangle-m {
     clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
@@ -116,12 +139,12 @@ function lookUp() {
     height: 110px;
 }
 
-.text-m{
-        color: white;
-        padding-top: 20px;
-        margin-top: 25px;
-        margin-left: 25%;
-    }
+.text-m {
+    color: white;
+    padding-top: 20px;
+    margin-top: 25px;
+    margin-left: 25%;
+}
 
 .line-m {
     width: 450px;
