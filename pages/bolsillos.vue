@@ -37,16 +37,16 @@
                                         <v-btn color="var(--color-secondary)" @click="openModal(bolsillo)">
                                             Editar
                                         </v-btn>
-                                        <v-btn color="var(--color-primary)">
+                                        <v-btn color="var(--color-primary)" @click="cargarBolsillo()">
                                             Cargar
                                         </v-btn>
-                                        <v-btn color="var(--color-primary)">
+                                        <v-btn color="var(--color-primary)" @click="descargarBolsillo()">
                                             Descargar
                                         </v-btn>
                                         <v-btn color="var(--color-danger)" @click="eliminarBolsillo(bolsillo.idBolsillo)">
                                             Eliminar
                                         </v-btn>
-                                        <v-btn @click="toggleMovimientosDrawer(bolsillo)">
+                                        <v-btn @click="movimientosBolsillo(bolsillo.idBolsillo)">
                                             <v-icon color="var(--color-accent)">mdi-history</v-icon>
                                             Movimientos
                                         </v-btn>
@@ -58,9 +58,48 @@
                             </p>
                         </v-col>
                     </v-row>
-                    <!-- <v-navigation-drawer expand-on-hover v-model="movimientosDrawer" app right>
-                        
-                    </v-navigation-drawer> -->
+                    <v-lazy v-if="showList"
+                        :min-height="200"
+                        :options="{'threshold':0.5}"
+                        transition="fade-transition"
+                    >
+                        <v-container fluid>
+                            <v-row justify="center">
+                                <v-table fixed-header height="400px">
+                                    <thead style="position: -webkit-sticky;">
+                                        <tr>
+                                            <th class="text-left">
+                                                Tipo de movimiento
+                                            </th>
+                                            <th class="text-left">
+                                                Monto
+                                            </th>
+                                            <th class="text-left">
+                                                Fecha/hora
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="!loading">
+                                        <tr v-for="item in movimientos" :key="item.idMovimiento" v-if="movimientos.length > 0">
+                                            <td>{{ item.tipoMovimiento }}</td>
+                                            <td>{{ UtilsService.formatToCOP(parseFloat(item.monto)) }}</td>
+                                            <td>{{ moment(item.fechaHora).format('yyyy-MM-DD hh:mm:ss A') }}</td>
+                                        </tr>
+                                        <tr v-else>
+                                            <td colspan="3" class="text-center">No hay movimientos realizados hasta la fecha</td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr v-for="i in 7">
+                                            <td> <span class="skeleton-loader-white"></span></td>
+                                            <td> <span class="skeleton-loader-white"></span></td>
+                                            <td> <span class="skeleton-loader-white"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </v-table>
+                            </v-row>
+                        </v-container>
+                    </v-lazy>
                     <Transition name="fade">
                         <div class="modal-overlay" v-if="showModal"></div>
                     </Transition>
@@ -104,6 +143,52 @@
                             </v-btn>
                         </v-col>
                     </v-row>
+                    <Transition name="fade">
+                        <div class="modal-overlay" v-if="showCargar"></div>
+                    </Transition>
+                    <Transition name="fade">
+                        <div class="modal" v-if="showCargar">
+                            <v-card>
+                                <v-card-title>Cargar bolsillo</v-card-title>
+                                <v-card-text>
+                                    <div class="lr-form__group">
+                                        <input type="number" min="0" name="cargarSaldo" id="cargarSaldo" v-model="saldoCargar"
+                                            placeholder="Monto a cargar" class="lr-form__input">
+                                    </div>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn class="botonG" @click="cargarBolsillo()">
+                                        Cargar bolsillo
+                                    </v-btn>
+                                    <v-btn class="botonC" @click="resetCargarModal">Cancelar</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </div>
+                    </Transition>
+                    <Transition name="fade">
+                        <div class="modal-overlay" v-if="showDescargar"></div>
+                    </Transition>
+                    <Transition name="fade">
+                        <div class="modal" v-if="showDescargar">
+                            <v-card>
+                                <v-card-title>Descargar bolsillo</v-card-title>
+                                <v-card-text>
+                                    <div class="lr-form__group">
+                                        <input type="number" name="descargarSaldo" id="descargarSaldo" v-model="saldoCargar"
+                                            placeholder="Monto a descargar" class="lr-form__input">
+                                    </div>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn class="botonG" @click="descargarBolsillo()">
+                                        Descargar bolsillo
+                                    </v-btn>
+                                    <v-btn class="botonC" @click="resetCargarModal">Cancelar</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </div>
+                    </Transition>  
                 </v-card>
             </v-container>
             <v-container class="card" v-else>
@@ -157,7 +242,7 @@
 import { AlertService } from '~/services/AlertService';
 import { BolsillosService } from '~/services/BolsillosService';
 import { UtilsService } from '~/services/UtilsService';
-
+import moment from 'moment';
 const loading = ref(true);
 
 definePageMeta({
@@ -170,18 +255,24 @@ useHead({
 
 onBeforeMount(async () => {
     await getBolsillos();
+    let mov =[ { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Ingreso', "monto": 500000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }]
+    movimientos.value = mov;
 });
 
 const bolsillos = ref([]);
 const nombreBolsillo = ref('');
 const saldoObjetivo = ref(null);
 const showModal = ref(false);
+const showList = ref(false);
+const showCargar = ref(false);
+const showDescargar = ref(false);
 const bolsilloEdit = ref(null);
 const disabledButton = ref(false);
+const movimientos = ref([]);
+
 const camposCompletos = computed(() => {
     return nombreBolsillo.value;
 });
-// const movimientosDrawer = ref(false);
 
 const getBolsillos = async () => {
     bolsillos.value = await BolsillosService.consultar();
@@ -204,6 +295,11 @@ const resetModal = () => {
     disabledButton.value = false;
     nombreBolsillo.value = "";
     saldoObjetivo.value = null;
+}
+
+const resetCargarModal = () => {
+    showCargar.value = false;
+    showDescargar.value = false;
 }
 
 const crearBolsillo = async () => {
@@ -244,10 +340,19 @@ const eliminarBolsillo = async (idBolsillo) => {
     }
 }
 
-// const toggleMovimientosDrawer = (bolsillo) => {
-//     // Aquí puedes cargar los movimientos específicos del bolsillo antes de abrir el drawer si es necesario.
-//     movimientosDrawer.value = !movimientosDrawer.value;
-// }
+const cargarBolsillo = async () => {
+    showCargar.value = true;
+}
+
+const descargarBolsillo = async() => {
+    showDescargar.value = true;
+}
+
+const movimientosBolsillo = async (idBolsillo) => {
+    
+    showList.value = !showList.value;
+}
+
 </script>
 
 <style>
