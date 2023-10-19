@@ -14,7 +14,7 @@
     </header>
     <div class="container">
         <div class="contenedor">
-            <v-container class="card">
+            <v-container class="card" v-if="!loading">
                 <v-card class="centered-content">
                     <NuxtLink to="/inicio">
                         <v-icon class="lr-card__back" icon="mdi-arrow-left" size="large"></v-icon>
@@ -64,8 +64,9 @@
                                 <v-card-title>Personaliza tu bolsillo</v-card-title>
                                 <v-card-text>
                                     <div class="lr-form__group">
-                                        <input type="text" name="nombreBolsillo" id="nombreBolsillo" v-model="nombreBolsilloNuevo"
-                                            placeholder="Nombre del bolsillo (Obligatorio)" class="lr-form__input">
+                                        <input type="text" name="nombreBolsillo" id="nombreBolsillo"
+                                            v-model="nombreBolsilloNuevo" placeholder="Nombre del bolsillo (Obligatorio)"
+                                            class="lr-form__input">
                                     </div>
                                     <br>
                                     <div class="lr-form__group">
@@ -76,7 +77,8 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn class="botonG" @click="crearBolsillo" :disabled="!camposCompletos">Crear Bolsillo</v-btn>
+                                    <v-btn class="botonG" @click="crearBolsillo" :disabled="!camposCompletos">Crear
+                                        Bolsillo</v-btn>
                                     <v-btn class="botonC" @click="showModal = false">Cancelar</v-btn>
                                 </v-card-actions>
                             </v-card>
@@ -91,6 +93,49 @@
                     </v-row>
                 </v-card>
             </v-container>
+            <v-container class="card" v-else>
+
+                <v-card class="centered-content">
+                    <NuxtLink to="/inicio" style="position: relative; top: 0; right: 0; float: left;">
+                        <v-icon icon="mdi-arrow-left" size="large"></v-icon>
+                    </NuxtLink>
+                    <v-responsive style="display: flex; flex-direction: row;  padding-left: 40px; padding-right: 40px;">
+
+                        <section v-for="i in 3">
+                            <v-row justify="space-around" style="margin-top: 20px;">
+                                <v-col cols="7">
+                                    <span style="width: 50%;" class="skeleton-loader-white"></span>
+                                </v-col>
+                                <v-col cols="1">
+                                    <span class="skeleton-loader-white" style="width: 100%;"></span>
+                                </v-col>
+                                <v-col cols="1">
+                                    <span class="skeleton-loader-white" style="width: 100%;"></span>
+                                </v-col>
+                                <v-col cols="1">
+                                    <span style="width: 100%;" class="skeleton-loader-white"></span>
+                                </v-col>
+                                <v-col cols="1">
+                                    <span style="width: 100%;" class="skeleton-loader-white"></span>
+                                </v-col>
+
+                            </v-row>
+                            <hr style=" margin-top: 20px;">
+                        </section>
+                        <section>
+                            <v-row justify="end" style="margin-top: 20px; margin-bottom: 10px;">
+                                <v-col cols="2">
+                                    <span style="width: 80%;" class="skeleton-loader-white"></span>
+                                </v-col>
+                            </v-row>
+                        </section>
+                    </v-responsive>
+
+
+
+                </v-card>
+
+            </v-container>
         </div>
     </div>
 </template>
@@ -98,7 +143,7 @@
 <script setup>
 import { BolsillosService } from '~/services/BolsillosService';
 import { CuentasService } from '~/services/CuentasService';
-
+const loading = ref(true);
 definePageMeta({
     layout: "navbar"
 });
@@ -123,6 +168,7 @@ const camposCompletos = computed(() => {
 const getBolsillos = async () => {
     const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();
     bolsillos.value = await BolsillosService.consultar(idCuenta);
+    loading.value = false;
 }
 
 const crearBolsillo = async () => {
@@ -144,7 +190,6 @@ const crearBolsillo = async () => {
 .clikeable {
     cursor: pointer;
 }
-
 
 .modal-overlay {
     position: absolute;

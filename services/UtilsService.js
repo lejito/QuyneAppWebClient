@@ -78,7 +78,7 @@ export const UtilsService = {
   getTiposDocumentos() {
     return tiposDocumentos;
   },
-  
+
   getEntidades() {
     return entidades;
   },
@@ -93,5 +93,9 @@ export const UtilsService = {
 
   getSessionToken() {
     return sessionStorage.getItem("STK");
+  },
+
+  formatToCOP(value) {
+    return value.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
   }
 }
