@@ -72,8 +72,34 @@
       <v-col>
         <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-multiple" class="icono-izquierda"
             size="35"></v-icon>Retirar</v-btn>
-        <v-btn block class="boton- boton-con-rectangulo2">Enviar<v-icon icon="mdi-account-cash-outline"
-            class="icono-dercha" size="35"></v-icon></v-btn>
+        <v-menu class="menu">
+          <template v-slot:activator="{ props }">
+
+          </template>
+
+
+        </v-menu>
+        <v-menu class="menu">
+          <template v-slot:activator="{ props }">
+            <v-btn block class="boton- boton-con-rectangulo2" v-bind="props">Enviar<v-icon icon="mdi-account-cash-outline"
+                class="icono-dercha" size="35"></v-icon></v-btn>
+          </template>
+          <v-list class="menu">
+            <v-list-item>
+              <nuxt-link to="/transferencia-interna">
+                <v-btn block class="boton- boton-con-rectangulo2" style="padding-right: 5px;">Cuenta de QuyneApp<v-icon
+                    icon="mdi-bank" size="30"></v-icon></v-btn>
+
+              </nuxt-link>
+            </v-list-item>
+            <v-list-item>
+              <nuxt-link to="/transferencia-externa">
+                <v-btn block class="boton- boton-con-rectangulo2">Cuenta de otra entidad<v-icon icon="mdi-bank"
+                    size="30"></v-icon></v-btn></nuxt-link>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
         <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" class="icono-izquierda2"
             size="35"></v-icon>Pagar Facturas</v-btn>
       </v-col>
