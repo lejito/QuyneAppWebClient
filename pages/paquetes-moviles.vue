@@ -1,4 +1,7 @@
 <template>
+  <Detalles v-if="confirmacion" @cerrar="cerrar"
+    :movimiento="{ 'destino': 'Julian', 'descripcion': 'Pago factura', 'fecha': '2023-10-19T18:33:40.658Z', 'monto': 5000 }">
+  </Detalles>
   <v-row>
     <v-col cols="1" class="center">
       <NuxtLink to="/servicios" style="position: relative; top: 0; right: 0; float: left;">
@@ -35,7 +38,8 @@ import { UtilsService } from '~/services/UtilsService';
 definePageMeta({
   layout: "navbar",
 });
-
+const form = ref(null)
+const confirmacion = ref(false)
 const operadores = ref([])
 const operador = ref(undefined)
 const numero = ref("")
@@ -73,20 +77,19 @@ useHead({
 function setLoading(value) {
   loading.value = value;
 }
-</script>
-
-<script>
-export default {
-  methods: {
-    async validate(operador, nombre, numero, monto) {
-      const { valid } = await this.$refs.form.validate()
-      if (!valid) {
-        AlertService.warning("Atención", "No se han cumplido las validaciones para realizar el proceso");
-        return;
-      }
-      await setTimeout(() => { console.log('Implementar logica aca') }, 1000)
-    }
+function cerrar(val) {
+  confirmacion.value = false;
+}
+async function validate(operador, nombre, numero, monto) {
+  const { valid } = await form.value.validate()
+  if (!valid) {
+    AlertService.warning("Atención", "No se han cumplido las validaciones para realizar el proceso");
+    return;
   }
+  confirmacion.value = true;
+  await setTimeout(() => { console.log('Implementar logica aca') }, 1000)
 }
 </script>
+
+
 <style scoped></style>

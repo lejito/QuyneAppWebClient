@@ -16,6 +16,7 @@
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.3.67",
     "axios": "^1.5.1",
+    "html2pdf.js": "^0.9.3",
     "json-server": "^0.17.3",
     "moment": "^2.29.4",
     "sweetalert2": "^11.7.31",
