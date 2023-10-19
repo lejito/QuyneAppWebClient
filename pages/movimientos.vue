@@ -81,12 +81,8 @@ useHead({
 
 onBeforeMount(() => {
     const getMovimientos = async () => {
-        await MovimientosService.consultarUltimos();
-        let mv = [{ 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Ingreso', "monto": 500000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() },]
-        movimientos.value = mv
+        movimientos.value = await MovimientosService.consultarUltimos();
         all.value = movimientos.value;
-
-
         loading.value = false;
     }
     getMovimientos()
