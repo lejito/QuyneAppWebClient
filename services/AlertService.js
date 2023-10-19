@@ -9,6 +9,14 @@ export const AlertService = {
     })
   },
 
+  warning: (title, text) => {
+    Swal.fire({
+      icon: 'warning',
+      title: title,
+      text: text
+    })
+  },
+
   error: (title, text) => {
     Swal.fire({
       icon: 'error',

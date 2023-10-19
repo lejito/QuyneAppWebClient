@@ -39,7 +39,7 @@
           </button>
         </div>
 
-        <button class="lr-form__button" @click="login(tipoDocumento, numeroDocumento, clave)"
+        <button id="login" class="lr-form__button" @click="login(tipoDocumento, numeroDocumento, clave)"
           :disabled="!camposCompletos">Iniciar sesión</button>
 
         <NuxtLink to="/registro">
@@ -50,6 +50,9 @@
       </form>
     </div>
   </div>
+  <v-lazy>
+    <Loader v-if="loading"></Loader>
+  </v-lazy>
 </template>
 
 
@@ -66,15 +69,11 @@ useHead({
 });
 
 onBeforeMount(() => {
-  const sessionToken = UtilsService.getSessionToken();
-  if (sessionToken) {
-    navigateTo("/inicio");
-  }
 
   tiposDocumentos.value = UtilsService.getTiposDocumentos();
   tipoDocumento.value = tiposDocumentos.value[0].value;
 });
-
+const loading = ref(false);
 const tiposDocumentos = ref([]);
 const tipoDocumento = ref("");
 const numeroDocumento = ref("");
@@ -89,7 +88,12 @@ const toggleMostrarContraseña = () => {
   mostrarContraseña.value = !mostrarContraseña.value;
 };
 
-const login = (tipoDocumento, numeroDocumento, clave) => {
-  UsuariosService.iniciarSesion(tipoDocumento, numeroDocumento, clave);
+const login = async (tipoDocumento, numeroDocumento, clave) => {
+  const btn = document.getElementById('login');
+  btn.disabled = true;
+  loading.value = true;
+  await UsuariosService.iniciarSesion(tipoDocumento, numeroDocumento, clave);
+  loading.value = false;
+  btn.disabled = false;
 }
 </script>

@@ -33,14 +33,21 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="!loading">
                     <tr v-for="item in movimientos" :key="item.idMovimiento" v-if="movimientos.length > 0">
                         <td>{{ item.tipoMovimiento }}</td>
-                        <td>{{ item.monto }} $</td>
+                        <td>{{ UtilsService.formatToCOP(parseFloat(item.monto)) }}</td>
                         <td>{{ moment(item.fechaHora).format('yyyy-MM-DD hh:mm:ss A') }}</td>
                     </tr>
                     <tr v-else>
                         <td colspan="3" class="text-center">No hay movimientos realizados hasta la fecha</td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <tr v-for="i in 7">
+                        <td> <span class="skeleton-loader-white"></span></td>
+                        <td> <span class="skeleton-loader-white"></span></td>
+                        <td> <span class="skeleton-loader-white"></span></td>
                     </tr>
                 </tbody>
             </v-table>
@@ -52,13 +59,15 @@
 import moment from 'moment';
 import { CuentasService } from '~/services/CuentasService';
 import { MovimientosService } from '~/services/MovimientosService';
+import { UtilsService } from '~/services/UtilsService';
 
+const loading = ref(true);
 definePageMeta({
     layout: "navbar"
 });
 
 useHead({
-  title: "QuyneApp ~ Movimientos"
+    title: "QuyneApp ~ Movimientos"
 });
 
 onBeforeMount(() => {
@@ -66,8 +75,10 @@ onBeforeMount(() => {
         const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();
         movimientos.value = await MovimientosService.consultarUltimos(idCuenta);
         all.value = movimientos.value;
+        loading.value = false;
     }
     getMovimientos()
+
 });
 
 const movimientos = ref([]);

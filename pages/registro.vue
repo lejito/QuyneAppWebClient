@@ -124,7 +124,7 @@
 
 
         <div class="lr-form__footer">
-          <button class="lr-form__button lr-form__button-footer"
+          <button id="crear" class="lr-form__button lr-form__button-footer"
             @click="verificarDatos(usuario.clave, confirmarClave, usuario.correoElectronico, usuario.numeroTelefono)"
             type="submit" :disabled="!camposCompletos">Crear
             cuenta</button>
@@ -138,6 +138,9 @@
       </form>
     </div>
   </div>
+  <v-lazy>
+    <Loader v-if="loading"></Loader>
+  </v-lazy>
 </template>
 
 
@@ -149,10 +152,12 @@
 
 
 <script setup>
+
 import moment from 'moment';
 import { VStepper } from 'vuetify/labs/VStepper'
 import { UsuariosService } from '~/services/UsuariosService';
 import { UtilsService } from '~/services/UtilsService';
+
 
 definePageMeta({
   layout: "blank"
@@ -163,11 +168,7 @@ useHead({
 });
 
 onBeforeMount(() => {
-  const sessionToken = UtilsService.getSessionToken();
-  if (sessionToken) {
-    navigateTo("/inicio");
-  }
-  
+
   tiposDocumentos.value = UtilsService.getTiposDocumentos();
   usuario.value.tipoDocumento = tiposDocumentos.value[0].value;
   usuario.value.fechaNacimiento = moment().format("yyyy-MM-DD");
@@ -178,7 +179,7 @@ const confirmarClave = ref('');
 const tiposDocumentos = ref([]);
 const usuario = ref({ tipoDocumento: "", numeroDocumento: "", primerNombre: "", segundoNombre: "", primerApellido: "", segundoApellido: "", fechaNacimiento: "", correoElectronico: "", clave: "", numeroTelefono: "" });
 const mostrarContraseña = ref(false);
-
+const loading = ref(false)
 const camposCompletos = computed(() => {
   let completo = (usuario.value.tipoDocumento && usuario.value.numeroDocumento && usuario.value.fechaNacimiento &&
     usuario.value.primerNombre && usuario.value.primerApellido && usuario.value.correoElectronico && usuario.value.numeroTelefono &&
@@ -192,7 +193,9 @@ const toggleMostrarContraseña = () => {
   mostrarContraseña.value = !mostrarContraseña.value;
 };
 
-const verificarDatos = (clave1, clave2, correo, telefono) => {
+const verificarDatos = async (clave1, clave2, correo, telefono) => {
+  const btn = document.getElementById('crear');
+  btn.disabled = true;
   let claveIgual = false;
   let correoCorrecto = false;
   let numeroTelefonicoBien = false;
@@ -225,7 +228,8 @@ const verificarDatos = (clave1, clave2, correo, telefono) => {
     intutelefono.style.borderColor = "red";
   }
   if (claveIgual && correoCorrecto && numeroTelefonicoBien) {
-    UsuariosService.crearUsuarioYCuenta(
+    loading.value = true
+    await UsuariosService.crearUsuarioYCuenta(
       usuario.value.tipoDocumento,
       usuario.value.numeroDocumento,
       usuario.value.primerNombre,
@@ -237,6 +241,8 @@ const verificarDatos = (clave1, clave2, correo, telefono) => {
       usuario.value.clave,
       usuario.value.numeroTelefono
     );
+    loading.value = false;
   }
+  btn.disabled = false;
 };
 </script>

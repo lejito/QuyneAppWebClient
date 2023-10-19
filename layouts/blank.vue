@@ -3,3 +3,12 @@
     <slot />
   </div>
 </template>
+<script setup>
+import { UtilsService } from '~/services/UtilsService';
+onBeforeMount(() => {
+  const sessionToken = UtilsService.getSessionToken();
+  if (sessionToken) {
+    navigateTo("/inicio");
+  }
+})
+</script>
