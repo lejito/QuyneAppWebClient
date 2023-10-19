@@ -9,8 +9,8 @@
 
 /* Variables */
 :root {
-  --color-primary: #7D3C98;
-  --color-secondary: #148F77;
+  --color-primary: #0E0480;
+  --color-secondary: #0E0480;
   --color-tertiary: #E74C3C;
   --color-white: #FAFAFA;
   --color-dark: #333333;
@@ -23,10 +23,10 @@
   --color-secundario: #4E52EF;
   --color-primario: #0E0480;
   --color-terciario: #81E7EF;
-  --color-cuarto: #DFBBFC;
+  --color-cuarto:#DFBBFC;
+  --color-terciario2: #41c9d3;
 
-
-  --color-primary-hover: #5d2476;
+  --color-primary-hover: #4E52EF;
   --color-secondary-hover: #117360;
   --color-tertiary-hover: #c54234;
   --color-shadow: rgba(0, 0, 0, 0.2);
@@ -183,7 +183,7 @@ button {
   gap: 50px;
   padding: 50px;
   color: var(--color-white);
-  background-color: var(--color-secondary);
+  background: linear-gradient(45deg, var(--color-primario) 28%, var(--color-secundario));
   overflow-y: auto;
 }
 
@@ -248,14 +248,14 @@ button {
   border-radius: 30px;
   font-size: var(--font-size-title-5);
   font-weight: bold;
-  color: var(--color-white);
-  background-color: var(--color-primary);
+  color: black;
+  background-color: var(--color-terciario);
   transition: all 300ms ease-in-out;
 }
 
 .index-content__register__button:hover {
   transform: scale(1.05);
-  background-color: var(--color-primary-hover);
+  background-color: var(--color-terciario2);
 }
 
 
@@ -267,7 +267,7 @@ button {
   display: flex;
   align-items: start;
   justify-content: center;
-  background-color: var(--color-secondary);
+  background-image: linear-gradient(to bottom,var(--color-secundario),var(--color-primario));
   overflow: auto;
 }
 
@@ -505,7 +505,7 @@ button {
 
 .navbar-button:hover h6,
 .navbar-button:hover .v-icon {
-  color: var(--color-secondary);
+  color: var(--color-secundario); 
 }
 
 .user-icon {
@@ -547,7 +547,11 @@ button {
 }
 
 .shadow {
-  filter: drop-shadow(0 0 1rem #000);
+  filter: drop-shadow(0 0 0.5rem #000);
+}
+.shadow2 {
+  filter: drop-shadow(0 0 0.5rem #000);
+  margin-top: -25px;
 }
 
 .center {

@@ -1,7 +1,7 @@
 <template>
     <header style="display: flex;
     flex-direction: row;    ">
-        <div class="shadow" style="
+        <div class="shadow2" style="
         flex:1;
         width: 300px;">
             <div class="rectangle-m">
@@ -101,6 +101,7 @@ function lookUp() {
 </script>
 
 <style scoped>
+
 .rectangle-m {
     clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
     background-color: var(--color-secundario);
@@ -114,14 +115,14 @@ function lookUp() {
     background: linear-gradient(138deg, transparent, var(--color-primario) 75%);
     width: 96%;
     height: 110px;
-
 }
 
-.text-m {
-    color: white;
-    margin-top: 25px;
-    margin-left: 20%;
-}
+.text-m{
+        color: white;
+        padding-top: 20px;
+        margin-top: 25px;
+        margin-left: 25%;
+    }
 
 .line-m {
     width: 450px;
@@ -131,7 +132,6 @@ function lookUp() {
 }
 
 .search-bar-container {
-
     margin-top: 10px;
     position: relative;
 }
@@ -139,7 +139,7 @@ function lookUp() {
 .icono-dentro {
     position: relative;
     left: 1.5%;
-    top: -23%;
+    top: -28%;
     font-size: 20px;
     color: black;
     outline: none;
