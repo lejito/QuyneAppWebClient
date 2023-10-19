@@ -122,7 +122,7 @@ definePageMeta({
   align-items: center;
   height: 50px;
   width: 200px;
-  background-color: beige;
+  background-color: whitesmoke;
   border-radius: 40px;
   margin-right: 20px;
   margin-top: 5px;
@@ -134,7 +134,7 @@ definePageMeta({
   align-items: center;
   height: 50px;
   width: 420px;
-  background-color: beige;
+  background-color: whitesmoke;
   border-radius: 40px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
