@@ -98,13 +98,13 @@ useHead({
 
 onBeforeMount(async () => {
   const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();
-  const { id, numeroTelefono, idUsuario, habilitada, saldoOculto } = await CuentasService.consultarDatos(idCuenta);
+  const { id, numeroTelefono, idUsuario, habilitada, saldoOculto } = await CuentasService.consultarDatos();
   cuenta.value.id = id;
   cuenta.value.numeroTelefono = numeroTelefono;
   cuenta.value.idUsuario = idUsuario;
   cuenta.value.habilitada = habilitada;
   cuenta.value.saldoOculto = saldoOculto;
-  const { saldo, saldoBolsillos } = await CuentasService.consultarSaldo(idCuenta);
+  const { saldo, saldoBolsillos } = await CuentasService.consultarSaldo();
   cuenta.value.saldo = saldo;
   cuenta.value.saldoBolsillos = saldoBolsillos;
   loading.value = false;
@@ -115,10 +115,10 @@ const cuenta = ref({ id: -1, numeroTelefono: "", idUsuario: -1, habilitada: true
 
 const changeVisibility = async () => {
   if (cuenta.value.saldoOculto) {
-    await CuentasService.desactivarSaldoOculto(cuenta.value.id);
+    await CuentasService.desactivarSaldoOculto();
     cuenta.value.saldoOculto = false;
   } else {
-    await CuentasService.activarSaldoOculto(cuenta.value.id);
+    await CuentasService.activarSaldoOculto();
     cuenta.value.saldoOculto = true;
   }
 }
