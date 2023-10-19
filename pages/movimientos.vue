@@ -72,8 +72,7 @@ useHead({
 
 onBeforeMount(() => {
     const getMovimientos = async () => {
-        const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();
-        movimientos.value = await MovimientosService.consultarUltimos(idCuenta);
+        movimientos.value = await MovimientosService.consultarUltimos();
         all.value = movimientos.value;
         loading.value = false;
     }

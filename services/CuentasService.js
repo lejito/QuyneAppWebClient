@@ -25,12 +25,12 @@ export const CuentasService = {
     }
   },
 
-  consultarDatos: async (idCuenta) => {
+  consultarDatos: async () => {
     try {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/cuentas/consultar-datos`,
-        { idCuenta },
+        { },
         { headers: { "Authorization": token } }
       );
 
@@ -47,13 +47,13 @@ export const CuentasService = {
     }
   },
 
-  consultarSaldo: async (idCuenta) => {
+  consultarSaldo: async () => {
     try {
       const token = UtilsService.getSessionToken();
 
       const { data } = await axios.post(
         `${Global.APIURL}/cuentas/consultar-saldo`,
-        { idCuenta },
+        { },
         { headers: { "Authorization": token } }
       );
 
@@ -70,13 +70,13 @@ export const CuentasService = {
     }
   },
 
-  activarSaldoOculto: async (idCuenta) => {
+  activarSaldoOculto: async () => {
     try {
       const token = UtilsService.getSessionToken();
 
       const { data } = await axios.post(
         `${Global.APIURL}/cuentas/activar-saldo-oculto`,
-        { idCuenta },
+        { },
         { headers: { "Authorization": token } }
       );
 
@@ -93,13 +93,13 @@ export const CuentasService = {
     }
   },
 
-  desactivarSaldoOculto: async (idCuenta) => {
+  desactivarSaldoOculto: async () => {
     try {
       const token = UtilsService.getSessionToken();
 
       const { data } = await axios.post(
         `${Global.APIURL}/cuentas/desactivar-saldo-oculto`,
-        { idCuenta },
+        { },
         { headers: { "Authorization": token } }
       );
 

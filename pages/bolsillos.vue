@@ -22,13 +22,19 @@
 
                     <v-row justify="center">
                         <v-col cols="9">
-                            <div v-if="bolsillos.length > 0" v-for="bolsillo in bolsillos" :key="bolsillo.id">
+                            <div v-if="bolsillos.length > 0" v-for="bolsillo in bolsillos" :key="bolsillo.idBolsillo">
                                 <v-banner lines="one">
-                                    <template v-slot:text><b>{{ bolsillo.nombre }}</b>
-                                        ${{ bolsillo.saldoDisponible }}
+                                    <template v-slot:text>
+                                        <i style="margin-right: 20px;">{{ bolsillo.nombre }}</i>
+                                        <span>
+                                            <b>{{ UtilsService.formatToCOP(parseFloat(bolsillo.saldoDisponible)) }}</b>
+
+                                            {{ bolsillo.saldoObjetivo !== null ? `/
+                                            ${UtilsService.formatToCOP(parseFloat(bolsillo.saldoObjetivo))}` : null }}
+                                        </span>
                                     </template>
                                     <template v-slot:actions>
-                                        <v-btn color="var(--color-secondary)">
+                                        <v-btn color="var(--color-secondary)" @click="openModal(bolsillo)">
                                             Editar
                                         </v-btn>
                                         <v-btn color="var(--color-primary)">
@@ -37,7 +43,7 @@
                                         <v-btn color="var(--color-primary)">
                                             Descargar
                                         </v-btn>
-                                        <v-btn color="var(--color-danger)">
+                                        <v-btn color="var(--color-danger)" @click="eliminarBolsillo(bolsillo.idBolsillo)">
                                             Eliminar
                                         </v-btn>
                                         <v-btn @click="toggleMovimientosDrawer(bolsillo)">
@@ -61,33 +67,40 @@
                     <Transition name="fade">
                         <div class="modal" v-if="showModal">
                             <v-card>
-                                <v-card-title>Personaliza tu bolsillo</v-card-title>
+                                <v-card-title v-if="bolsilloEdit === null">Crea un bolsillo</v-card-title>
+                                <v-card-title v-else>Edita tu bolsillo</v-card-title>
                                 <v-card-text>
                                     <div class="lr-form__group">
                                         <input type="text" name="nombreBolsillo" id="nombreBolsillo"
-                                            v-model="nombreBolsilloNuevo" placeholder="Nombre del bolsillo (Obligatorio)"
+                                            v-model="nombreBolsillo" placeholder="Nombre del bolsillo (Obligatorio)"
                                             class="lr-form__input">
                                     </div>
                                     <br>
                                     <div class="lr-form__group">
-                                        <input type="number" name="meta" id="meta" v-model="saldoObjetivoBolsilloNuevo"
+                                        <input type="number" name="meta" id="meta" v-model="saldoObjetivo"
                                             placeholder="¿Cuánto necesitas para alcanzar tu meta? (Opcional)"
                                             class="lr-form__input">
                                     </div>
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn class="botonG" @click="crearBolsillo" :disabled="!camposCompletos">Crear
-                                        Bolsillo</v-btn>
-                                    <v-btn class="botonC" @click="showModal = false">Cancelar</v-btn>
+                                    <v-btn class="botonG" @click="crearBolsillo()"
+                                        :disabled="!camposCompletos || disabledButton" v-if="bolsilloEdit === null">
+                                        Crear bolsillo
+                                    </v-btn>
+                                    <v-btn class="botonG" @click="editarBolsillo()"
+                                        :disabled="!camposCompletos || disabledButton" v-else>
+                                        Editar bolsillo
+                                    </v-btn>
+                                    <v-btn class="botonC" @click="resetModal">Cancelar</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </div>
                     </Transition>
                     <v-row justify="end" class="mb-3">
                         <v-col cols="3">
-                            <v-btn class="boton1" @click="showModal = true">
-                                Crear Bolsillo
+                            <v-btn class="boton1" @click="openModal(null)">
+                                Crear bolsillo
                             </v-btn>
                         </v-col>
                     </v-row>
@@ -141,9 +154,12 @@
 </template>
 
 <script setup>
+import { AlertService } from '~/services/AlertService';
 import { BolsillosService } from '~/services/BolsillosService';
-import { CuentasService } from '~/services/CuentasService';
+import { UtilsService } from '~/services/UtilsService';
+
 const loading = ref(true);
+
 definePageMeta({
     layout: "navbar"
 });
@@ -157,27 +173,75 @@ onBeforeMount(async () => {
 });
 
 const bolsillos = ref([]);
-const nombreBolsilloNuevo = ref('');
-const saldoObjetivoBolsilloNuevo = ref(null);
+const nombreBolsillo = ref('');
+const saldoObjetivo = ref(null);
 const showModal = ref(false);
+const bolsilloEdit = ref(null);
+const disabledButton = ref(false);
 const camposCompletos = computed(() => {
-    return nombreBolsilloNuevo.value;
+    return nombreBolsillo.value;
 });
 // const movimientosDrawer = ref(false);
 
 const getBolsillos = async () => {
-    const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();
-    bolsillos.value = await BolsillosService.consultar(idCuenta);
+    bolsillos.value = await BolsillosService.consultar();
     loading.value = false;
 }
 
-const crearBolsillo = async () => {
-    const idCuenta = await CuentasService.consultarIdCuentaIdUsuario();
-    await BolsillosService.crear(idCuenta, nombreBolsilloNuevo.value, saldoObjetivoBolsilloNuevo.value);
-    await getBolsillos();
+const openModal = async (bolsillo) => {
+    bolsilloEdit.value = bolsillo;
+
+    if (bolsillo !== null) {
+        nombreBolsillo.value = bolsilloEdit.value.nombre;
+        saldoObjetivo.value = bolsilloEdit.value.saldoObjetivo;
+    }
+
+    showModal.value = true;
+}
+
+const resetModal = () => {
     showModal.value = false;
-    nombreBolsilloNuevo.value = "";
-    saldoObjetivoBolsilloNuevo.value = null;
+    disabledButton.value = false;
+    nombreBolsillo.value = "";
+    saldoObjetivo.value = null;
+}
+
+const crearBolsillo = async () => {
+    disabledButton.value = true;
+    const bolsilloCreado = await BolsillosService.crear(nombreBolsillo.value, saldoObjetivo.value);
+
+    if (bolsilloCreado) {
+        resetModal();
+        await getBolsillos();
+    } else {
+        disabledButton.value = false;
+    }
+}
+
+const editarBolsillo = async () => {
+    disabledButton.value = true;
+    const bolsilloEditado = await BolsillosService.editar(bolsilloEdit.value.idBolsillo, nombreBolsillo.value, saldoObjetivo.value);
+
+    if (bolsilloEditado) {
+        resetModal();
+        await getBolsillos();
+    } else {
+        disabledButton.value = false;
+    }
+}
+
+const eliminarBolsillo = async (idBolsillo) => {
+    const confirmar = await AlertService.withConfirmation("Confirmación", "¿Realmente deseas eliminar este bolsillo?");
+
+    if (confirmar) {
+        loading.value = true;
+        const bolsilloEliminado = await BolsillosService.eliminar(idBolsillo);
+
+        if (bolsilloEliminado) {
+            await getBolsillos();
+            loading.value = false;
+        }
+    }
 }
 
 // const toggleMovimientosDrawer = (bolsillo) => {
@@ -257,30 +321,34 @@ const crearBolsillo = async () => {
     font-weight: bold;
 
 }
+
 .rectangle-b {
-        clip-path: polygon(0 0, 5% 100%, 95% 100%, 100% 0);
-        background-color: var(--color-secundario);
-        width: 50% !important; 
-        height: 140px !important;
-        margin: 0 auto;
-    }
-    .rectangle-b2 {
-        clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
-        background: linear-gradient(10deg, var(--color-primario) 25%,transparent);
-        width: 92%; 
-        height: 110px; 
-        margin: 0 auto;
-    }
-    .text-b{
-        color: white;
-        padding-top: 20px;
-        margin-top: 25px;
-        margin-left: 40%;
-    }
-    .line-b {
-        width: 450px; 
-        border-bottom: 1px solid white;
-        margin-left: 18%;
-        margin-top: 8px;
-    }
+    clip-path: polygon(0 0, 5% 100%, 95% 100%, 100% 0);
+    background-color: var(--color-secundario);
+    width: 50% !important;
+    height: 140px !important;
+    margin: 0 auto;
+}
+
+.rectangle-b2 {
+    clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
+    background: linear-gradient(10deg, var(--color-primario) 25%, transparent);
+    width: 92%;
+    height: 110px;
+    margin: 0 auto;
+}
+
+.text-b {
+    color: white;
+    padding-top: 20px;
+    margin-top: 25px;
+    margin-left: 40%;
+}
+
+.line-b {
+    width: 450px;
+    border-bottom: 1px solid white;
+    margin-left: 18%;
+    margin-top: 8px;
+}
 </style>
