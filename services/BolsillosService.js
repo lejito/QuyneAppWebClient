@@ -26,6 +26,50 @@ export const BolsillosService = {
     }
   },
 
+  cargar: async () => {
+    try {
+      const token = UtilsService.getSessionToken();
+      const { data } = await axios.post(
+        `${Global.APIURL}/bolsillos/cargar`,
+        { },
+        { headers: { "Authorization": token } }
+      );
+
+      if (data.error) {
+        AlertService.error("Error", data.message);
+        return null;
+      } else {
+        const movimiento = data.data.movimiento;
+        return movimiento;
+      }
+    } catch (error) {
+      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      return null;
+    }
+  },
+
+  descargar: async () => {
+    try {
+      const token = UtilsService.getSessionToken();
+      const { data } = await axios.post(
+        `${Global.APIURL}/bolsillos/descargar`,
+        { },
+        { headers: { "Authorization": token } }
+      );
+
+      if (data.error) {
+        AlertService.error("Error", data.message);
+        return null;
+      } else {
+        const movimiento = data.data.movimiento;
+        return movimiento;
+      }
+    } catch (error) {
+      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      return null;
+    }
+  },
+
   crear: async (nombre, saldoObjetivo) => {
     try {
       const token = UtilsService.getSessionToken();
@@ -122,4 +166,26 @@ export const BolsillosService = {
       return false;
     }
   },
+
+  consultarUltimosMovimientos: async () => {
+    try {
+      const token = UtilsService.getSessionToken();
+      const { data } = await axios.post(
+        `${Global.APIURL}/bolsillos/consultar-ultimos-movimientos`,
+        {},
+        { headers: { "Authorization": token } }
+      );
+
+      if (data.error) {
+        AlertService.error("Error", data.message);
+        return null;
+      } else {
+        const movimientos = data.data.movimientos;
+        return movimientos;
+      }
+    } catch (error) {
+      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      return null;
+    }
+  }
 }
