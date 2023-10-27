@@ -114,5 +114,47 @@ export const CuentasService = {
       AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
       return null;
     }
+  },
+
+  verificarExistenciaNumeroTelefono: async (numeroTelefono) => {
+    try {
+      const token = UtilsService.getSessionToken();
+
+      const { data } = await axios.post(
+        `${Global.APIURL}/cuentas/verificar-existencia-numero-telefono`,
+        { numeroTelefono },
+        { headers: { "Authorization": token } }
+      );
+
+      if (data.error) {
+        return null;
+      } else {
+        const cuentaExistente = data.data.cuentaExistente;
+        return cuentaExistente;
+      }
+    } catch (error) {
+      return null;
+    }
+  },
+
+  verificarSaldoSuficiente: async (monto) => {
+    try {
+      const token = UtilsService.getSessionToken();
+
+      const { data } = await axios.post(
+        `${Global.APIURL}/cuentas/verificar-saldo-suficiente`,
+        { monto },
+        { headers: { "Authorization": token } }
+      );
+
+      if (data.error) {
+        return null;
+      } else {
+        const saldoSuficiente = data.data.saldoSuficiente;
+        return saldoSuficiente;
+      }
+    } catch (error) {
+      return null;
+    }
   }
 }

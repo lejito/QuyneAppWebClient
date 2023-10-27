@@ -2,6 +2,7 @@ import axios from "axios";
 import { Global } from './Global';
 import { UtilsService } from "./UtilsService";
 import { AlertService } from "./AlertService";
+import { CuentasService } from "./CuentasService";
 
 export const MovimientosService = {
   consultarUltimos: async () => {
@@ -9,7 +10,7 @@ export const MovimientosService = {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/consultar-ultimos`,
-        { },
+        {},
         { headers: { "Authorization": token } }
       );
 
@@ -26,21 +27,34 @@ export const MovimientosService = {
     }
   },
 
-  realizarTransferenciaInterna: async () => {
+  realizarTransferenciaInterna: async (numeroTelefono, monto) => {
     try {
-      const token = UtilsService.getSessionToken();
-      const { data } = await axios.post(
-        `${Global.APIURL}/movimientos/realizar-transferencia-interna`,
-        { },
-        { headers: { "Authorization": token } }
-      );
+      const cuentaExistente = await CuentasService.verificarExistenciaNumeroTelefono(numeroTelefono);
 
-      if (data.error) {
-        AlertService.error("Error", data.message);
-        return null;
+      if (cuentaExistente) {
+        const saldoSuficiente = await CuentasService.verificarSaldoSuficiente(monto);
+
+        if (saldoSuficiente) {
+          const token = UtilsService.getSessionToken();
+          const { data } = await axios.post(
+            `${Global.APIURL}/movimientos/realizar-transferencia-interna`,
+            { numeroTelefono, monto },
+            { headers: { "Authorization": token } }
+          );
+
+          if (data.error) {
+            AlertService.error("Error", data.message);
+            return null;
+          } else {
+            const movimiento = data.data.movimiento;
+            return movimiento;
+          }
+        } else {
+          AlertService.warning("Atención", "No tienes saldo suficiente para hacer la transferencia.");
+
+        }
       } else {
-        const movimiento = data.data.movimiento;
-        return movimiento;
+        AlertService.warning("Atención", "El número de teléfono no coincide con ninguna cuenta de QuyneApp.");
       }
     } catch (error) {
       AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
@@ -48,21 +62,28 @@ export const MovimientosService = {
     }
   },
 
-  realizarTransferenciaExterna: async () => {
+  realizarTransferenciaExterna: async (entidadDestino, cuentaDestino, monto) => {
     try {
-      const token = UtilsService.getSessionToken();
-      const { data } = await axios.post(
-        `${Global.APIURL}/movimientos/realizar-transferencia-externa`,
-        { },
-        { headers: { "Authorization": token } }
-      );
+      const saldoSuficiente = await CuentasService.verificarSaldoSuficiente(monto);
 
-      if (data.error) {
-        AlertService.error("Error", data.message);
-        return null;
+      if (saldoSuficiente) {
+        const token = UtilsService.getSessionToken();
+        const { data } = await axios.post(
+          `${Global.APIURL}/movimientos/realizar-transferencia-externa`,
+          { entidadDestino, cuentaDestino, monto },
+          { headers: { "Authorization": token } }
+        );
+
+        if (data.error) {
+          AlertService.error("Error", data.message);
+          return null;
+        } else {
+          const movimiento = data.data.movimiento;
+          return movimiento;
+        }
       } else {
-        const movimiento = data.data.movimiento;
-        return movimiento;
+        AlertService.warning("Atención", "No tienes saldo suficiente para hacer la transferencia.");
+
       }
     } catch (error) {
       AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
@@ -75,7 +96,7 @@ export const MovimientosService = {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/realizar-pago-factura`,
-        { },
+        {},
         { headers: { "Authorization": token } }
       );
 
@@ -97,7 +118,7 @@ export const MovimientosService = {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/realizar-recarga-civica`,
-        { },
+        {},
         { headers: { "Authorization": token } }
       );
 
@@ -119,7 +140,7 @@ export const MovimientosService = {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/realizar-recarga-telefonia`,
-        { },
+        {},
         { headers: { "Authorization": token } }
       );
 
@@ -141,7 +162,7 @@ export const MovimientosService = {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/realizar-pago-paquete-telefonia`,
-        { },
+        {},
         { headers: { "Authorization": token } }
       );
 

@@ -1,22 +1,50 @@
 <template>
   <v-responsive class="modal_detalles">
-
     <main class="detalles" id="details">
       <v-icon icon="mdi-download" class="descargar" @click="descargar"></v-icon>
-      <h2>Detalles del movimiento</h2>
-      <v-icon icon="mdi-arrow-down-circle-outline" class="icono"></v-icon>
-      <p class="destino">{{ movimiento.destino }}</p>
-      <p class="descripcion">{{ movimiento.descripcion }}</p>
-      <p class="fecha">{{ moment(movimiento.fecha).format('yyyy-MM-DD hh:mm:ss A') }} </p>
-      <p class="monto" v-if="movimiento.monto > 0" style="color: green;">{{
-        UtilsService.formatToCOP(parseFloat(movimiento.monto)) }}
+      <div class="title">
+        <h3>¡Movimiento realizado!</h3>
+        <h6>{{ movimiento.tipoMovimiento }}</h6>
+        <div class="movimiento-info">
+          <div class="movimiento-id">
+            <v-icon icon="mdi-arrow-down-circle-outline" class="icono"></v-icon>
+            <span class="movimiento-id__text"><b>ID movimiento:</b> {{ movimiento.idMovimiento }}</span>
+          </div>
+          <div class="movimiento-datetime">
+            <v-icon icon="mdi-clock" class="icono"></v-icon>
+            <span class="movimiento-datetime__text"><b>Fecha y hora:</b>
+              {{ moment(movimiento.fecha).format('yyyy/MM/DD hh:mm:ss A') }}</span>
+          </div>
+        </div>
+      </div>
+      <p class="text" v-if="movimiento.tipoMovimiento == 'Transferencia externa'"><b>Entidad destino:</b> {{
+        nombreEntidad(movimiento.entidadDestino) }}</p>
+      <p class="text"
+        v-if="movimiento.tipoMovimiento == 'Transferencia interna' || movimiento.tipoMovimiento == 'Transferencia externa'">
+        <b>Cuenta destino:</b> {{ movimiento.cuentaDestino }}
       </p>
-      <p class="monto" v-else style="color: red;">{{ UtilsService.formatToCOP(parseFloat(movimiento.monto)) }}</p>
-      <v-btn style="margin-top: 30px;" color="var(--color-success)" @click="() => { emit('cerrar', true); }">
-        <p style="font-weight: 600; color: white;">OK</p>
+      <p class="text" v-if="movimiento.tipoMovimiento == 'Pago de factura'"><b>Referencia:</b> {{ movimiento.referencia
+      }}</p>
+      <p class="text" v-if="movimiento.tipoMovimiento == 'Pago de factura'"><b>Descripción:</b> {{ movimiento.descripcion
+      }}</p>
+      <p class="text" v-if="movimiento.tipoMovimiento == 'Recarga a tarjeta cívica'"><b>Documento de identidad:</b> {{
+        movimiento.tipoDocumento }} {{ movimiento.numeroDocumento }}</p>
+      <p class="text"
+        v-if="movimiento.tipoMovimiento == 'Recarga a telefonía móvil' || movimiento.tipoMovimiento == 'Pago de paquete de telefonía'">
+        <b>Operador:</b> {{ nombreOperador(movimiento.operador) }}
+      </p>
+      <p class="text" v-if="movimiento.tipoMovimiento == 'Pago de paquete de telefonía'">
+        <b>Paquete:</b> {{ movimiento.nombre }}
+      </p>
+      <p class="text"
+        v-if="movimiento.tipoMovimiento == 'Recarga a telefonía móvil' || movimiento.tipoMovimiento == 'Pago de paquete de telefonía'">
+        <b>Número de teléfono:</b> {{ movimiento.numeroTelefono }}
+      </p>
+      <p class="text"><b>Monto:</b> {{ UtilsService.formatToCOP(parseFloat(movimiento.monto)) }}</p>
+      <v-btn style="margin-top: 30px;" color="var(--color-danger)" @click="() => { emit('cerrar', true); }">
+        <p style="font-weight: 600; color: white;">Cerrar</p>
       </v-btn>
     </main>
-
   </v-responsive>
 </template>
 
@@ -31,6 +59,14 @@ const movimiento = ref({});
 onBeforeMount(() => {
   movimiento.value = props.movimiento;
 })
+
+const nombreEntidad = (value) => {
+  return UtilsService.getEntidades().find(entidad => { return entidad.value == value }).name;
+}
+
+const nombreOperador = (value) => {
+  return UtilsService.getOperadores().find(entidad => { return entidad.value == value }).name;
+}
 
 const props = defineProps({
   movimiento: {
@@ -71,13 +107,23 @@ function descargar() {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
+  gap: 20px;
 }
 
 .icono {
-  margin: 40px;
+  width: max-content;
   color: var(--color-success);
+}
 
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.text {
+  font-size: var(--font-size-text-big);
 }
 
 .descargar {
@@ -93,54 +139,22 @@ function descargar() {
   font-size: 45px;
 }
 
-.icono::after {
-  content: 'Envio Realizado';
-  font-size: medium;
+.movimiento-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.movimiento-id,
+.movimiento-datetime {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.movimiento-id__text,
+.movimiento-datetime__text {
   color: var(--color-success);
-
-}
-
-.destino {
-  font-size: medium;
-  font-weight: bolder;
-}
-
-.destino::before {
-  content: 'Para: ';
-  font-size: larger;
-
-}
-
-.descripcion {
-  font-size: medium;
-  font-weight: bolder;
-}
-
-.descripcion::before {
-  content: 'Descripción: ';
-  font-size: larger;
-
-}
-
-.monto {
-  font-size: medium;
-  font-weight: bolder;
-}
-
-.monto::before {
-  content: 'Monto: ';
-  font-size: larger;
-
-}
-
-.fecha {
-  font-size: medium;
-  font-weight: bolder;
-}
-
-.fecha::before {
-  content: 'Fecha: ';
-  font-size: larger;
-
 }
 </style>
