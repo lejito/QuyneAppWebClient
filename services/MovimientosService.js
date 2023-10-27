@@ -42,7 +42,7 @@ export const MovimientosService = {
             { headers: { "Authorization": token } }
           );
 
-          if (data.error) {
+          if (data.error || data.type == 'warning') {
             AlertService.error("Error", data.message);
             return null;
           } else {
@@ -57,6 +57,7 @@ export const MovimientosService = {
         AlertService.warning("Atención", "El número de teléfono no coincide con ninguna cuenta de QuyneApp.");
       }
     } catch (error) {
+      console.log(error);
       AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
       return null;
     }
