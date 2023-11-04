@@ -15,91 +15,69 @@
     <div class="container">
         <div class="contenedor">
             <v-container class="card" v-if="!loading">
-                <v-card class="centered-content">
-                    <NuxtLink to="/inicio">
-                        <v-icon class="lr-card__back" icon="mdi-arrow-left" size="large"></v-icon>
+                <v-card style="display: flex; flex-direction: column; padding: 40px;" class="overflow-y-auto"
+                    max-height="400">
+                    <NuxtLink to="/inicio" style="position: absolute; top: 0px; left: 0px;  cursor: pointer;">
+                        <v-icon icon="mdi-arrow-left" size="large"></v-icon>
                     </NuxtLink>
+                    <div style="display: flex; flex-direction: column;">
+                        <template v-if="bolsillos.length > 0" v-for="bolsillo in bolsillos" :key="bolsillo.idBolsillo">
+                            <v-banner lines="one">
+                                <template v-slot:text>
+                                    <i style="margin-right: 20px;">{{ bolsillo.nombre }}</i>
+                                    <span>
+                                        <b>{{ UtilsService.formatToCOP(parseFloat(bolsillo.saldoDisponible)) }}</b>
 
-                    <v-row justify="center">
-                        <v-col cols="9">
-                            <div v-if="bolsillos.length > 0" v-for="bolsillo in bolsillos" :key="bolsillo.idBolsillo">
-                                <v-banner lines="one">
-                                    <template v-slot:text>
-                                        <i style="margin-right: 20px;">{{ bolsillo.nombre }}</i>
-                                        <span>
-                                            <b>{{ UtilsService.formatToCOP(parseFloat(bolsillo.saldoDisponible)) }}</b>
+                                        {{ bolsillo.saldoObjetivo !== null ? `/
+                                        ${UtilsService.formatToCOP(parseFloat(bolsillo.saldoObjetivo))}` : null }}
+                                    </span>
+                                </template>
+                                <template v-slot:actions>
+                                    <v-btn color="var(--color-secondary)" @click="openModal(bolsillo)">
+                                        Editar
+                                    </v-btn>
+                                    <v-btn color="var(--color-primary)" @click="showCargarBolsillo(bolsillo.idBolsillo)">
+                                        Cargar
+                                    </v-btn>
+                                    <v-btn color="var(--color-primary)" @click="showDescargarBolsillo(bolsillo.idBolsillo)">
+                                        Descargar
+                                    </v-btn>
+                                    <v-btn color="var(--color-danger)" @click="eliminarBolsillo(bolsillo.idBolsillo)">
+                                        Eliminar
+                                    </v-btn>
+                                    <v-btn @click="movimientosBolsillo(bolsillo.idBolsillo)">
+                                        <v-icon color="var(--color-accent)">mdi-history</v-icon>
+                                        Movimientos
+                                    </v-btn>
+                                </template>
+                            </v-banner>
 
-                                            {{ bolsillo.saldoObjetivo !== null ? `/
-                                            ${UtilsService.formatToCOP(parseFloat(bolsillo.saldoObjetivo))}` : null }}
-                                        </span>
-                                    </template>
-                                    <template v-slot:actions>
-                                        <v-btn color="var(--color-secondary)" @click="openModal(bolsillo)">
-                                            Editar
-                                        </v-btn>
-                                        <v-btn color="var(--color-primary)" @click="cargarBolsillo()">
-                                            Cargar
-                                        </v-btn>
-                                        <v-btn color="var(--color-primary)" @click="descargarBolsillo()">
-                                            Descargar
-                                        </v-btn>
-                                        <v-btn color="var(--color-danger)" @click="eliminarBolsillo(bolsillo.idBolsillo)">
-                                            Eliminar
-                                        </v-btn>
-                                        <v-btn @click="movimientosBolsillo(bolsillo.idBolsillo)">
-                                            <v-icon color="var(--color-accent)">mdi-history</v-icon>
-                                            Movimientos
-                                        </v-btn>
-                                    </template>
-                                </v-banner>
-                            </div>
-                            <p v-else>
-                                Actualmente no tienes ningún bolsillo activo
-                            </p>
-                        </v-col>
-                    </v-row>
-                    <v-lazy v-if="showList"
-                        :min-height="200"
-                        :options="{'threshold':0.5}"
-                        transition="fade-transition"
-                    >
-                        <v-container fluid>
-                            <v-row justify="center">
-                                <v-table fixed-header height="400px">
-                                    <thead style="position: -webkit-sticky;">
-                                        <tr>
-                                            <th class="text-left">
-                                                Tipo de movimiento
-                                            </th>
-                                            <th class="text-left">
-                                                Monto
-                                            </th>
-                                            <th class="text-left">
-                                                Fecha/hora
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody v-if="!loading">
-                                        <tr v-for="item in movimientos" :key="item.idMovimiento" v-if="movimientos.length > 0">
-                                            <td>{{ item.tipoMovimiento }}</td>
-                                            <td>{{ UtilsService.formatToCOP(parseFloat(item.monto)) }}</td>
-                                            <td>{{ moment(item.fechaHora).format('yyyy-MM-DD hh:mm:ss A') }}</td>
-                                        </tr>
-                                        <tr v-else>
-                                            <td colspan="3" class="text-center">No hay movimientos realizados hasta la fecha</td>
-                                        </tr>
-                                    </tbody>
-                                    <tbody v-else>
-                                        <tr v-for="i in 7">
-                                            <td> <span class="skeleton-loader-white"></span></td>
-                                            <td> <span class="skeleton-loader-white"></span></td>
-                                            <td> <span class="skeleton-loader-white"></span></td>
-                                        </tr>
-                                    </tbody>
-                                </v-table>
-                            </v-row>
-                        </v-container>
-                    </v-lazy>
+                            <v-lazy v-if="showList.get(bolsillo.idBolsillo)">
+                                <MovimientosBolsillo :id-bolsillo="bolsillo.idBolsillo"></MovimientosBolsillo>
+                            </v-lazy>
+                            <v-lazy v-if="showCargar.get(bolsillo.idBolsillo) || showDescargar.get(bolsillo.idBolsillo)">
+                                <Transition name="fade">
+                                    <div class="modal-overlay">
+                                    </div>
+                                </Transition>
+                            </v-lazy>
+                            <v-lazy v-if="showCargar.get(bolsillo.idBolsillo)">
+                                <CargarBolsillo :resetCargarModal="resetCargarModal" :idBolsillo="bolsillo.idBolsillo"
+                                    :cargarBolsillo="cargarBolsillo"></CargarBolsillo>
+                            </v-lazy>
+                            <v-lazy v-if="showDescargar.get(bolsillo.idBolsillo)">
+                                <DescargarBolsillo :resetCargarModal="resetCargarModal" :idBolsillo="bolsillo.idBolsillo"
+                                    :descargarBolsillo="descargarBolsillo">
+                                </DescargarBolsillo>
+                            </v-lazy>
+
+                        </template>
+                        <p v-else>
+                            Actualmente no tienes ningún bolsillo activo
+                        </p>
+
+                    </div>
+
                     <Transition name="fade">
                         <div class="modal-overlay" v-if="showModal"></div>
                     </Transition>
@@ -136,65 +114,19 @@
                             </v-card>
                         </div>
                     </Transition>
-                    <v-row justify="end" class="mb-3">
-                        <v-col cols="3">
+                    <v-row justify="end" style="margin-top: 20px; margin-bottom: 10px;">
+                        <v-col cols="2">
                             <v-btn class="boton1" @click="openModal(null)">
                                 Crear bolsillo
                             </v-btn>
                         </v-col>
                     </v-row>
-                    <Transition name="fade">
-                        <div class="modal-overlay" v-if="showCargar"></div>
-                    </Transition>
-                    <Transition name="fade">
-                        <div class="modal" v-if="showCargar">
-                            <v-card>
-                                <v-card-title>Cargar bolsillo</v-card-title>
-                                <v-card-text>
-                                    <div class="lr-form__group">
-                                        <input type="number" min="0" name="cargarSaldo" id="cargarSaldo" v-model="saldoCargar"
-                                            placeholder="Monto a cargar" class="lr-form__input">
-                                    </div>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn class="botonG" @click="cargarBolsillo()">
-                                        Cargar bolsillo
-                                    </v-btn>
-                                    <v-btn class="botonC" @click="resetCargarModal">Cancelar</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </div>
-                    </Transition>
-                    <Transition name="fade">
-                        <div class="modal-overlay" v-if="showDescargar"></div>
-                    </Transition>
-                    <Transition name="fade">
-                        <div class="modal" v-if="showDescargar">
-                            <v-card>
-                                <v-card-title>Descargar bolsillo</v-card-title>
-                                <v-card-text>
-                                    <div class="lr-form__group">
-                                        <input type="number" name="descargarSaldo" id="descargarSaldo" v-model="saldoCargar"
-                                            placeholder="Monto a descargar" class="lr-form__input">
-                                    </div>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn class="botonG" @click="descargarBolsillo()">
-                                        Descargar bolsillo
-                                    </v-btn>
-                                    <v-btn class="botonC" @click="resetCargarModal">Cancelar</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </div>
-                    </Transition>  
                 </v-card>
             </v-container>
             <v-container class="card" v-else>
 
                 <v-card class="centered-content">
-                    <NuxtLink to="/inicio" style="position: relative; top: 0; right: 0; float: left;">
+                    <NuxtLink to="/inicio" style="position: absolute; top: 0px; left: 0px;  cursor: pointer;">
                         <v-icon icon="mdi-arrow-left" size="large"></v-icon>
                     </NuxtLink>
                     <v-responsive style="display: flex; flex-direction: row;  padding-left: 40px; padding-right: 40px;">
@@ -236,14 +168,18 @@
             </v-container>
         </div>
     </div>
+    <Detalles v-if="confirmacion" @cerrar="cerrar" :movimiento="movimiento">
+    </Detalles>
 </template>
 
 <script setup>
 import { AlertService } from '~/services/AlertService';
 import { BolsillosService } from '~/services/BolsillosService';
 import { UtilsService } from '~/services/UtilsService';
+
 import moment from 'moment';
 const loading = ref(true);
+const movimiento = ref({})
 
 definePageMeta({
     layout: "navbar"
@@ -255,20 +191,27 @@ useHead({
 
 onBeforeMount(async () => {
     await getBolsillos();
-    let mov =[ { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Ingreso', "monto": 500000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }, { 'tipoMovimiento': 'Retiro', "monto": -5000, fecha: moment.now().toString() }]
-    movimientos.value = mov;
-});
 
+
+});
+function cerrar(val) {
+    confirmacion.value = false;
+}
+
+const confirmacion = ref(false)
 const bolsillos = ref([]);
 const nombreBolsillo = ref('');
 const saldoObjetivo = ref(null);
 const showModal = ref(false);
-const showList = ref(false);
-const showCargar = ref(false);
-const showDescargar = ref(false);
+const showList = ref(new Map());
+const showCargar = ref(new Map());
+const showDescargar = ref(new Map());
 const bolsilloEdit = ref(null);
 const disabledButton = ref(false);
-const movimientos = ref([]);
+
+
+
+
 
 const camposCompletos = computed(() => {
     return nombreBolsillo.value;
@@ -276,6 +219,11 @@ const camposCompletos = computed(() => {
 
 const getBolsillos = async () => {
     bolsillos.value = await BolsillosService.consultar();
+    bolsillos.value.map((value) => {
+        showList.value.set(value.idBolsillo, false);
+        showCargar.value.set(value.idBolsillo, false);
+        showDescargar.value.set(value.idBolsillo, false);
+    })
     loading.value = false;
 }
 
@@ -297,9 +245,9 @@ const resetModal = () => {
     saldoObjetivo.value = null;
 }
 
-const resetCargarModal = () => {
-    showCargar.value = false;
-    showDescargar.value = false;
+const resetCargarModal = (idBolsillo) => {
+    showCargar.value.set(idBolsillo, false);
+    showDescargar.value.set(idBolsillo, false);
 }
 
 const crearBolsillo = async () => {
@@ -326,6 +274,7 @@ const editarBolsillo = async () => {
     }
 }
 
+
 const eliminarBolsillo = async (idBolsillo) => {
     const confirmar = await AlertService.withConfirmation("Confirmación", "¿Realmente deseas eliminar este bolsillo?");
 
@@ -340,17 +289,44 @@ const eliminarBolsillo = async (idBolsillo) => {
     }
 }
 
-const cargarBolsillo = async () => {
-    showCargar.value = true;
+async function cargarBolsillo(idBolsillo, monto) {
+    showCargar.value.set(idBolsillo, false);
+    loading.value = true;
+
+    movimiento.value = await BolsillosService.cargar(idBolsillo, monto);
+    if (!movimiento.value) return
+
+    confirmacion.value = true;
+    bolsillos.value = await BolsillosService.consultar();
+    loading.value = false;
+
+
 }
 
-const descargarBolsillo = async() => {
-    showDescargar.value = true;
+async function descargarBolsillo(idBolsillo, monto) {
+    showDescargar.value.set(idBolsillo, false);
+    loading.value = true;
+
+    movimiento.value = await BolsillosService.descargar(idBolsillo, monto);
+    if (!movimiento.value) return
+    confirmacion.value = true;
+    bolsillos.value = await BolsillosService.consultar();
+    loading.value = false
+
 }
 
 const movimientosBolsillo = async (idBolsillo) => {
-    
-    showList.value = !showList.value;
+
+    showList.value.set(idBolsillo, !showList.value.get(idBolsillo));
+
+}
+
+const showDescargarBolsillo = async (idBolsillo) => {
+    showDescargar.value.set(idBolsillo, true);
+}
+
+const showCargarBolsillo = async (idBolsillo) => {
+    showCargar.value.set(idBolsillo, true);
 }
 
 </script>

@@ -26,12 +26,12 @@ export const BolsillosService = {
     }
   },
 
-  cargar: async () => {
+  cargar: async (idBolsillo, monto) => {
     try {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/cargar`,
-        { },
+        { idBolsillo, monto },
         { headers: { "Authorization": token } }
       );
 
@@ -48,12 +48,12 @@ export const BolsillosService = {
     }
   },
 
-  descargar: async () => {
+  descargar: async (idBolsillo, monto) => {
     try {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/descargar`,
-        { },
+        { idBolsillo, monto },
         { headers: { "Authorization": token } }
       );
 
@@ -95,6 +95,7 @@ export const BolsillosService = {
   editar: async (idBolsillo, nombre, saldoObjetivo) => {
     try {
       const token = UtilsService.getSessionToken();
+      saldoObjetivo = !saldoObjetivo ? null : saldoObjetivo;
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/editar`,
         { idBolsillo, nombre, saldoObjetivo },
@@ -167,12 +168,12 @@ export const BolsillosService = {
     }
   },
 
-  consultarUltimosMovimientos: async () => {
+  consultarUltimosMovimientos: async (idBolsillo) => {
     try {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/consultar-ultimos-movimientos`,
-        {},
+        { idBolsillo },
         { headers: { "Authorization": token } }
       );
 
