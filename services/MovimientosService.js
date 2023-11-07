@@ -92,12 +92,17 @@ export const MovimientosService = {
     }
   },
 
-  realizarPagoFactura: async () => {
+  realizarPagoFactura: async (referencia, descripcion, monto) => {
     try {
+      const saldoSuficiente = await CuentasService.verificarSaldoSuficiente(monto);
+      if (!saldoSuficiente) {
+        AlertService.warning("Atención", "No tienes saldo suficiente para hacer la transacción.");
+        return;
+      }
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/realizar-pago-factura`,
-        {},
+        { referencia, descripcion, monto },
         { headers: { "Authorization": token } }
       );
 
@@ -114,12 +119,12 @@ export const MovimientosService = {
     }
   },
 
-  realizarRecargaCivica: async () => {
+  realizarRecargaCivica: async (tipoDocumento, numeroDocumento, monto) => {
     try {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/realizar-recarga-civica`,
-        {},
+        { tipoDocumento, numeroDocumento, monto },
         { headers: { "Authorization": token } }
       );
 
@@ -136,12 +141,12 @@ export const MovimientosService = {
     }
   },
 
-  realizarRecargaTelefonia: async () => {
+  realizarRecargaTelefonia: async (numeroTelefono, operador, monto) => {
     try {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/realizar-recarga-telefonia`,
-        {},
+        { numeroTelefono, operador, monto },
         { headers: { "Authorization": token } }
       );
 
@@ -158,12 +163,12 @@ export const MovimientosService = {
     }
   },
 
-  realizarPagoPaqueteTelefonia: async () => {
+  realizarPagoPaqueteTelefonia: async (operador, nombre, numeroTelefono, monto) => {
     try {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.post(
         `${Global.APIURL}/movimientos/realizar-pago-paquete-telefonia`,
-        {},
+        { operador, nombre, numeroTelefono, monto },
         { headers: { "Authorization": token } }
       );
 

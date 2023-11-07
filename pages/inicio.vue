@@ -87,21 +87,23 @@
           <v-list class="menu" style="border-radius: 30px;">
             <v-list-item>
               <nuxt-link to="/transferencia-interna">
-                <v-btn block class="boton- boton-con-rectangulo2" style="padding-right: 5px; margin: 10px 0;">Cuenta de QuyneApp<v-icon
-                    icon="mdi-bank" size="30"></v-icon></v-btn>
+                <v-btn block class="boton- boton-con-rectangulo2" style="padding-right: 5px; margin: 10px 0;">Cuenta de
+                  QuyneApp<v-icon icon="mdi-bank" size="30"></v-icon></v-btn>
 
               </nuxt-link>
             </v-list-item>
             <v-list-item>
               <nuxt-link to="/transferencia-externa">
-                <v-btn block class="boton- boton-con-rectangulo2" style="margin: 10px 0;">Cuenta de otra entidad<v-icon icon="mdi-bank"
-                    size="30"></v-icon></v-btn></nuxt-link>
+                <v-btn block class="boton- boton-con-rectangulo2" style="margin: 10px 0;">Cuenta de otra entidad<v-icon
+                    icon="mdi-bank" size="30"></v-icon></v-btn></nuxt-link>
             </v-list-item>
           </v-list>
         </v-menu>
+        <NuxtLink to="/pago-factura">
+          <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" class="icono-izquierda2"
+              size="35"></v-icon>Pagar factura</v-btn>
+        </NuxtLink>
 
-        <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" class="icono-izquierda2"
-            size="35"></v-icon>Pagar factura</v-btn>
       </v-col>
 
     </div>

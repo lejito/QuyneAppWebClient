@@ -3,36 +3,37 @@
   </Detalles>
   <v-row>
     <v-col cols="1" class="center">
-      <NuxtLink to="/servicios" style="position: relative; top: 0; right: 0; float: left;">
+      <NuxtLink to="/inicio" style="position: relative; top: 0; right: 0; float: left;">
         <v-icon icon="mdi-arrow-left" style=" font-size: 90px;"></v-icon>
       </NuxtLink>
     </v-col>
     <v-col cols=" 11" style="margin-right: 5px ;">
-      <TitleLeft name="RECARGAS TELEFONIA"></TitleLeft>
+      <TitleLeft name="PAGO DE FACTURAS"></TitleLeft>
     </v-col>
   </v-row>
   <v-responsive style="margin-top: 50px;" width="50%" class="mx-auto">
     <v-form id="form" ref="form">
-      <v-text-field v-model="numero" :rules="numRules" label="Numero de telefono" required></v-text-field>
+      <v-text-field v-model="referencia" :rules="refRules" label="Codigo de referencia" required></v-text-field>
+      <v-text-field v-model="descripcion" :rules="descRoules" label="Descripcion del pago" required></v-text-field>
       <v-text-field v-model="monto" :rules="amountRules" label="Monto a recargar" required></v-text-field>
 
-      <v-select v-model="operador" :items="operadores" :rules="[v => !!v || 'El operador es requerido']" label="Operador"
-        required></v-select>
 
       <div class="d-flex flex-column">
-        <v-btn color="var(--color-primario)" block @click="validate(operador, numero, monto)" id="btn">
+        <v-btn color="var(--color-primario)" block @click="validate(referencia, descripcion, monto)" id="btn">
           <p style="color: white;">Pagar</p>
         </v-btn>
       </div>
     </v-form>
+
   </v-responsive>
   <Loader v-if="loading"></Loader>
 </template>
+
 <script setup>
 import TitleLeft from '~/components/TitleLeft.vue';
 import { AlertService } from '~/services/AlertService';
 import { MovimientosService } from '~/services/MovimientosService';
-import { UtilsService } from '~/services/UtilsService';
+
 
 definePageMeta({
   layout: "navbar",
@@ -40,54 +41,52 @@ definePageMeta({
 const movimiento = ref({})
 const form = ref(null)
 const confirmacion = ref(false)
-const operadores = ref([])
-const operador = ref(undefined)
-const numero = ref("")
+const referencia = ref(undefined)
+const descripcion = ref("")
 const monto = ref();
 const loading = ref(false)
-const numRules = ref([
-  v => !!v || 'El numero es requerido',
-  v => (v && v.length == 10) || 'Los numeros de celular son de 10 digitos',
-  v => (RegExp("^[0-9]").test(v)) || 'Solo se admiten numeros'
+const refRules = ref([
+  v => !!v || 'El codigo de referencia es requerido',
+  v => (v && v.length > 4) || 'El codigo de referencia es de más de 4 digitos',
+
 ])
 const amountRules = ref([
   v => !!v || 'El monto es requerido',
   v => (RegExp("^[0-9,$]*$").test(v)) || 'Solo se admiten numeros',
   v => (Number(v) != 0) || "Ingrese un valor"
 ])
-onBeforeMount(() => {
-  operadores.value = UtilsService.getOperadores().map(o => o.value);
-})
-
+const descRoules = ref([v => !!v || 'La descripcion es requerida',])
 useHead({
-  title: "QuyneApp ~ Recargas de telefonia"
+  title: "QuyneApp ~ Recargas civica"
 })
 function setLoading(value) {
   loading.value = value;
 }
-function resetForm() {
-  numero.value = null;
-  monto.value = null;
-  operador.value = null;
-}
 function cerrar(val) {
   confirmacion.value = false;
 }
-async function validate(operador, numero, monto) {
+function resetForm() {
+  descripcion.value = null;
+  referencia.value = null;
+  monto.value = null;
+}
+
+async function validate(referencia, descripcion, monto) {
+
   const { valid } = await form.value.validate()
   if (!valid) {
     AlertService.warning("Atención", "No se han cumplido las validaciones para realizar el proceso");
     return;
   }
+  setLoading(true)
+  let movimientoRealizado = await MovimientosService.realizarPagoFactura(referencia, descripcion, parseFloat(monto));
 
-  loading.value = true;
-  const movimientoRealizado = await MovimientosService.realizarRecargaTelefonia(numero, operador, parseFloat(monto));
-  loading.value = false;
-  if (movimientoRealizado) {
+  if (movimientoRealizado != null && movimientoRealizado != undefined) {
     movimiento.value = movimientoRealizado;
     confirmacion.value = true;
     resetForm();
   }
+  setLoading(false)
 }
 </script>
 
