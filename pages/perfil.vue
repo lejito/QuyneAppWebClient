@@ -1,88 +1,112 @@
 <template>
   <div class="shadow2">
-        <div class="rectangle-p">
-            <div class="rectangle-p2">
-                    <h4 class="text-p">PERFIL</h4>
-                    <div class="line-p"></div>
-            </div> 
-        </div>
-    </div>
-    <div class="contenedior">
-      <div class="card-perfil">
-          <div class="iconContainer">
-            <img src="~/public/perficon.png"/>
-            <h4>Identificacion</h4>
-          </div>
-          <div class="linea"></div>
-          <div class="inputscontainer">
-            <v-container>
-              <v-row>
-                <h5 class="texto-label-p">Primer nombre</h5>
-                <h5 class="texto-label-p">Segundo nombre</h5>
-              </v-row>
-              <v-row>
-                <input class="labelContainer" placeholder="Nombre"/>
-                <input class="labelContainer" placeholder="Segundo nombre"/>
-              </v-row>
-              <v-row>
-                <h5 class="texto-label-p">Primer apellido</h5>
-                <h5 class="texto-label-p">Segundo apellido</h5>
-              </v-row>
-              <v-row>
-                <input class="labelContainer" placeholder="Apellido"/> 
-                <input class="labelContainer" placeholder="Segundo apellido"/>
-              </v-row>
-              <v-row>
-                <h5 class="texto-label-p">Correo</h5>
-              </v-row>
-              <v-row>
-                <input class="labelContainer2" placeholder="Correo"/>
-              </v-row>
-            </v-container>
-            <button class="boton">Guardar Cambios</button>
-          </div>
-          
+    <div class="rectangle-p">
+      <div class="rectangle-p2">
+        <h4 class="text-p">PERFIL</h4>
+        <div class="line-p"></div>
       </div>
     </div>
+  </div>
+  <div class="contenedior">
+    <div class="card-perfil">
+      <div class="iconContainer">
+        <img src="~/public/perficon.png" />
+        <h4>Identificacion</h4>
+      </div>
+      <div class="linea"></div>
+      <div class="inputscontainer">
+        <v-container>
+          <v-row>
+            <h5 class="texto-label-p">Primer nombre</h5>
+            <h5 class="texto-label-p">Segundo nombre</h5>
+          </v-row>
+          <v-row>
+            <input class="labelContainer" v-model="primerNombre" placeholder="Nombre" />
+            <input class="labelContainer" v-model="segundoNombre" placeholder="Segundo nombre" />
+          </v-row>
+          <v-row>
+            <h5 class="texto-label-p">Primer apellido</h5>
+            <h5 class="texto-label-p">Segundo apellido</h5>
+          </v-row>
+          <v-row>
+            <input class="labelContainer" placeholder="Apellido" v-model="primerApellido" />
+            <input class="labelContainer" placeholder="Segundo apellido" v-model="segundoApellido" />
+          </v-row>
+          <v-row>
+            <h5 class="texto-label-p">Correo</h5>
+          </v-row>
+          <v-row>
+            <input class="labelContainer2" placeholder="Correo" v-model="correoElectronico" />
+          </v-row>
+        </v-container>
+        <button class="boton">Guardar Cambios</button>
+      </div>
 
+    </div>
+  </div>
+  <Loader v-if="loading"></Loader>
 </template>
-<script>
+<script setup>
+import { UsuariosService } from '~/services/UsuariosService';
+
+const primerNombre = ref('');
+const segundoNombre = ref('');
+const primerApellido = ref('');
+const segundoApellido = ref('');
+const correoElectronico = ref('');
+const editando = ref(true);
+const loading = ref(false);
+onBeforeMount(async () => {
+  loading.value = true;
+  let { primerNombre: nombre, segundoNombre: sNombre, primerApellido: apellido, segundoApellido: sApellido, correoElectronico: correo } = await UsuariosService.consultarDatos();
+  loading.value = false;
+  primerNombre.value = nombre;
+  segundoNombre.value = sNombre;
+  primerApellido.value = apellido;
+  segundoApellido.value = sApellido;
+  correoElectronico.value = correo;
+
+});
 definePageMeta({
   layout: "navbar"
 });
 </script>
 <style scoped>
-    .rectangle-p {
-        clip-path: polygon(0 0, 5% 100%, 95% 100%, 100% 0);
-        background-color: var(--color-secundario);
-        width: 50% !important; 
-        height: 140px !important;
-        margin: 0 auto;
-    }
-    .rectangle-p2 {
-        clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
-        background: linear-gradient(10deg, var(--color-primario) 25%,transparent);
-        width: 92%; 
-        height: 110px; 
-        margin: 0 auto;
-    }
-    .text-p{
-        color: white;
-        padding-top: 20px;
-        margin-top: 25px;
-        margin-left: 45%;
-    }
-    .line-p {
-        width: 450px; 
-        border-bottom: 1px solid white;
-        margin-left: 18%;
-        margin-top: 8px;
-    }
-    .card-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 11%;
-    padding: 35px;
+.rectangle-p {
+  clip-path: polygon(0 0, 5% 100%, 95% 100%, 100% 0);
+  background-color: var(--color-secundario);
+  width: 50% !important;
+  height: 140px !important;
+  margin: 0 auto;
+}
+
+.rectangle-p2 {
+  clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
+  background: linear-gradient(10deg, var(--color-primario) 25%, transparent);
+  width: 92%;
+  height: 110px;
+  margin: 0 auto;
+}
+
+.text-p {
+  color: white;
+  padding-top: 20px;
+  margin-top: 25px;
+  margin-left: 45%;
+}
+
+.line-p {
+  width: 450px;
+  border-bottom: 1px solid white;
+  margin-left: 18%;
+  margin-top: 8px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 11%;
+  padding: 35px;
 }
 
 .card-perfil {
@@ -90,33 +114,37 @@ definePageMeta({
   justify-content: flex-start;
   align-self: start;
   align-items: center;
-  background-color: #fafafa; 
-  width: 800px; 
-  height: 450px; 
+  background-color: #fafafa;
+  width: 800px;
+  height: 450px;
   border-radius: 40px;
   box-shadow: 0 2px 5px var(--color-hover-background);
   margin-top: 25px;
 
 }
-.contenedior{
+
+.contenedior {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.iconContainer{
+
+.iconContainer {
   width: 150px;
   height: 150px;
   margin-left: 50px;
   margin-bottom: 50px;
 }
-.linea{
+
+.linea {
   background-color: black;
   width: 1px;
   height: 80%;
   margin-left: 50px;
-  
+
 }
-.labelContainer{
+
+.labelContainer {
   display: flex;
   padding-left: 20px;
   align-items: center;
@@ -128,7 +156,8 @@ definePageMeta({
   margin-top: 5px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-.labelContainer2{
+
+.labelContainer2 {
   display: flex;
   padding-left: 20px;
   align-items: center;
@@ -138,19 +167,23 @@ definePageMeta({
   border-radius: 40px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-.label-p{
+
+.label-p {
   margin-left: 10px;
 }
-.texto-label-p{
+
+.texto-label-p {
   font-size: 20px;
   margin-left: 9px;
   color: black;
   margin-right: 90px;
 }
-.inputscontainer{
+
+.inputscontainer {
   margin-left: 30px;
 }
-.boton{
+
+.boton {
   height: 50px;
   width: 200px;
   background-color: transparent;
@@ -165,11 +198,11 @@ definePageMeta({
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   font-weight: bold;
 }
+
 .boton:hover {
   background-color: var(--color-terciario);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   font-weight: bold;
 }
-
 </style>
