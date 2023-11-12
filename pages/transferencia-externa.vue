@@ -31,12 +31,16 @@
 <script setup>
 import TitleLeft from '~/components/TitleLeft.vue';
 import { AlertService } from '~/services/AlertService';
+import { CuentasService } from '~/services/CuentasService';
 import { MovimientosService } from '~/services/MovimientosService';
 import { UtilsService } from '~/services/UtilsService';
+
+const route = useRoute();
 
 definePageMeta({
   layout: "navbar",
 });
+const queryF4Y = ref(route.query.f4y ? route.query.f4y : null);
 const form = ref(null)
 const confirmacion = ref(false)
 const movimiento = ref({})
@@ -48,8 +52,7 @@ const loading = ref(false)
 const validando = ref(false)
 const numRules = ref([
   v => !!v || 'El numero es requerido',
-  v => (v && v.length <= 15) || 'Los numeros de cuenta no son de mas de 15 digitos',
-  v => (RegExp("^[0-9]").test(v)) || 'Solo se admiten numeros'
+  v => (v && v.length <= 15) || 'Los numeros de cuenta no son de mas de 15 digitos'
 ])
 const amountRules = ref([
   v => !!v || 'El monto es requerido',
@@ -60,6 +63,13 @@ onBeforeMount(() => {
   UtilsService.getEntidades().forEach(entidad => {
     bancos.value.push({ title: entidad.name, value: entidad.value });
   });
+})
+
+onMounted(() => {
+  if (queryF4Y) {
+    numero.value = queryF4Y.value;
+    banco.value = 'F4Y';
+  }
 })
 
 useHead({
