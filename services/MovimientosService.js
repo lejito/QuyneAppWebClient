@@ -8,9 +8,8 @@ export const MovimientosService = {
   consultarUltimos: async () => {
     try {
       const token = UtilsService.getSessionToken();
-      const { data } = await axios.post(
+      const { data } = await axios.get(
         `${Global.APIURL}/movimientos/consultar-ultimos`,
-        {},
         { headers: { "Authorization": token } }
       );
 

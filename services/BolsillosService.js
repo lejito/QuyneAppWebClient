@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Global } from './Global';
+import { Global } from "./Global";
 import { UtilsService } from "./UtilsService";
 import { AlertService } from "./AlertService";
 
@@ -7,11 +7,9 @@ export const BolsillosService = {
   consultar: async () => {
     try {
       const token = UtilsService.getSessionToken();
-      const { data } = await axios.post(
-        `${Global.APIURL}/bolsillos/consultar`,
-        {},
-        { headers: { "Authorization": token } }
-      );
+      const { data } = await axios.get(`${Global.APIURL}/bolsillos/consultar`, {
+        headers: { Authorization: token },
+      });
 
       if (data.error) {
         AlertService.error("Error", data.message);
@@ -21,7 +19,10 @@ export const BolsillosService = {
         return bolsillos;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -32,7 +33,7 @@ export const BolsillosService = {
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/cargar`,
         { idBolsillo, monto },
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -43,7 +44,10 @@ export const BolsillosService = {
         return movimiento;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -54,7 +58,7 @@ export const BolsillosService = {
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/descargar`,
         { idBolsillo, monto },
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -65,7 +69,10 @@ export const BolsillosService = {
         return movimiento;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -76,7 +83,7 @@ export const BolsillosService = {
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/crear`,
         { nombre, saldoObjetivo },
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -87,7 +94,10 @@ export const BolsillosService = {
         return true;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return false;
     }
   },
@@ -96,10 +106,10 @@ export const BolsillosService = {
     try {
       const token = UtilsService.getSessionToken();
       saldoObjetivo = !saldoObjetivo ? null : saldoObjetivo;
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `${Global.APIURL}/bolsillos/editar`,
         { idBolsillo, nombre, saldoObjetivo },
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -110,7 +120,10 @@ export const BolsillosService = {
         return true;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return false;
     }
   },
@@ -121,7 +134,7 @@ export const BolsillosService = {
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/verificar-saldo-suficiente`,
         { idBolsillo, monto },
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.data) {
@@ -131,7 +144,10 @@ export const BolsillosService = {
         return null;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -140,18 +156,25 @@ export const BolsillosService = {
     try {
       const token = UtilsService.getSessionToken();
 
-      const saldoSuficiente = await BolsillosService.verificarSaldoSuficiente(idBolsillo, 1);
+      const saldoSuficiente = await BolsillosService.verificarSaldoSuficiente(
+        idBolsillo,
+        1
+      );
 
-      if (saldoSuficiente === null) { throw Error("Error al verificar el saldo del bolsillo.") }
+      if (saldoSuficiente === null) {
+        throw Error("Error al verificar el saldo del bolsillo.");
+      }
 
       if (saldoSuficiente) {
-        AlertService.warning("Advertencia", "El bolsillo tiene saldo disponible. Antes de eliminarlo, debes descargar el saldo.")
+        AlertService.warning(
+          "Advertencia",
+          "El bolsillo tiene saldo disponible. Antes de eliminarlo, debes descargar el saldo."
+        );
         return false;
       } else {
-        const { data } = await axios.post(
+        const { data } = await axios.delete(
           `${Global.APIURL}/bolsillos/eliminar`,
-          { idBolsillo },
-          { headers: { "Authorization": token } }
+          { data: { idBolsillo }, headers: { Authorization: token } }
         );
 
         if (data.error) {
@@ -163,7 +186,10 @@ export const BolsillosService = {
         }
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return false;
     }
   },
@@ -174,7 +200,7 @@ export const BolsillosService = {
       const { data } = await axios.post(
         `${Global.APIURL}/bolsillos/consultar-ultimos-movimientos`,
         { idBolsillo },
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -185,8 +211,11 @@ export const BolsillosService = {
         return movimientos;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
-  }
-}
+  },
+};
