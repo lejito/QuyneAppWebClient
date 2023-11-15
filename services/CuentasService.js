@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Global } from './Global';
+import { Global } from "./Global";
 import { UtilsService } from "./UtilsService";
 import { AlertService } from "./AlertService";
 
@@ -8,9 +8,12 @@ export const CuentasService = {
     try {
       const token = UtilsService.getSessionToken();
 
-      const { data } = await axios.get(`${Global.APIURL}/cuentas/consultar-id-cuenta-id-usuario`, {
-        headers: { "Authorization": token }
-      });
+      const { data } = await axios.get(
+        `${Global.APIURL}/cuentas/consultar-id-cuenta-id-usuario`,
+        {
+          headers: { Authorization: token },
+        }
+      );
 
       if (data.error) {
         AlertService.error("Error", data.message);
@@ -20,7 +23,10 @@ export const CuentasService = {
         return idCuenta;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -30,7 +36,7 @@ export const CuentasService = {
       const token = UtilsService.getSessionToken();
       const { data } = await axios.get(
         `${Global.APIURL}/cuentas/consultar-datos`,
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -41,7 +47,10 @@ export const CuentasService = {
         return cuenta;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -52,7 +61,7 @@ export const CuentasService = {
 
       const { data } = await axios.get(
         `${Global.APIURL}/cuentas/consultar-saldo`,
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -63,7 +72,10 @@ export const CuentasService = {
         return cuenta;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -74,7 +86,8 @@ export const CuentasService = {
 
       const { data } = await axios.put(
         `${Global.APIURL}/cuentas/activar-saldo-oculto`,
-        { headers: { "Authorization": token } }
+        {},
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -85,7 +98,10 @@ export const CuentasService = {
         return cuenta;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -96,7 +112,8 @@ export const CuentasService = {
 
       const { data } = await axios.put(
         `${Global.APIURL}/cuentas/desactivar-saldo-oculto`,
-        { headers: { "Authorization": token } }
+        {},
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -107,7 +124,10 @@ export const CuentasService = {
         return cuenta;
       }
     } catch (error) {
-      AlertService.error("Error", "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.");
+      AlertService.error(
+        "Error",
+        "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."
+      );
       return null;
     }
   },
@@ -119,7 +139,7 @@ export const CuentasService = {
       const { data } = await axios.post(
         `${Global.APIURL}/cuentas/verificar-existencia-numero-telefono`,
         { numeroTelefono },
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -140,7 +160,7 @@ export const CuentasService = {
       const { data } = await axios.post(
         `${Global.APIURL}/cuentas/verificar-saldo-suficiente`,
         { monto },
-        { headers: { "Authorization": token } }
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -152,5 +172,5 @@ export const CuentasService = {
     } catch (error) {
       return null;
     }
-  }
-}
+  },
+};

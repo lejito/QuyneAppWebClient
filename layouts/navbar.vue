@@ -1,4 +1,6 @@
 <template>
+	<Loader v-if="loadingPage"></Loader>
+
 	<div class="index-layout">
 		<nav class="index-navbar">
 			<div class="navbar__link">
@@ -13,18 +15,20 @@
 			<nuxt-link @click="handleClick('servicios')" :class="{ active: activeTab === 'servicios' }"
 				to="/servicios">SERVICIOS</nuxt-link>
 			<v-menu class="menu">
-      			<template v-slot:activator="{ props }">
+				<template v-slot:activator="{ props }">
 					<button class="navbar-button" v-bind="props">
 						<h6>{{ usuario.primerNombre }} <v-icon>mdi-account</v-icon></h6>
 					</button>
 				</template>
 				<v-list class="menu">
 					<v-list-item><nuxt-link class="user-icon" to="/perfil"><button class="navbar-button" v-bind="props">
-						<h6>Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
-					</button></nuxt-link></v-list-item>
-					<v-list-item><botton class="navbar-button" @click="logOut">
-						<h6>Salir <v-icon>mdi-exit-to-app</v-icon></h6>
-						</botton></v-list-item>
+								<h6>Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
+							</button></nuxt-link></v-list-item>
+					<v-list-item>
+						<botton class="navbar-button" @click="logOut">
+							<h6>Salir <v-icon>mdi-exit-to-app</v-icon></h6>
+						</botton>
+					</v-list-item>
 				</v-list>
 			</v-menu>
 		</nav>
@@ -55,6 +59,7 @@ onBeforeMount(async () => {
 	usuario.value.correoElectronico = correoElectronico;
 })
 
+const loadingPage = ref(false);
 const activeTab = ref("inicio");
 const usuario = ref({ tipoDocumento: "", numeroDocumento: "", primerNombre: "", segundoNombre: "", primerApellido: "", segundoApellido: "", fechaNacimiento: "", correoElectronico: "" });
 
@@ -63,11 +68,13 @@ function handleClick(tab) {
 };
 
 const logOut = async () => {
+	loadingPage.value = true;
 	await UsuariosService.cerrarSesion();
+	loadingPage.value = false;
 }
 </script>
 <style>
-.menu{
+.menu {
 	margin-top: 15px;
 }
 </style>

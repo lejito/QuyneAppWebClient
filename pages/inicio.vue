@@ -1,4 +1,6 @@
 <template>
+  <Loader v-if="loadingPage"></Loader>
+
   <div class="container">
     <div class="contenedor">
       <div class="shadow">
@@ -139,9 +141,11 @@ onBeforeMount(async () => {
 });
 
 const loading = ref(true);
+const loadingPage = ref(false);
 const cuenta = ref({ id: -1, numeroTelefono: "", idUsuario: -1, habilitada: true, saldoOculto: false, saldo: 0, saldoBolsillos: 0 });
 
 const changeVisibility = async () => {
+  loadingPage.value = true;
   if (cuenta.value.saldoOculto) {
     await CuentasService.desactivarSaldoOculto();
     cuenta.value.saldoOculto = false;
@@ -149,6 +153,7 @@ const changeVisibility = async () => {
     await CuentasService.activarSaldoOculto();
     cuenta.value.saldoOculto = true;
   }
+  loadingPage.value = false;
 }
 </script>
 
