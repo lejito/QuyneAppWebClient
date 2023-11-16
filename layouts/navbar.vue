@@ -22,6 +22,9 @@
 					<v-list-item><nuxt-link class="user-icon" to="/perfil"><button class="navbar-button" v-bind="props">
 						<h6>Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
 					</button></nuxt-link></v-list-item>
+					<v-list-item><nuxt-link class="user-icon" to="/actividad"><button class="navbar-button" v-bind="props">
+						<h6>Actividad <v-icon>mdi-history</v-icon></h6>
+					</button></nuxt-link></v-list-item>
 					<v-list-item><botton class="navbar-button" @click="logOut">
 						<h6>Salir <v-icon>mdi-exit-to-app</v-icon></h6>
 						</botton></v-list-item>
