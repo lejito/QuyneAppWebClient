@@ -57,7 +57,7 @@ const amountRules = ref([
 ])
 const descRoules = ref([v => !!v || 'La descripcion es requerida',])
 useHead({
-  title: "QuyneApp ~ Recargas civica"
+  title: "QuyneApp ~ Pagar factura"
 })
 function setLoading(value) {
   loading.value = value;

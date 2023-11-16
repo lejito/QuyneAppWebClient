@@ -296,17 +296,25 @@ export const UsuariosService = {
     try {
       const token = UtilsService.getSessionToken();
 
-      const { data } = await axios.put(
-        `${Global.APIURL}/usuarios/actualizar-clave`,
-        { claveActual, clave },
-        { headers: { Authorization: token } }
-      );
-
-      if (data.error) {
-        AlertService.error("Error", data.message);
+      if (clave.length < 8 || clave.length > 20) {
+        AlertService.warning(
+          "Advertencia",
+          "La contraseña debe tener entre 8 y 20 caracteres."
+        );
         return false;
       } else {
-        return true;
+        const { data } = await axios.put(
+          `${Global.APIURL}/usuarios/actualizar-clave`,
+          { claveActual, clave },
+          { headers: { Authorization: token } }
+        );
+
+        if (data.error) {
+          AlertService.error("Error", data.message);
+          return false;
+        } else {
+          return true;
+        }
       }
     } catch (error) {
       AlertService.error(
@@ -322,8 +330,8 @@ export const UsuariosService = {
       const token = UtilsService.getSessionToken();
 
       const { data } = await axios.get(
-        `${Global.APIURL}/consultar-registros-actividad`,
-        { headers: { "Authorization": token } }
+        `${Global.APIURL}/usuarios/consultar-registros-actividad`,
+        { headers: { Authorization: token } }
       );
 
       if (data.error) {
@@ -333,6 +341,7 @@ export const UsuariosService = {
         return data.data.registros;
       }
     } catch (error) {
+      console.log(error);
       AlertService.error(
         "Error",
         "Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde."

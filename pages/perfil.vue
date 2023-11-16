@@ -63,6 +63,10 @@ function Load(value) {
 definePageMeta({
   layout: "navbar"
 });
+
+useHead({
+  title: "QuyneApp ~ Editar perfil"
+});
 </script>
 <style scoped>
 .rectangle-p {

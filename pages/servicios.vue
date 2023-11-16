@@ -29,6 +29,10 @@ definePageMeta({
   layout: "navbar"
 });
 
+useHead({
+  title: "QuyneApp ~ Servicios"
+});
+
 </script>
 <style scoped>
 .rectangle-s {

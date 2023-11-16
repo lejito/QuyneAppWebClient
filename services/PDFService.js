@@ -9,7 +9,6 @@ export async function toPDF(element, name) {
   let opt = {
     margin: 0.5,
     filename: `${name}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 3 },
     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
   };

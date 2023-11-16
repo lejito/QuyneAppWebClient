@@ -101,7 +101,8 @@ async function descargar() {
     const { numeroTelefono } = await CuentasService.consultarDatos();
     loadingPage.value = false;
     const tabla = document.getElementById('table');
-    toPDF(tabla, `QuyneApp_Extracto_${numeroTelefono}`);
+    const fecha = moment().format('yyyyDDMMhhmmss');
+    toPDF(tabla, `QuyneApp_Extracto_${numeroTelefono}_${fecha}`);
 }
 
 function lookUp() {
