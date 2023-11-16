@@ -27,8 +27,6 @@
             :active="current === 'email'"></v-list-item>
           <v-list-item prepend-icon="mdi-calendar-edit" title="Fecha de nacimiento" @click="current = 'birth'"
             :active="current === 'birth'"></v-list-item>
-          <v-list-item prepend-icon="mdi-account-details" title="Registros de actividad" @click="current = 'logs'"
-            :active="current === 'logs'"></v-list-item>
         </v-list>
 
       </v-navigation-drawer>
@@ -43,7 +41,6 @@
           <ProfilePasswordSection @loading="Load" v-if="current === 'password'"></ProfilePasswordSection>
           <ProfileEmailSection @loading="Load" v-if="current === 'email'"></ProfileEmailSection>
           <ProfileBirthSection @loading="Load" v-if="current === 'birth'"></ProfileBirthSection>
-          <ProfileLogSection @loading="Load" v-if="current === 'logs'"></ProfileLogSection>
         </div>
       </v-main>
     </v-layout>
