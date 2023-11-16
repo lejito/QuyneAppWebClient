@@ -60,6 +60,8 @@
 import { UsuariosService } from '~/services/UsuariosService';
 import { UtilsService } from '~/services/UtilsService';
 
+const route = useRoute();
+
 definePageMeta({
   layout: "blank"
 });
@@ -69,10 +71,11 @@ useHead({
 });
 
 onBeforeMount(() => {
-
   tiposDocumentos.value = UtilsService.getTiposDocumentos();
   tipoDocumento.value = tiposDocumentos.value[0].value;
 });
+
+const queryF4Y = ref(route.query.f4y ? route.query.f4y : null)
 const loading = ref(false);
 const tiposDocumentos = ref([]);
 const tipoDocumento = ref("");
@@ -93,6 +96,9 @@ const login = async (tipoDocumento, numeroDocumento, clave) => {
   btn.disabled = true;
   loading.value = true;
   await UsuariosService.iniciarSesion(tipoDocumento, numeroDocumento, clave);
+  if (queryF4Y.value) {
+    navigateTo(`/transferencia-externa?f4y=${queryF4Y.value}`);
+  }
   loading.value = false;
   btn.disabled = false;
 }

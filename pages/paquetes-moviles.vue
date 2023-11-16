@@ -1,6 +1,5 @@
 <template>
-  <Detalles v-if="confirmacion" @cerrar="cerrar"
-    :movimiento="{ 'destino': 'Julian', 'descripcion': 'Pago factura', 'fecha': '2023-10-19T18:33:40.658Z', 'monto': 5000 }">
+  <Detalles v-if="confirmacion" @cerrar="cerrar" :movimiento="movimiento">
   </Detalles>
   <v-row>
     <v-col cols="1" class="center">
@@ -33,16 +32,18 @@
 <script setup>
 import TitleLeft from '~/components/TitleLeft.vue';
 import { AlertService } from '~/services/AlertService';
+import { MovimientosService } from '~/services/MovimientosService';
 import { UtilsService } from '~/services/UtilsService';
 
 definePageMeta({
   layout: "navbar",
 });
-const form = ref(null)
-const confirmacion = ref(false)
-const operadores = ref([])
-const operador = ref(undefined)
-const numero = ref("")
+const movimiento = ref({});
+const form = ref(null);
+const confirmacion = ref(false);
+const operadores = ref([]);
+const operador = ref(undefined);
+const numero = ref("");
 const monto = ref('');
 const nombre = ref();
 const nombres = ref([]);
@@ -70,6 +71,12 @@ onBeforeMount(() => {
   paquetes.value = new Map();
   pq.forEach(elm => paquetes.value.set(elm.name, elm.price));
 })
+function resetForm() {
+  numero.value = null;
+  operador.value = null;
+  monto.value = null;
+  nombre.value = null;
+}
 
 useHead({
   title: "QuyneApp ~ Paquetes moviles"
@@ -86,8 +93,15 @@ async function validate(operador, nombre, numero, monto) {
     AlertService.warning("Atención", "No se han cumplido las validaciones para realizar el proceso");
     return;
   }
-  confirmacion.value = true;
-  await setTimeout(() => { console.log('Implementar logica aca') }, 1000)
+  loading.value = true;
+  const movimientoRealizado = await MovimientosService.realizarPagoPaqueteTelefonia(operador, nombre, numero, monto);
+  loading.value = false;
+
+  if (movimientoRealizado) {
+    movimiento.value = movimientoRealizado;
+    confirmacion.value = true;
+    resetForm();
+  }
 }
 </script>
 

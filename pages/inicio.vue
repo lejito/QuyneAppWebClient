@@ -1,4 +1,6 @@
 <template>
+  <Loader v-if="loadingPage"></Loader>
+
   <div class="container">
     <div class="contenedor">
       <div class="shadow">
@@ -70,8 +72,7 @@
       <h4>BIENVENIDO DE NUEVO</h4>
       <p class="derecha">¿Qué deseas hacer hoy?</p>
       <v-col>
-        <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-multiple" class="icono-izquierda"
-            size="35"></v-icon>Retirar</v-btn>
+
         <v-menu class="menu">
           <template v-slot:activator="{ props }">
 
@@ -87,21 +88,23 @@
           <v-list class="menu" style="border-radius: 30px;">
             <v-list-item>
               <nuxt-link to="/transferencia-interna">
-                <v-btn block class="boton- boton-con-rectangulo2" style="padding-right: 5px; margin: 10px 0;">Cuenta de QuyneApp<v-icon
-                    icon="mdi-bank" size="30"></v-icon></v-btn>
+                <v-btn block class="boton- boton-con-rectangulo2" style="padding-right: 5px; margin: 10px 0;">Cuenta de
+                  QuyneApp<v-icon icon="mdi-bank" size="30"></v-icon></v-btn>
 
               </nuxt-link>
             </v-list-item>
             <v-list-item>
               <nuxt-link to="/transferencia-externa">
-                <v-btn block class="boton- boton-con-rectangulo2" style="margin: 10px 0;">Cuenta de otra entidad<v-icon icon="mdi-bank"
-                    size="30"></v-icon></v-btn></nuxt-link>
+                <v-btn block class="boton- boton-con-rectangulo2" style="margin: 10px 0;">Cuenta de otra entidad<v-icon
+                    icon="mdi-bank" size="30"></v-icon></v-btn></nuxt-link>
             </v-list-item>
           </v-list>
         </v-menu>
+        <NuxtLink to="/pago-factura">
+          <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" class="icono-izquierda2"
+              size="35"></v-icon>Pagar factura</v-btn>
+        </NuxtLink>
 
-        <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-refund" class="icono-izquierda2"
-            size="35"></v-icon>Pagar factura</v-btn>
       </v-col>
 
     </div>
@@ -137,9 +140,11 @@ onBeforeMount(async () => {
 });
 
 const loading = ref(true);
+const loadingPage = ref(false);
 const cuenta = ref({ id: -1, numeroTelefono: "", idUsuario: -1, habilitada: true, saldoOculto: false, saldo: 0, saldoBolsillos: 0 });
 
 const changeVisibility = async () => {
+  loadingPage.value = true;
   if (cuenta.value.saldoOculto) {
     await CuentasService.desactivarSaldoOculto();
     cuenta.value.saldoOculto = false;
@@ -147,6 +152,7 @@ const changeVisibility = async () => {
     await CuentasService.activarSaldoOculto();
     cuenta.value.saldoOculto = true;
   }
+  loadingPage.value = false;
 }
 </script>
 

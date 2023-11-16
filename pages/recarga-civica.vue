@@ -1,6 +1,5 @@
 <template>
-  <Detalles v-if="confirmacion" @cerrar="cerrar"
-    :movimiento="{ 'destino': 'Julian', 'descripcion': 'Pago factura', 'fecha': '2023-10-19T18:33:40.658Z', 'monto': 5000 }">
+  <Detalles v-if="confirmacion" @cerrar="cerrar" :movimiento="movimiento">
   </Detalles>
   <v-row>
     <v-col cols="1" class="center">
@@ -34,11 +33,13 @@
 <script setup>
 import TitleLeft from '~/components/TitleLeft.vue';
 import { AlertService } from '~/services/AlertService';
+import { MovimientosService } from '~/services/MovimientosService';
 import { UtilsService } from '~/services/UtilsService';
 
 definePageMeta({
   layout: "navbar",
 });
+const movimiento = ref({})
 const form = ref(null)
 const confirmacion = ref(false)
 const tipoDocumentos = ref([])
@@ -51,6 +52,12 @@ const docRules = ref([
   v => (v && v.length > 4) || 'Los documentos de documento son de más de 4 digitos',
 
 ])
+function resetForm() {
+  documento.value = null;
+  tipoDocumento.value = null;
+  monto.value = null;
+}
+
 const amountRules = ref([
   v => !!v || 'El monto es requerido',
   v => (RegExp("^[0-9,$]*$").test(v)) || 'Solo se admiten documentos',
@@ -77,8 +84,15 @@ async function validate(tipoDocumento, documento, monto) {
     AlertService.warning("Atención", "No se han cumplido las validaciones para realizar el proceso");
     return;
   }
-  confirmacion.value = true;
-  await setTimeout(() => { console.log('Implementar logica aca') }, 1000)
+  loading.value = true
+  const movimientoRealizado = await MovimientosService.realizarRecargaCivica(tipoDocumento, documento, parseFloat(monto));
+  loading.value = false;
+  if (movimientoRealizado) {
+    movimiento.value = movimientoRealizado;
+
+    confirmacion.value = true;
+    resetForm();
+  }
 }
 </script>
 

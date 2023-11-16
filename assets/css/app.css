@@ -107,6 +107,9 @@ button {
   color: var(--color-dark);
 }
 
+.content {
+  overflow: auto;
+}
 
 /* Scrollbar */
 *::-webkit-scrollbar {

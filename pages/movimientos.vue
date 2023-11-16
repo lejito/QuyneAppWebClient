@@ -1,4 +1,6 @@
 <template>
+    <Loader v-if="loadingPage"></Loader>
+
     <header style="display: flex;
     flex-direction: row;    ">
         <div class="shadow2" style="
@@ -67,9 +69,11 @@
 <script setup>
 import moment from 'moment';
 import { MovimientosService } from '~/services/MovimientosService';
+import { CuentasService } from '~/services/CuentasService';
 import { UtilsService } from '~/services/UtilsService';
 import { toPDF } from '~/services/PDFService';
 const loading = ref(true);
+const loadingPage = ref(false);
 definePageMeta({
     layout: "navbar"
 });
@@ -85,19 +89,19 @@ onBeforeMount(() => {
         all.value = movimientos.value;
         loading.value = false;
     }
-    getMovimientos()
-
+    getMovimientos();
 });
 
 const movimientos = ref([]);
 const all = ref([]);
 const filter = ref('');
 
-function descargar() {
+async function descargar() {
+    loadingPage.value = true;
+    const { numeroTelefono } = await CuentasService.consultarDatos();
+    loadingPage.value = false;
     const tabla = document.getElementById('table');
-    toPDF(tabla, 'Extracto');
-
-
+    toPDF(tabla, `QuyneApp_Extracto_${numeroTelefono}`);
 }
 
 function lookUp() {

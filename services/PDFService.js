@@ -1,6 +1,11 @@
-import html2pdf from 'html2pdf.js';
+export async function toPDF(element, name) {
+  if (import.meta.env.SSR) {
+    console.error('html2pdf.js no está disponible en el entorno actual');
+    return;
+  }
 
-export function toPDF(element, name) {
+  const { default: html2pdf } = await import('html2pdf.js');
+
   let opt = {
     margin: 0.5,
     filename: `${name}.pdf`,
