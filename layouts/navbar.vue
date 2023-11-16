@@ -18,7 +18,7 @@
 				<v-menu class="menu">
 				<template v-slot:activator="{ props }">
 					<button class="navbar-button" v-bind="props">
-						<h6 :class="{ active: activeTab === 'perfil' }">{{ usuario.primerNombre }}
+						<h6 :class="{ active: activeTab === 'perfil' || activeTab === 'actividad' }">{{ usuario.primerNombre }}
 							<v-icon>mdi-account</v-icon>
 						</h6>
 					</button>
