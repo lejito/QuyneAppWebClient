@@ -15,7 +15,7 @@
           </v-row>
           <v-container>
             <v-row justify="space-around">
-              <v-text-field type="date" label="Fecha" v-model="date" min='1900-01-01' max="2006-01-01"></v-text-field>
+              <v-text-field type="date" label="Fecha" v-model="date"></v-text-field>
             </v-row>
           </v-container>
         </v-container>
@@ -35,8 +35,7 @@ const emit = defineEmits(['loading'])
 onBeforeMount(async () => {
   emit('loading', true);
   let { fechaNacimiento } = await UsuariosService.consultarDatos();
-
-  date.value = new Date();
+  date.value = fechaNacimiento;
   emit('loading', false);
 })
 async function guardar() {
