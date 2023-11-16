@@ -72,8 +72,7 @@
       <h4>BIENVENIDO DE NUEVO</h4>
       <p class="derecha">¿Qué deseas hacer hoy?</p>
       <v-col>
-        <v-btn block class="boton- boton-con-rectangulo"><v-icon icon="mdi-cash-multiple" class="icono-izquierda"
-            size="35"></v-icon>Retirar</v-btn>
+
         <v-menu class="menu">
           <template v-slot:activator="{ props }">
 

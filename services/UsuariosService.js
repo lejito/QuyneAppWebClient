@@ -323,7 +323,7 @@ export const UsuariosService = {
 
       const { data } = await axios.get(
         `${Global.APIURL}/consultar-registros-actividad`,
-        { headers: { Authorization: token } }
+        { headers: { "Authorization": token } }
       );
 
       if (data.error) {

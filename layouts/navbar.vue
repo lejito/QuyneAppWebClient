@@ -6,7 +6,8 @@
 			<div class="navbar__link">
 				<img src="~/public/QuyneApp_Logo_Normal.png" alt="QuyneApp" class="index-navbar__logo">
 			</div>
-			<nuxt-link @click="handleClick('inicio')" :class="{ active: activeTab === 'inicio' }" to="/inicio">
+			<nuxt-link @click="handleClick('inicio')" :class="{ active: ['inicio', 'bolsillos'].includes(activeTab) }"
+				to="/inicio">
 				INICIO
 			</nuxt-link>
 
@@ -17,12 +18,14 @@
 			<v-menu class="menu">
 				<template v-slot:activator="{ props }">
 					<button class="navbar-button" v-bind="props">
-						<h6>{{ usuario.primerNombre }} <v-icon>mdi-account</v-icon></h6>
+						<h6 :class="{ active: activeTab === 'perfil' }">{{ usuario.primerNombre }}
+							<v-icon>mdi-account</v-icon>
+						</h6>
 					</button>
 				</template>
 				<v-list class="menu">
 					<v-list-item><nuxt-link class="user-icon" to="/perfil"><button class="navbar-button" v-bind="props">
-								<h6>Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
+								<h6 @click="handleClick('perfil')">Editar Perfil <v-icon>mdi-pencil</v-icon></h6>
 							</button></nuxt-link></v-list-item>
 					<v-list-item>
 						<botton class="navbar-button" @click="logOut">
@@ -41,13 +44,14 @@
 <script setup>
 import { UtilsService } from '~/services/UtilsService';
 import { UsuariosService } from '~/services/UsuariosService';
-
+const activeTab = ref("null");
 onBeforeMount(async () => {
 	const sessionToken = UtilsService.getSessionToken();
 	if (!sessionToken) {
 		navigateTo("/");
 	}
-
+	const currentUrl = await window.location.href.split('/').pop();
+	activeTab.value = currentUrl;
 	const { tipoDocumento, numeroDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, correoElectronico } = await UsuariosService.consultarDatos();
 	usuario.value.tipoDocumento = tipoDocumento;
 	usuario.value.numeroDocumento = numeroDocumento;
@@ -60,7 +64,7 @@ onBeforeMount(async () => {
 })
 
 const loadingPage = ref(false);
-const activeTab = ref("inicio");
+
 const usuario = ref({ tipoDocumento: "", numeroDocumento: "", primerNombre: "", segundoNombre: "", primerApellido: "", segundoApellido: "", fechaNacimiento: "", correoElectronico: "" });
 
 function handleClick(tab) {
@@ -76,5 +80,9 @@ const logOut = async () => {
 <style>
 .menu {
 	margin-top: 15px;
+}
+
+.menu .activate {
+	background-color: black;
 }
 </style>
