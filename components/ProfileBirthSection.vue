@@ -3,7 +3,7 @@
     <div class="card-perfil">
       <div class="iconContainer">
         <img src="~/public/perficon.png" />
-        <h4>Correo electronico</h4>
+        <h4>Fecha de nacimiento</h4>
       </div>
       <div class="linea"></div>
       <div class="inputscontainer">
@@ -15,29 +15,39 @@
           </v-row>
           <v-container>
             <v-row justify="space-around">
-              <v-text-field type="date" label="Fecha" v-model="date"></v-text-field>
+              <v-text-field type="date" label="Fecha" v-model="date"
+                @keyup="() => { cambios = cambiosDisponibles() }"></v-text-field>
             </v-row>
           </v-container>
         </v-container>
-        <button class="boton" @click="guardar">Guardar Cambios</button>
+        <button class="boton" :disabled="!cambios" @click="guardar">Guardar Cambios</button>
       </div>
 
     </div>
   </div>
 </template>
 <script setup>
+import { dateConfiguration } from 'virtual:vuetify-date-configuration';
 import { AlertService } from '~/services/AlertService';
 import { UsuariosService } from '~/services/UsuariosService';
 
+const dateInicial = ref(null);
 const date = ref(null);
+const cambios = ref(false);
 const emit = defineEmits(['loading'])
 
 onBeforeMount(async () => {
   emit('loading', true);
   let { fechaNacimiento } = await UsuariosService.consultarDatos();
   date.value = fechaNacimiento;
+  dateInicial.value = fechaNacimiento;
   emit('loading', false);
 })
+
+function cambiosDisponibles() {
+  return !!date && date.value != dateInicial.value;
+}
+
 async function guardar() {
 
   emit('loading', true);
@@ -87,7 +97,7 @@ async function guardar() {
 }
 
 .iconContainer {
-  width: 150px;
+  width: 180px;
   height: 150px;
   margin-left: 50px;
   margin-bottom: 50px;

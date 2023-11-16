@@ -3,7 +3,7 @@
     <div class="card-perfil">
       <div class="iconContainer">
         <img src="~/public/perficon.png" />
-        <h4>contraseña</h4>
+        <h4>Contraseña</h4>
       </div>
       <div class="linea"></div>
       <div class="inputscontainer">
@@ -112,7 +112,7 @@ function cambiosDisponibles() {
 }
 
 .iconContainer {
-  width: 150px;
+  width: 200px;
   height: 150px;
   margin-left: 50px;
   margin-bottom: 50px;

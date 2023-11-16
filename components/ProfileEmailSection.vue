@@ -3,20 +3,20 @@
     <div class="card-perfil">
       <div class="iconContainer">
         <img src="~/public/perficon.png" />
-        <h4>Correo electronico</h4>
+        <h4>Correo electrónico</h4>
       </div>
       <div class="linea"></div>
       <div class="inputscontainer">
         <v-container>
           <v-row>
             <v-col>
-              <h5 class="texto-label-p">Nuevo correo electronico</h5>
-              <input class="labelContainer" placeholder="Nuevo correo electronico" type="email" v-model="correo"
+              <h5 class="texto-label-p">Nuevo correo electrónico</h5>
+              <input class="labelContainer" placeholder="Nuevo correo electrónico" type="email" v-model="correo"
                 @keyup="() => { cambios = cambiosDisponibles() }" />
             </v-col>
             <v-col>
-              <h5 class="texto-label-p">Verificar correo electronico</h5>
-              <input class="labelContainer" placeholder="Verificar correo electronico" type="email"
+              <h5 class="texto-label-p">Verificar correo electrónico</h5>
+              <input class="labelContainer" placeholder="Verificar correo electrónico" type="email"
                 v-model="validarCorreo" @keyup="() => { cambios = cambiosDisponibles() }" />
             </v-col>
 
