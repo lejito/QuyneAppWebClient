@@ -3,7 +3,7 @@ name: Building of the container
 on:
   push:
     branches:
-      -main
+      - main
   workflow_dispatch:
 env:
 
