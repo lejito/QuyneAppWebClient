@@ -8,7 +8,7 @@ on:
 env:
 
   TAG: ${{ github.run_number }}
-  DOCKER_IMAGE_NAME: ghcr.io/lejito/quyne_app_Web:v${{ github.run_number }}
+  DOCKER_IMAGE_NAME: ghcr.io/lejito/quyne_app_web:v${{ github.run_number }}
 
 jobs:
   compose:
